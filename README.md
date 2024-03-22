@@ -34,9 +34,9 @@
   - 프로젝트를 진행하며 트러블슈팅, 성능 개선에 힘쓰며 배울점을 놓치지 않고 개개인의 발전에 힘씁니다.
 
 ## ⚙️프로젝트 구성
-| 프론트 엔드 | 백엔드 | 데이터베이스 | 
-| --- | --- | --- |
-|<img src="https://camo.githubusercontent.com/39791c3e4c4387b8b913628a8f258768ea3a4a71fc815ced2219f81c22c71f6a/68747470733a2f2f6173736574732e76657263656c2e636f6d2f696d6167652f75706c6f61642f76313636323133303535392f6e6578746a732f49636f6e5f6c696768745f6261636b67726f756e642e706e67" height="128" data-canonical-src="https://assets.vercel.com/image/upload/v1662130559/nextjs/Icon_light_background.png" style="visibility:visible;max-width:100%;"> | <a href="https://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a> | <img src="https://www.mysql.com/common/logos/logo-mysql-170x115.png"> | 
+| 프론트 엔드 | 백엔드 | 데이터베이스 | 배포 |
+| --- | --- | --- | --- | 
+|<img src="https://camo.githubusercontent.com/39791c3e4c4387b8b913628a8f258768ea3a4a71fc815ced2219f81c22c71f6a/68747470733a2f2f6173736574732e76657263656c2e636f6d2f696d6167652f75706c6f61642f76313636323133303535392f6e6578746a732f49636f6e5f6c696768745f6261636b67726f756e642e706e67" height="128" data-canonical-src="https://assets.vercel.com/image/upload/v1662130559/nextjs/Icon_light_background.png" style="visibility:visible;max-width:100%;"> | <a href="https://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a> | <img src="https://www.mysql.com/common/logos/logo-mysql-170x115.png"> | 미정 |
 
 ## 💖Sporsors
 <img src="https://swuniv.jbnu.ac.kr/main/img/common/top_logo.png?v=24020604" alt="전북대학교 SW중심대학사업단" title="">
