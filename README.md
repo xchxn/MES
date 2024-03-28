@@ -1,4 +1,4 @@
-## 💻 MES 개요
+## 💻개요
 > 전북대학교 컴퓨터인공지능학부 산학실전캡스톤2 팀 프로젝트
 
 > `산학실전 과제: KKMC 판매정보 빅데이터 기반 유통정보 개발`
@@ -6,16 +6,17 @@
 > 📅 프로젝트 진행 기간 2024-03-25 ~ 2024-06-22
 
 ## 프로젝트(과제) 내용
-- MES 개발
+- 재고 예측 관리 서비스 개발
 - 빅데이터를 통해 더 효율적인 작업 계획을 세워주는 알고리즘 개발
+- 빅데이터와 인공지능을 통해 과잉 재고 혹은 재고 품정을 예방하는 서비스 제공
 
 ## 👨‍💻Team CoD 구성원 
 | 팀원 | 학과 | 역할 |
 | --- | --- | --- | 
 | 정석찬 | IT정보공학과 | `팀장`, Frontend, Backend, PM | <seokregi@gmail.com> | 
-| 김정우 | IT정보공학과 | Database, Client
-| 이유찬 | IT정보공학과 | Backend
-| 전찬호 | IT정보공학과 | Backend, Cloud
+| 김정우 | IT정보공학과 | Client
+| 이유찬 | IT정보공학과 | Database, Backend
+| 전찬호 | IT정보공학과 | Cloud, Ai modeling
 
 <a href="https://github.com/xchxn/MES/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=xchxn/MES"/>
