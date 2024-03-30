@@ -10,5 +10,5 @@ export default function Sidebar() {
         <Link href="/">Home</Link>
       </div>
     </div>
-)
+  )
 }
