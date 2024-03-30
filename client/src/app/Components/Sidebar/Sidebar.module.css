@@ -1,0 +1,12 @@
+.title {
+  font-size: xx-large;
+  color: #22aeff;
+}
+.navButton {
+  display: flex;
+  margin-top: 0.5rem;
+  border: 1.5px;
+  border-color: white;
+  border-style: solid;
+  justify-content: center;
+}
