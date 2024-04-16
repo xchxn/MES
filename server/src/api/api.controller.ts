@@ -1,12 +1,15 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Post, Body } from '@nestjs/common';
 import { ApiService } from './api.service';
+import { ProductInventory } from './api.entity';
 
-@Controller()
+@Controller('api')
 export class ApiController {
-  constructor(private readonly apiService: ApiService) {}
+  constructor(private apiService: ApiService) {}
 
-  @Get()
-  getHello(): Promise<string> {
-    return this.apiService.getApi();
+  @Post('apiview')
+  async updateData(
+    @Body() data: ProductInventory[],
+  ): Promise<ProductInventory[]> {
+    return Promise.all(data.map((item) => this.apiService.updateData(item)));
   }
 }
