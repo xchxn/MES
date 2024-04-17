@@ -21,4 +21,8 @@ export class ManagementController {
       data.testValue2,
     );
   }
+  @Get('normalized')
+  normalizeData(): any {
+    return this.managementService.normalizeData();
+  }
 }

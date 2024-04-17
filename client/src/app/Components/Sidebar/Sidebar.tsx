@@ -15,6 +15,9 @@ export default function Sidebar() {
         <div className={sidebarstyle.navButton}>
           <Link href="/TestPage">TestPage</Link>
         </div>
+        <div className={sidebarstyle.navButton}>
+          <Link href="/DashBoard">DashBoard</Link>
+        </div>
       </div>
     </div>
   );
