@@ -8,6 +8,7 @@ import { useState } from "react";
 //   return res.json();
 // }
 
+
 export default async function Page() {
   const inventoryData = [
     {
