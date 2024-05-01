@@ -1,8 +1,9 @@
 .main {
   display: flex;
+  flex:1;
   flex-direction: column;
-  justify-content: space-between;
   align-items: center;
+  justify-content: right;
   padding: 6rem;
   min-height: 100vh;
 }

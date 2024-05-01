@@ -49,4 +49,23 @@ export class ApiService {
     console.log('check');
     return this.productInventoryRepository.findOneBy({ inventory_id });
   }
+
+  /* Param으로 얻은 id에 해당하는 튜플을 반환 */
+  async getInventoryById(id: number): Promise<ProductInventory> {
+    return this.productInventoryRepository.findOneBy({ id: id });
+  }
+
+  /* Param으로 얻은 id에 해당하는 튜플을 업데이트 */
+  async updateInventoryById(
+    id: number,
+    data: ProductInventory,
+  ): Promise<ProductInventory> {
+    await this.productInventoryRepository.update({ id: id }, data);
+    return this.productInventoryRepository.findOneBy({ id: id });
+  }
+
+  /* Param으로 얻은 id에 해당하는 튜플을 삭제 */
+  async deleteInventoryById(id: number): Promise<void> {
+    await this.productInventoryRepository.delete({ id: id });
+  }
 }
