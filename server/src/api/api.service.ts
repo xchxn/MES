@@ -11,18 +11,18 @@ export class ApiService {
 
   async updateData(data: ProductInventory): Promise<ProductInventory> {
     const {
-      inventory_id,
-      category_name,
-      type_name,
-      grade_name,
-      previous_month_stock,
-      previous_month_weight,
-      incoming_quantity,
-      incoming_weight,
-      outgoing_quantity,
-      outgoing_weight,
-      current_stock,
-      current_weight,
+      관리구분,
+      품목,
+      품종,
+      등급,
+      전월재고,
+      전월중량,
+      입고수량,
+      입고중량,
+      출고수량,
+      출고중량,
+      현재고,
+      현재중량,
     } = data;
 
     console.log(data);
@@ -32,22 +32,22 @@ export class ApiService {
       .insert()
       .into(ProductInventory)
       .values({
-        inventory_id,
-        category_name,
-        type_name,
-        grade_name,
-        previous_month_stock,
-        previous_month_weight,
-        incoming_quantity,
-        incoming_weight,
-        outgoing_quantity,
-        outgoing_weight,
-        current_stock,
-        current_weight,
+        관리구분,
+        품목,
+        품종,
+        등급,
+        전월재고,
+        전월중량,
+        입고수량,
+        입고중량,
+        출고수량,
+        출고중량,
+        현재고,
+        현재중량,
       })
       .execute();
     console.log('check');
-    return this.productInventoryRepository.findOneBy({ inventory_id });
+    return this.productInventoryRepository.findOneBy({ 관리구분 });
   }
 
   /* Param으로 얻은 id에 해당하는 튜플을 반환 */

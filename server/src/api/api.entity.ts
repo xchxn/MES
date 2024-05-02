@@ -6,38 +6,38 @@ export class ProductInventory {
   id: number;
 
   @Column({ type: 'varchar', length: 255 })
-  inventory_id: string;
+  관리구분: string;
 
   @Column({ type: 'varchar', length: 255 })
-  category_name: string;
+  품목: string;
 
   @Column({ type: 'varchar', length: 255 })
-  type_name: string;
+  품종: string;
 
   @Column({ type: 'varchar', length: 255 })
-  grade_name: string;
+  등급: string;
 
   @Column({ type: 'decimal', precision: 8, scale: 1, default: 0 })
-  previous_month_stock: number;
+  전월재고: number;
 
   @Column({ type: 'decimal', precision: 8, scale: 1, default: 0 })
-  previous_month_weight: number;
+  전월중량: number;
 
   @Column({ type: 'decimal', precision: 8, scale: 1, default: 0 })
-  incoming_quantity: number;
+  입고수량: number;
 
   @Column({ type: 'decimal', precision: 8, scale: 1, default: 0 })
-  incoming_weight: number;
+  입고중량: number;
 
   @Column({ type: 'decimal', precision: 8, scale: 1, default: 0 })
-  outgoing_quantity: number;
+  출고수량: number;
 
   @Column({ type: 'decimal', precision: 8, scale: 1, default: 0 })
-  outgoing_weight: number;
+  출고중량: number;
 
   @Column({ type: 'decimal', precision: 8, scale: 1, default: 0 })
-  current_stock: number;
+  현재고: number;
 
   @Column({ type: 'decimal', precision: 8, scale: 1, default: 0 })
-  current_weight: number;
+  현재중량: number;
 }
