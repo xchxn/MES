@@ -6,3 +6,16 @@
   min-height: 100vh; /* 최소 높이를 뷰포트의 100%로 설정하여 전체 페이지를 채움 */
   text-align: center; /* 텍스트를 중앙 정렬 */
 }
+
+
+.dropZone {
+  border: 2px dashed #ccc;
+  padding: 20px;
+  margin: 10px 0;
+  text-align: center;
+  background-color: #f9f9f9;
+}
+
+.dropZone:hover {
+  background-color: #e0e0e0;
+}
