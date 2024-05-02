@@ -18,6 +18,7 @@ export class ApiController {
   async updateData(
     @Body() data: ProductInventory[],
   ): Promise<ProductInventory[]> {
+    console.log('check req');
     return Promise.all(data.map((item) => this.apiService.updateData(item)));
   }
 
