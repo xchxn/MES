@@ -23,7 +23,7 @@ async function example(rawFormData) {
 }
 
 export default function Page() {
-  const [excelData, setExcelData] = useState(null);
+  const [excelData, setExcelData] = useState([]);
 
   const handleFileUpload = (file) => {
     if (file) {
