@@ -24,9 +24,9 @@ export default function RootLayout({
           <aside className={layoutstyle.sideBar}>
             <Sidebar />
           </aside>
+          <main className={layoutstyle.content}>{children}</main>
           <aside>{/* update header and footer after*/}</aside>
         </div>
-        {children}
       </body>
     </html>
   );

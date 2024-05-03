@@ -21,6 +21,10 @@ export class ApiController {
     console.log('check req');
     return Promise.all(data.map((item) => this.apiService.updateData(item)));
   }
+  @Get('test')
+  async getAll(): Promise<any> {
+    return this.apiService.getAll();
+  }
 
   /* GET방식으로 id에 해당하는 데이터를 읽어옴. id는 api.entity.ts의 @PrimaryGeneratedColumn()id: number */
   @Get('inventory/:id')

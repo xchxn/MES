@@ -1,85 +1,63 @@
 import styles from "./dashboard.module.css";
-import { useState } from "react";
-// async function getInventory () {
-//   const res = await fetch(`http://localhost:3001/api/apiget`)
-//   if (!res.ok) {
-//     throw new Error('Failed to fetch inventory');
-//   }
-//   return res.json();
-// }
+async function getInventory() {
+  const requestOptions = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
 
+  const res = await fetch(`http://localhost:3001/api/test`, requestOptions);
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch data");
+  }
+  return res.json();
+}
 
 export default async function Page() {
-  const inventoryData = [
-    {
-         "inventory_id" : "1",
-         "category_name" : "lemon",
-         "type_name" : "box",
-         "grade_name": "a",
-         "previous_month_stock" : "1234",
-         "previous_month_weight" : "2500",
-         "incoming_quantity" : "230",
-         "incoming_weight" : "500",
-         "outgoing_quantity" : "800",
-         "outgoing_weight" : "1000",
-         "current_stock" : "2000",
-         "current_weight" : "2500"
-   },
-   {
-         "inventory_id" : "2",
-         "category_name" : "orange",
-         "type_name" : "bigbox",
-         "grade_name": "b",
-         "previous_month_stock" : "3243",
-         "previous_month_weight" : "400",
-         "incoming_quantity" : "230",
-         "incoming_weight" : "500",
-         "outgoing_quantity" : "800",
-         "outgoing_weight" : "1000",
-         "current_stock" : "4545",
-         "current_weight" : "2500",
-   }
-   ]
-  
-  const [inventory] = await Promise.all([inventoryData])
+  const inventoryData = await getInventory();
+  const [inventory] = await Promise.all([inventoryData]);
   return (
-    <div className={styles.dataTable}>
-      <table>
-      <thead>
-        <tr>
-          <th>Inventory ID</th>
-          <th>Category Name</th>
-          <th>Type Name</th>
-          <th>Grade Name</th>
-          <th>Previous Month Stock</th>
-          <th>Previous Month Weight</th>
-          <th>Incoming Quantity</th>
-          <th>Incoming Weight</th>
-          <th>Outgoing Quantity</th>
-          <th>Outgoing Weight</th>
-          <th>Current Stock</th>
-          <th>Current Weight</th>
-        </tr>
-      </thead>
-      <tbody>
-        {inventory.map((item : any) => (
-          <tr key={item.inventory_id}>
-            <td>{item.inventory_id}</td>
-            <td>{item.category_name}</td>
-            <td>{item.type_name}</td>
-            <td>{item.grade_name}</td>
-            <td>{item.previous_month_stock}</td>
-            <td>{item.previous_month_weight}</td>
-            <td>{item.incoming_quantity}</td>
-            <td>{item.incoming_weight}</td>
-            <td>{item.outgoing_quantity}</td>
-            <td>{item.outgoing_weight}</td>
-            <td>{item.current_stock}</td>
-            <td>{item.current_weight}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <div className={styles.container}>
+      <div className={styles.dataTable}>
+        <table className={styles.table}>
+          <thead className={styles.thead}>
+            <tr>
+              <th>관리구분</th>
+              <th>품목</th>
+              <th>품종</th>
+              <th>등급</th>
+              <th>전월재고</th>
+              <th>전월중량</th>
+              <th>입고수량</th>
+              <th>입고중량</th>
+              <th>출고수량</th>
+              <th>출고중량</th>
+              <th>현재고</th>
+              <th>현재중량</th>
+            </tr>
+          </thead>
+          <tbody className={styles.tbody}>
+            {inventory.map((item: any, index: number) => (
+              <tr key={index}>
+                <td>{item.관리구분}</td>
+                <td>{item.품목}</td>
+                <td>{item.품종}</td>
+                <td>{item.등급}</td>
+                <td>{item.전월재고}</td>
+                <td>{item.전월중량}</td>
+                <td>{item.입고수량}</td>
+                <td>{item.입고중량}</td>
+                <td>{item.출고수량}</td>
+                <td>{item.출고중량}</td>
+                <td>{item.현재고}</td>
+                <td>{item.현재중량}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
-  )
+  );
 }

@@ -50,6 +50,10 @@ export class ApiService {
     return this.productInventoryRepository.findOneBy({ 관리구분 });
   }
 
+  async getAll(): Promise<any> {
+    return this.productInventoryRepository.createQueryBuilder().getMany();
+  }
+
   /* Param으로 얻은 id에 해당하는 튜플을 반환 */
   async getInventoryById(id: number): Promise<ProductInventory> {
     return this.productInventoryRepository.findOneBy({ id: id });
