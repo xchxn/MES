@@ -2,6 +2,11 @@
   display: flex;
 }
 
+.chartContainer {
+  margin: 20px;
+  width: 100%;
+}
+
 .dataTable {
   display: flex;
   flex-direction: column;

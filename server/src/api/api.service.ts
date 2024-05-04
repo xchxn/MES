@@ -25,8 +25,6 @@ export class ApiService {
       현재중량,
     } = data;
 
-    console.log(data);
-
     await this.productInventoryRepository
       .createQueryBuilder()
       .insert()
@@ -46,7 +44,6 @@ export class ApiService {
         현재중량,
       })
       .execute();
-    console.log('check');
     return this.productInventoryRepository.findOneBy({ 관리구분 });
   }
 

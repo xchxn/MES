@@ -1,4 +1,17 @@
+"use client";
+import { useState, useEffect } from "react";
 import styles from "./chart.module.css";
+import { Line } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  LineElement,
+  PointElement,
+  LinearScale,
+  Title,
+  CategoryScale,
+} from "chart.js";
+
+ChartJS.register(LineElement, PointElement, LinearScale, Title, CategoryScale);
 
 async function getInventory() {
   const requestOptions = {
@@ -16,12 +29,63 @@ async function getInventory() {
   return res.json();
 }
 
-export default async function Page() {
-  const inventoryData = await getInventory();
-  const [inventory] = await Promise.all([inventoryData]);
+export default function Page() {
+  const [inventory, setInventory] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getInventory();
+        setInventory(data);
+      } catch (error) {
+        console.error("Error fetching inventory:", error);
+      }
+    };
+    fetchData();
+  }, []);
+  
+  const data : any= {
+    labels: ["January", "February", "March", "April", "May", "June"],
+    datasets: [
+      {
+        label: "My First Dataset",
+        data: [65, 59, 80, 81, 56, 55],
+        fill: false,
+        borderColor: "rgb(75, 192, 192)",
+        tension: 0.1,
+      },
+    ],
+  };
+
+  const chartOptions: any = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "top",
+      },
+      title: {
+        display: true,
+        text: "Line Chart Example",
+      },
+    },
+    scales: {
+      x: {
+        type: "category",
+        labels: ["January", "February", "March", "April", "May", "June"],
+      },
+      y: {
+        type: "linear",
+        min: 0,
+        max: 100,
+      },
+    },
+  };
 
   return (
     <div>
+      <div className={styles.chartContainer}>
+        <Line data={data} options={ chartOptions } />
+      </div>
       <div className={styles.container}>
         <div className={styles.dataTable}>
           <table className={styles.table}>

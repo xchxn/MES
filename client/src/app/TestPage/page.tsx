@@ -47,6 +47,7 @@ export default function Page() {
     e.stopPropagation();
 
     const files = e.dataTransfer.files;
+    console.log(files[0].name);
     if (files.length > 0) {
       handleFileUpload(files[0]);
     }
