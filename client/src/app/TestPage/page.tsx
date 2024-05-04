@@ -2,11 +2,12 @@
 import { useState, useCallback } from "react";
 import * as XLSX from "xlsx";
 import styles from "./testpage.module.css";
-async function updateServer(data: any) {
+async function updateServer(data: any, fileName: string) {
   const requestOptions = {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "File-Name": fileName,
     },
     body: JSON.stringify(data),
     next: { revalidate: 3600 },
@@ -35,7 +36,7 @@ export default function Page() {
         const json: any = XLSX.utils.sheet_to_json(sheet);
         console.log(json);
         setInventory(json);
-        updateServer(json);
+        updateServer(json, file.name);
         console.log(inventory);
       };
       reader.readAsArrayBuffer(file);
@@ -47,7 +48,7 @@ export default function Page() {
     e.stopPropagation();
 
     const files = e.dataTransfer.files;
-    console.log(files[0].name);
+    console.log(files[0].name); //23.1.16-1.22.xlsx
     if (files.length > 0) {
       handleFileUpload(files[0]);
     }

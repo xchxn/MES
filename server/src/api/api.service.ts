@@ -23,6 +23,7 @@ export class ApiService {
       출고중량,
       현재고,
       현재중량,
+      날짜,
     } = data;
 
     await this.productInventoryRepository
@@ -42,6 +43,7 @@ export class ApiService {
         출고중량,
         현재고,
         현재중량,
+        날짜,
       })
       .execute();
     return this.productInventoryRepository.findOneBy({ 관리구분 });
