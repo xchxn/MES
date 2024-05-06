@@ -28,10 +28,41 @@ async function getInventory() {
   }
   return res.json();
 }
+async function getOptions(option: any) {
+  const requestOptions = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(option),
+  };
 
+  const res = await fetch(`http://localhost:3001/management/getOptions`, requestOptions);
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch data");
+  }
+  return res.json();
+}
+//첫번째 옵션=db에서 가져오는 관리구분
+//관리구분으로 품목 가져오기
+//품목으로 품종 가져오기
+//품종으로 등급 가져오기
+//최종 '조회하기'버튼으로 위의 옵션에 해당하는 값들 가져와서 chart와 연동
 export default function Page() {
   const [inventory, setInventory] = useState([]);
-
+  const [options, setOptions] = useState({
+    관리구분: "",
+    품목: "",
+    품종: "",
+    등급: ""
+  })
+  const [initialState, setInitialState] = useState({
+    관리구분: [],
+    품목: [],
+    품종: [],
+    등급: []
+  });
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -43,8 +74,38 @@ export default function Page() {
     };
     fetchData();
   }, []);
-  
-  const data : any= {
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getOptions(options);
+        //해당 set함수 확인필요 05.06
+        setInitialState(prevStates => ({
+          관리구분: data.관리구분 || prevStates.관리구분,
+          품목: data.품목 || prevStates.품목,
+          품종: data.품종 || prevStates.품종,
+          등급: data.등급 || prevStates.등급
+        }));
+      } catch (error) {
+        console.error("Error fetching options:", error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const handleSelectChange = (event: any) => {
+    const { name, value } = event.target;
+    setOptions(prevOptions => ({
+      ...prevOptions,
+      [name]: value // 특정 키(예: 관리구분)의 값을 업데이트
+    }));
+    console.log(options);
+  };
+
+  //fetch한 data에서 날짜를 뽑아서 dataConfig의 labels로 매칭
+  //dataConfig의 datasets속 data에 수치 데이터 mapping
+  //chartsOptions에서 scales의 x에는 라벨링, y축에는 max값와 min값 적용필요
+  const dataConfig : any= {
     labels: ["January", "February", "March", "April", "May", "June"],
     datasets: [
       {
@@ -83,8 +144,54 @@ export default function Page() {
 
   return (
     <div>
+      <div>
+        <select
+        id="관리구분"
+        name="관리구분"
+        value={options.관리구분}
+        onChange={handleSelectChange}
+        >
+          {initialState.관리구분.map((option:any, index: any) => (
+          <option key={index} value={option}>
+            {option}
+          </option>))}
+        </select>
+        <select
+        id="품목"
+        name="품목"
+        value={options.품목}
+        onChange={handleSelectChange}
+        >
+          {initialState.품목.map((option, index) => (
+          <option key={index} value={option}>
+            {option}
+          </option>))}
+        </select>
+        <select
+        id="품종"
+        name="품종"
+        value={options.품종}
+        onChange={handleSelectChange}
+        >
+          {initialState.품종.map((option, index) => (
+          <option key={index} value={option}>
+            {option}
+          </option>))}
+        </select>
+        <select
+        id="등급"
+        name="등급"
+        value={options.등급}
+        onChange={handleSelectChange}
+        >
+          {initialState.등급.map((option, index) => (
+          <option key={index} value={option}>
+            {option}
+          </option>))}
+        </select>
+      </div>
       <div className={styles.chartContainer}>
-        <Line data={data} options={ chartOptions } />
+        <Line data={dataConfig} options={ chartOptions } />
       </div>
       <div className={styles.container}>
         <div className={styles.dataTable}>

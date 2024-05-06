@@ -1,30 +1,76 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { Management } from './management.entity';
+import { TestInventory } from './management.entity';
 
 @Injectable()
 export class ManagementService {
   constructor(
-    @Inject('MANAGEMENT_REPOSITORY')
-    private managementRepository: Repository<Management>,
+    @Inject('TESTING_INVENTORY_REPOSITORY')
+    private managementRepository: Repository<TestInventory>,
   ) {}
 
-  async getStock(): Promise<any> {
-    return 'Stock status';
-  }
+  async managementUpdate(data: TestInventory): Promise<TestInventory> {
+    const {
+      관리구분,
+      품목,
+      품종,
+      등급,
+      전월재고,
+      전월중량,
+      입고수량,
+      입고중량,
+      출고수량,
+      출고중량,
+      현재고,
+      현재중량,
+      날짜,
+    } = data;
 
-  //기본적으로 DB에 insert하는 예제
-  async managementView(testValue1: string, testValue2: string): Promise<any> {
-    const dataExample = testValue1 + testValue2;
-    console.log(dataExample);
     await this.managementRepository
       .createQueryBuilder()
       .insert()
-      .into(Management)
-      .values([{ name: testValue1, description: testValue2 }])
+      .into(TestInventory)
+      .values({
+        관리구분,
+        품목,
+        품종,
+        등급,
+        전월재고,
+        전월중량,
+        입고수량,
+        입고중량,
+        출고수량,
+        출고중량,
+        현재고,
+        현재중량,
+        날짜,
+      })
       .execute();
-    return dataExample;
+    return this.managementRepository.findOneBy({ 관리구분 });
   }
+
+  //요청에 따라 distinct된 옵션 선택지 제공
+  async getOptions(): Promise<any> {
+    const options = await this.managementRepository
+      .createQueryBuilder()
+      .select('DISTINCT 관리구분', '관리구분')
+      .getRawMany();
+    //배열로 반환할 수 있도록 수정 05.06
+    return options.map((option) => option.관리구분);
+  }
+
+  //기본적으로 DB에 insert하는 예제
+  // async managementView(testValue1: string, testValue2: string): Promise<any> {
+  //   const dataExample = testValue1 + testValue2;
+  //   console.log(dataExample);
+  //   await this.managementRepository
+  //     .createQueryBuilder()
+  //     .insert()
+  //     .into(TestInventory)
+  //     .values([{ name: testValue1, description: testValue2 }])
+  //     .execute();
+  //   return dataExample;
+  // }
 
   //테이블 수치 정규화 함수
   //나중에 api로 옮김

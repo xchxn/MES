@@ -14,7 +14,7 @@ async function updateServer(data: any, fileName: string) {
   };
 
   const res = await fetch(
-    `http://localhost:3001/api/apiview`,
+    `http://localhost:3001/management/update`,
     requestOptions
   );
 
