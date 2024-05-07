@@ -115,7 +115,18 @@ export class ManagementService {
   //     .execute();
   //   return dataExample;
   // }
-
+  async getData(data: any): Promise<any> {
+    const options = await this.managementRepository
+      .createQueryBuilder()
+      .select(['현재고', '현재중량', '날짜'])
+      .where('관리구분 = :type', { type: data.관리구분 })
+      .andWhere('품목 = :item', { item: data.품목 })
+      .andWhere('품종 = :kind', { kind: data.품종 })
+      .andWhere('등급 = :grade', { grade: data.등급 })
+      .getRawMany();
+    //배열로 반환할 수 있도록 수정 05.06
+    return options;
+  }
   //테이블 수치 정규화 함수
   //나중에 api로 옮김
   //Min-Max Scaling을 통해 모든 값이 [0,1]사이에 위치하도록

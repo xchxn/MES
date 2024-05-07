@@ -79,6 +79,11 @@ export class ManagementController {
     return { error: 'Invalid request data' };
   }
 
+  @Post('getData')
+  async getData(@Body() data: any) {
+    return this.managementService.getData(data);
+  }
+
   @Get('normalized')
   normalizeData(): any {
     return this.managementService.normalizeData();

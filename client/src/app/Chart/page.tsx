@@ -13,16 +13,20 @@ import {
 
 ChartJS.register(LineElement, PointElement, LinearScale, Title, CategoryScale);
 
-async function getInventory() {
+async function getInventory(option: any) {
   const requestOptions = {
-    method: "GET",
+    method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
+    body: JSON.stringify(option),
   };
 
-  const res = await fetch(`http://localhost:3001/api/test`, requestOptions);
-
+  const res = await fetch(
+    `http://localhost:3001/management/getData`,
+    requestOptions
+  );
+  console.log(res);
   if (!res.ok) {
     throw new Error("Failed to fetch data");
   }
@@ -66,17 +70,31 @@ export default function Page() {
     품종: [],
     등급: [],
   });
+
+  const [chartData, setChartData] = useState({
+    labels: [],
+    datasets: [
+      {
+        label: "My First Dataset",
+        data: [],
+        fill: false,
+        borderColor: "rgb(75, 192, 192)",
+        tension: 0.1,
+      },
+    ],
+  });
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await getInventory();
+        const data = await getInventory(options);
         setInventory(data);
       } catch (error) {
         console.error("Error fetching inventory:", error);
       }
     };
     fetchData();
-  }, []);
+  }, [options, options.등급]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -96,7 +114,24 @@ export default function Page() {
     fetchData();
   }, [options]);
 
-  const handleSelectChange = (event: any) => {
+  useEffect(() => {
+    if (inventory.length > 0) {
+      const newLabels = inventory.map((item) => item.날짜);
+      const newData = inventory.map((item) => item.현재고); // 예시 데이터 매핑
+
+      setChartData({
+        labels: newLabels,
+        datasets: [
+          {
+            ...chartData.datasets[0],
+            data: newData,
+          },
+        ],
+      });
+    }
+  }, [inventory]);
+
+  const handleSelectChange = async (event: any) => {
     const { name, value } = event.target;
 
     if (name === "관리구분") {
@@ -151,18 +186,18 @@ export default function Page() {
   //fetch한 data에서 날짜를 뽑아서 dataConfig의 labels로 매칭
   //dataConfig의 datasets속 data에 수치 데이터 mapping
   //chartsOptions에서 scales의 x에는 라벨링, y축에는 max값와 min값 적용필요
-  const dataConfig: any = {
-    labels: ["January", "February", "March", "April", "May", "June"],
-    datasets: [
-      {
-        label: "My First Dataset",
-        data: [65, 59, 80, 81, 56, 55],
-        fill: false,
-        borderColor: "rgb(75, 192, 192)",
-        tension: 0.1,
-      },
-    ],
-  };
+  // const dataConfig: any = {
+  //   labels: ["January", "February", "March", "April", "May", "June"],
+  //   datasets: [
+  //     {
+  //       label: "My First Dataset",
+  //       data: [65, 59, 80, 81, 56, 55],
+  //       fill: false,
+  //       borderColor: "rgb(75, 192, 192)",
+  //       tension: 0.1,
+  //     },
+  //   ],
+  // };
 
   const chartOptions: any = {
     responsive: true,
@@ -178,12 +213,12 @@ export default function Page() {
     scales: {
       x: {
         type: "category",
-        labels: ["January", "February", "March", "April", "May", "June"],
+        labels: chartData.labels,
       },
       y: {
         type: "linear",
         min: 0,
-        max: 100,
+        max: 700,
       },
     },
   };
@@ -253,42 +288,24 @@ export default function Page() {
         </select>
       </div>
       <div className={styles.chartContainer}>
-        <Line data={dataConfig} options={chartOptions} />
+        <Line data={chartData} options={chartOptions} />
       </div>
       <div className={styles.container}>
         <div className={styles.dataTable}>
           <table className={styles.table}>
             <thead className={styles.thead}>
               <tr>
-                <th>관리구분</th>
-                <th>품목</th>
-                <th>품종</th>
-                <th>등급</th>
-                <th>전월재고</th>
-                <th>전월중량</th>
-                <th>입고수량</th>
-                <th>입고중량</th>
-                <th>출고수량</th>
-                <th>출고중량</th>
                 <th>현재고</th>
                 <th>현재중량</th>
+                <th>날짜</th>
               </tr>
             </thead>
             <tbody className={styles.tbody}>
               {inventory.map((item: any, index: number) => (
                 <tr key={index}>
-                  <td>{item.관리구분}</td>
-                  <td>{item.품목}</td>
-                  <td>{item.품종}</td>
-                  <td>{item.등급}</td>
-                  <td>{item.전월재고}</td>
-                  <td>{item.전월중량}</td>
-                  <td>{item.입고수량}</td>
-                  <td>{item.입고중량}</td>
-                  <td>{item.출고수량}</td>
-                  <td>{item.출고중량}</td>
                   <td>{item.현재고}</td>
                   <td>{item.현재중량}</td>
+                  <td>{item.날짜}</td>
                 </tr>
               ))}
             </tbody>
