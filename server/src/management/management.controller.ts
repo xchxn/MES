@@ -38,7 +38,45 @@ export class ManagementController {
   @Post('getOptions')
   async getOptions(@Body() data: any) {
     console.log(data);
-    return this.managementService.getOptions();
+    // 1. 모든 요소가 비어 있을 때
+    if (!data.관리구분 && !data.품목 && !data.품종 && !data.등급) {
+      return this.managementService.handleEmpty();
+    }
+
+    // 2. 관리구분만 있고 나머지 요소가 비어 있을 때
+    if (data.관리구분 && !data.품목 && !data.품종 && !data.등급) {
+      return this.managementService.handleOnlyManagement(data.관리구분);
+    }
+
+    // 3. 관리구분, 품목이 있고 품종, 등급이 비어 있을 때
+    if (data.관리구분 && data.품목 && !data.품종 && !data.등급) {
+      return this.managementService.handleManagementAndItem(
+        data.관리구분,
+        data.품목,
+      );
+    }
+
+    // 4. 등급만 없을 때
+    if (data.관리구분 && data.품목 && data.품종 && !data.등급) {
+      return this.managementService.handleWithoutGrade(
+        data.관리구분,
+        data.품목,
+        data.품종,
+      );
+    }
+
+    // 5. 모든 요소가 있을 때
+    // if (data.관리구분 && data.품목 && data.품종 && data.등급) {
+    //   return this.managementService.handleAll(
+    //     data.관리구분,
+    //     data.품목,
+    //     data.품종,
+    //     data.등급,
+    //   );
+    // }
+
+    // 기본적으로 정의되지 않은 조건에 대해 처리
+    return { error: 'Invalid request data' };
   }
 
   @Get('normalized')

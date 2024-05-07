@@ -50,14 +50,58 @@ export class ManagementService {
   }
 
   //요청에 따라 distinct된 옵션 선택지 제공
-  async getOptions(): Promise<any> {
-    const options = await this.managementRepository
+  async handleEmpty(): Promise<any> {
+    const 관리구분 = await this.managementRepository
       .createQueryBuilder()
       .select('DISTINCT 관리구분', '관리구분')
       .getRawMany();
     //배열로 반환할 수 있도록 수정 05.06
-    return options.map((option) => option.관리구분);
+    return {
+      관리구분: 관리구분.map((option) => option.관리구분),
+    };
   }
+  async handleOnlyManagement(op1: string): Promise<any> {
+    const 품목 = await this.managementRepository
+      .createQueryBuilder()
+      .select('DISTINCT 품목', '품목')
+      .where('관리구분 = :type', { type: op1 })
+      .getRawMany();
+    //배열로 반환할 수 있도록 수정 05.06
+    return { 품목: 품목.map((option) => option.품목) };
+  }
+  async handleManagementAndItem(op1: string, op2: string): Promise<any> {
+    const 품종 = await this.managementRepository
+      .createQueryBuilder()
+      .select('DISTINCT 품종', '품종')
+      .where('관리구분 = :type', { type: op1 })
+      .andWhere('품목 = :item', { item: op2 })
+      .getRawMany();
+    //배열로 반환할 수 있도록 수정 05.06
+    return { 품종: 품종.map((option) => option.품종) };
+  }
+  async handleWithoutGrade(
+    op1: string,
+    op2: string,
+    op3: string,
+  ): Promise<any> {
+    const 등급 = await this.managementRepository
+      .createQueryBuilder()
+      .select('DISTINCT 등급', '등급')
+      .where('관리구분 = :type', { type: op1 })
+      .andWhere('품목 = :item', { item: op2 })
+      .andWhere('품종 = :kind', { kind: op3 })
+      .getRawMany();
+    //배열로 반환할 수 있도록 수정 05.06
+    return { 등급: 등급.map((option) => option.등급) };
+  }
+  // async handleAll(op1, op2, op3, op4): Promise<any> {
+  //   const options = await this.managementRepository
+  //     .createQueryBuilder()
+  //     .select('DISTINCT 관리구분', '관리구분')
+  //     .getRawMany();
+  //   //배열로 반환할 수 있도록 수정 05.06
+  //   return options.map((option) => option.관리구분);
+  // }
 
   //기본적으로 DB에 insert하는 예제
   // async managementView(testValue1: string, testValue2: string): Promise<any> {
