@@ -55,7 +55,6 @@ export class ManagementService {
       .createQueryBuilder()
       .select('DISTINCT 관리구분', '관리구분')
       .getRawMany();
-    //배열로 반환할 수 있도록 수정 05.06
     return {
       관리구분: 관리구분.map((option) => option.관리구분),
     };
@@ -66,7 +65,6 @@ export class ManagementService {
       .select('DISTINCT 품목', '품목')
       .where('관리구분 = :type', { type: op1 })
       .getRawMany();
-    //배열로 반환할 수 있도록 수정 05.06
     return { 품목: 품목.map((option) => option.품목) };
   }
   async handleManagementAndItem(op1: string, op2: string): Promise<any> {
@@ -76,7 +74,6 @@ export class ManagementService {
       .where('관리구분 = :type', { type: op1 })
       .andWhere('품목 = :item', { item: op2 })
       .getRawMany();
-    //배열로 반환할 수 있도록 수정 05.06
     return { 품종: 품종.map((option) => option.품종) };
   }
   async handleWithoutGrade(
@@ -91,30 +88,26 @@ export class ManagementService {
       .andWhere('품목 = :item', { item: op2 })
       .andWhere('품종 = :kind', { kind: op3 })
       .getRawMany();
-    //배열로 반환할 수 있도록 수정 05.06
     return { 등급: 등급.map((option) => option.등급) };
   }
-  // async handleAll(op1, op2, op3, op4): Promise<any> {
-  //   const options = await this.managementRepository
-  //     .createQueryBuilder()
-  //     .select('DISTINCT 관리구분', '관리구분')
-  //     .getRawMany();
-  //   //배열로 반환할 수 있도록 수정 05.06
-  //   return options.map((option) => option.관리구분);
-  // }
 
-  //기본적으로 DB에 insert하는 예제
-  // async managementView(testValue1: string, testValue2: string): Promise<any> {
-  //   const dataExample = testValue1 + testValue2;
-  //   console.log(dataExample);
-  //   await this.managementRepository
-  //     .createQueryBuilder()
-  //     .insert()
-  //     .into(TestInventory)
-  //     .values([{ name: testValue1, description: testValue2 }])
-  //     .execute();
-  //   return dataExample;
-  // }
+  async handleAll(
+    op1: string,
+    op2: string,
+    op3: string,
+    op4: string
+  ): Promise<any> {
+    const 날짜 = await this.managementRepository
+      .createQueryBuilder()
+      .select('DISTINCT 날짜', '날짜')
+      .where('관리구분 = :type', { type: op1 })
+      .andWhere('품목 = :item', { item: op2 })
+      .andWhere('품종 = :kind', { kind: op3 })
+      .andWhere('등급 = :grade', { grade: op4 })
+      .getRawMany();
+    return { 날짜: 날짜.map((option) => option.날짜) };
+  }
+
   async getData(data: any): Promise<any> {
     const options = await this.managementRepository
       .createQueryBuilder()
@@ -124,9 +117,22 @@ export class ManagementService {
       .andWhere('품종 = :kind', { kind: data.품종 })
       .andWhere('등급 = :grade', { grade: data.등급 })
       .getRawMany();
-    //배열로 반환할 수 있도록 수정 05.06
     return options;
   }
+
+  async getCompare(data: any): Promise<any> {
+    const options = await this.managementRepository
+      .createQueryBuilder()
+      .select(['현재고', '전월재고', '날짜'])
+      .where('관리구분 = :type', { type: data.관리구분 })
+      .andWhere('품목 = :item', { item: data.품목 })
+      .andWhere('품종 = :kind', { kind: data.품종 })
+      .andWhere('등급 = :grade', { grade: data.등급 })
+      .orderBy('날짜', 'DESC')
+      .getRawOne();
+    return options;
+  }
+
   //테이블 수치 정규화 함수
   //나중에 api로 옮김
   //Min-Max Scaling을 통해 모든 값이 [0,1]사이에 위치하도록

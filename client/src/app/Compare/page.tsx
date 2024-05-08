@@ -1,17 +1,18 @@
 "use client";
 import { useState, useEffect } from "react";
-import styles from "./chart.module.css";
-import { Line } from "react-chartjs-2";
+import styles from "./compare.module.css";
+import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   LineElement,
   PointElement,
+  BarElement,
   LinearScale,
   Title,
   CategoryScale,
 } from "chart.js";
 
-ChartJS.register(LineElement, PointElement, LinearScale, Title, CategoryScale);
+ChartJS.register(LineElement, PointElement, BarElement, LinearScale, Title, CategoryScale);
 
 async function getInventory(option: any) {
   const requestOptions = {
@@ -23,7 +24,7 @@ async function getInventory(option: any) {
   };
 
   const res = await fetch(
-    `http://localhost:3001/management/getData`,
+    `http://localhost:3001/management/getCompare`,
     requestOptions
   );
   console.log(res);
@@ -115,19 +116,28 @@ export default function Page() {
   }, [options]);
 
   useEffect(() => {
-    if (inventory.length > 0) {
-      const newLabels = inventory.map((item: any) => item.날짜.substr(2,8)); //문자열 슬라이싱
-      const newData = inventory.map((item: any) => item.현재고); // 예시 데이터 매핑
-      setChartData({
-        labels: newLabels,
-        datasets: [
-          {
-            ...chartData.datasets[0],
-            data: newData,
-          },
-        ],
-      });
-    }
+    const newLabels = "ㅇ"; //문자열 슬라이싱
+    const newData = inventory.현재고;
+    const newData2 = inventory.전월재고;
+    setChartData({
+      labels: newLabels,
+      datasets: [
+        {
+          label: '현재고',
+          data: newData,
+          backgroundColor: 'rgba(255, 99, 132, 0.5)', // 현재고 데이터 색상
+          borderColor: 'rgba(255, 99, 132, 1)', // 테두리 색상
+          borderWidth: 1
+        },
+        {
+          label: '전월재고',
+          data: newData2,
+          backgroundColor: 'rgba(54, 162, 235, 0.5)', // 전월재고 데이터 색상
+          borderColor: 'rgba(54, 162, 235, 1)', // 테두리 색상
+          borderWidth: 1
+        }
+      ],
+    });
   }, [inventory]);
 
   const handleSelectChange = async (event: any) => {
@@ -182,43 +192,24 @@ export default function Page() {
     console.log(options);
   };
 
-  //fetch한 data에서 날짜를 뽑아서 dataConfig의 labels로 매칭
-  //dataConfig의 datasets속 data에 수치 데이터 mapping
-  //chartsOptions에서 scales의 x에는 라벨링, y축에는 max값와 min값 적용필요
-  // const dataConfig: any = {
-  //   labels: ["January", "February", "March", "April", "May", "June"],
-  //   datasets: [
-  //     {
-  //       label: "My First Dataset",
-  //       data: [65, 59, 80, 81, 56, 55],
-  //       fill: false,
-  //       borderColor: "rgb(75, 192, 192)",
-  //       tension: 0.1,
-  //     },
-  //   ],
-  // };
-
   const chartOptions: any = {
     responsive: true,
     plugins: {
       legend: {
-        position: "top",
+        position: 'top',
       },
       title: {
         display: true,
-        text: "Line Chart Example",
-      },
+        text: 'Chart.js Floating Bar Chart'
+      }
     },
     scales: {
       x: {
-        type: "category",
-        labels: chartData.labels,
+        beginAtZero: true,
       },
       y: {
-        type: "linear",
-        min: Math.min(inventory.현재고),
-        max: Math.max(inventory.현재고),
-      },
+        beginAtZero: true, // Y축을 0부터 시작하도록 설정
+      }
     },
   };
 
@@ -231,7 +222,7 @@ export default function Page() {
           value={options.관리구분}
           onChange={handleSelectChange}
         >
-          <option value="" disabled={options.품목 === ""}>
+          <option value="" disabled={options.관리구분 === ""}>
             선택하세요
           </option>
           {initialState.관리구분.map((option: any, index: any) => (
@@ -261,7 +252,7 @@ export default function Page() {
           value={options.품종}
           onChange={handleSelectChange}
         >
-          <option value="" disabled={options.품목 === ""}>
+          <option value="" disabled={options.품종 === ""}>
             선택하세요
           </option>
           {initialState.품종.map((option, index) => (
@@ -276,7 +267,7 @@ export default function Page() {
           value={options.등급}
           onChange={handleSelectChange}
         >
-          <option value="" disabled={options.품목 === ""}>
+          <option value="" disabled={options.등급 === ""}>
             선택하세요
           </option>
           {initialState.등급.map((option, index) => (
@@ -287,7 +278,7 @@ export default function Page() {
         </select>
       </div>
       <div className={styles.chartContainer}>
-        <Line data={chartData} options={chartOptions} />
+        <Bar data={chartData} options={chartOptions} />
       </div>
       <div className={styles.container}>
         <div className={styles.dataTable}>
@@ -295,18 +286,16 @@ export default function Page() {
             <thead className={styles.thead}>
               <tr>
                 <th>현재고</th>
-                <th>현재중량</th>
+                <th>전월재고</th>
                 <th>날짜</th>
               </tr>
             </thead>
             <tbody className={styles.tbody}>
-              {inventory.map((item: any, index: number) => (
-                <tr key={index}>
-                  <td>{item.현재고}</td>
-                  <td>{item.현재중량}</td>
-                  <td>{item.날짜}</td>
-                </tr>
-              ))}
+              <tr>
+                <td>{inventory.현재고}</td>
+                <td>{inventory.전월재고}</td>
+                <td>{inventory.날짜}</td>
+              </tr>
             </tbody>
           </table>
         </div>

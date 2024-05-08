@@ -65,15 +65,15 @@ export class ManagementController {
       );
     }
 
-    // 5. 모든 요소가 있을 때
-    // if (data.관리구분 && data.품목 && data.품종 && data.등급) {
-    //   return this.managementService.handleAll(
-    //     data.관리구분,
-    //     data.품목,
-    //     data.품종,
-    //     data.등급,
-    //   );
-    // }
+    //5. 모든 요소가 있을 때
+    if (data.관리구분 && data.품목 && data.품종 && data.등급) {
+      return this.managementService.handleAll(
+        data.관리구분,
+        data.품목,
+        data.품종,
+        data.등급,
+      );
+    }
 
     // 기본적으로 정의되지 않은 조건에 대해 처리
     return { error: 'Invalid request data' };
@@ -82,6 +82,10 @@ export class ManagementController {
   @Post('getData')
   async getData(@Body() data: any) {
     return this.managementService.getData(data);
+  }
+  @Post('getCompare')
+  async getCompare(@Body() data: any) {
+    return this.managementService.getCompare(data);
   }
 
   @Get('normalized')
