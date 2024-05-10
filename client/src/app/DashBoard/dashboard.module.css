@@ -15,7 +15,9 @@
   text-align: left;
   /* 텍스트를 중앙 정렬 */
 }
-
+.pagination {
+  display: flex;
+}
 .table{
   border: 1px solid #fff;
   border-radius: 5px;
