@@ -95,7 +95,7 @@ export class ManagementService {
     op1: string,
     op2: string,
     op3: string,
-    op4: string
+    op4: string,
   ): Promise<any> {
     const 날짜 = await this.managementRepository
       .createQueryBuilder()
