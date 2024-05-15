@@ -25,27 +25,29 @@ export class ManagementService {
       현재중량,
       날짜,
     } = data;
-
-    await this.managementRepository
-      .createQueryBuilder()
-      .insert()
-      .into(TestInventory)
-      .values({
-        관리구분,
-        품목,
-        품종,
-        등급,
-        전월재고,
-        전월중량,
-        입고수량,
-        입고중량,
-        출고수량,
-        출고중량,
-        현재고,
-        현재중량,
-        날짜,
-      })
-      .execute();
+    const existingEntry = await this.managementRepository.findOneBy({ 날짜 });
+    if (!existingEntry) {
+      await this.managementRepository
+        .createQueryBuilder()
+        .insert()
+        .into(TestInventory)
+        .values({
+          관리구분,
+          품목,
+          품종,
+          등급,
+          전월재고,
+          전월중량,
+          입고수량,
+          입고중량,
+          출고수량,
+          출고중량,
+          현재고,
+          현재중량,
+          날짜,
+        })
+        .execute();
+    }
     return this.managementRepository.findOneBy({ 관리구분 });
   }
 

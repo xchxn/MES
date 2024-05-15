@@ -4,6 +4,7 @@ import "./globals.css";
 import Link from "next/link";
 import Sidebar from "./Components/Sidebar/Sidebar";
 import layoutstyle from "./layout.module.css";
+import Header from "./Components/Header/Header";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,6 +22,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <div className={layoutstyle.container}>
+          <header>
+            <Header />
+          </header>
           <aside className={layoutstyle.sideBar}>
             <Sidebar />
           </aside>

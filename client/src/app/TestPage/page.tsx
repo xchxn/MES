@@ -2,12 +2,16 @@
 import { useState, useCallback } from "react";
 import * as XLSX from "xlsx";
 import styles from "./testpage.module.css";
+import Cookies from "js-cookie";
+
 async function updateServer(data: any, fileName: string) {
+  const token = Cookies.get('token');
   const requestOptions = {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       "File-Name": fileName,
+      "Authorization": `Bearer ${token}`,
     },
     body: JSON.stringify(data),
     next: { revalidate: 3600 },
@@ -19,7 +23,11 @@ async function updateServer(data: any, fileName: string) {
   );
 
   if (!res.ok) {
-    throw new Error("Failed to fetch data");
+    if (res.status === 401) {
+      throw new Error("Token authentication failed. Please log in again.");
+    } else {
+      throw new Error("Failed to fetch data");
+    }
   }
   return res.json();
 }

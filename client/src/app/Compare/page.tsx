@@ -124,14 +124,14 @@ export default function Page() {
       datasets: [
         {
           label: '현재고',
-          data: newData,
+          data: inventory.현재고,
           backgroundColor: 'rgba(255, 99, 132, 0.5)', // 현재고 데이터 색상
           borderColor: 'rgba(255, 99, 132, 1)', // 테두리 색상
           borderWidth: 1
         },
         {
           label: '전월재고',
-          data: newData2,
+          data: inventory.전월재고,
           backgroundColor: 'rgba(54, 162, 235, 0.5)', // 전월재고 데이터 색상
           borderColor: 'rgba(54, 162, 235, 1)', // 테두리 색상
           borderWidth: 1
@@ -209,6 +209,7 @@ export default function Page() {
       },
       y: {
         beginAtZero: true, // Y축을 0부터 시작하도록 설정
+        max: Math.max(inventory.현재고, inventory.전월재고),
       }
     },
   };

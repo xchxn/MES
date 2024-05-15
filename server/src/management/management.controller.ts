@@ -1,6 +1,14 @@
-import { Controller, Get, Post, Body, Headers } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Headers,
+  UseGuards,
+} from '@nestjs/common';
 import { ManagementService } from './management.service';
 import { TestInventory } from './management.entity';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 function extractAndFormatDate(fileName: string): string {
   // Split the filename using "-" as a delimiter
@@ -22,6 +30,7 @@ function extractAndFormatDate(fileName: string): string {
 export class ManagementController {
   constructor(private managementService: ManagementService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Post('update')
   async updateData(
     @Body() data: TestInventory[],

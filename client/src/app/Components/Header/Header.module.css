@@ -1,0 +1,29 @@
+.title {
+  font-size: xx-large;
+  color: #22aeff;
+}
+.navButton {
+  display: flex;
+  margin-top: 0.5rem;
+  border: 0.5px;
+  border-color: white;
+  border-style: solid;
+  justify-content: right;
+  border: solid;
+  border-radius: 5px;
+  padding: 5%;
+}
+
+.navContainer {
+  display: flex;
+  margin-left: 15px;
+  margin-right: 5px;
+  padding-right: 10px;
+  flex-direction: column;
+  align-items: right;
+  justify-content: right;
+  min-height: 30vh;
+  text-align: center;
+  border-right: 1px solid white;
+  height: 100%;
+}
