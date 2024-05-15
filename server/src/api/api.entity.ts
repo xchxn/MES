@@ -40,4 +40,7 @@ export class ProductInventory {
 
   @Column({ type: 'decimal', precision: 8, scale: 1, default: 0 })
   현재중량: number;
+
+  @Column({ type: 'date', default: '1900-01-01' })
+  날짜: any;
 }

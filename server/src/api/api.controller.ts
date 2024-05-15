@@ -6,9 +6,26 @@ import {
   Put,
   Delete,
   Param,
+  Headers,
 } from '@nestjs/common';
 import { ApiService } from './api.service';
 import { ProductInventory } from './api.entity';
+
+function extractAndFormatDate(fileName: string): string {
+  // Split the filename using "-" as a delimiter
+  const datePart = fileName.split('-')[0];
+
+  // Parse the datePart using the format "yy.mm.dd"
+  const [yy, mm, dd] = datePart.split('.').map(Number);
+
+  // Create a Date object
+  const date = new Date(2000 + yy, mm - 1, dd); // Add 2000 to the year to account for 21st century
+
+  // Format the date as "YYYY-MM-DD"
+  const formattedDate = date.toISOString().split('T')[0];
+
+  return formattedDate;
+}
 
 @Controller('api')
 export class ApiController {
@@ -17,9 +34,12 @@ export class ApiController {
   @Post('apiview')
   async updateData(
     @Body() data: ProductInventory[],
+    @Headers('File-name') date: string,
   ): Promise<ProductInventory[]> {
-    console.log('check req');
-    return Promise.all(data.map((item) => this.apiService.updateData(item)));
+    const 날짜 = extractAndFormatDate(date);
+    return Promise.all(
+      data.map((item) => this.apiService.updateData({ ...item, 날짜 })),
+    );
   }
   @Get('test')
   async getAll(): Promise<any> {

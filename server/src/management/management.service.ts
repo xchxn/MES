@@ -1,29 +1,136 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { Management } from './management.entity';
+import { TestInventory } from './management.entity';
 
 @Injectable()
 export class ManagementService {
   constructor(
-    @Inject('MANAGEMENT_REPOSITORY')
-    private managementRepository: Repository<Management>,
+    @Inject('TESTING_INVENTORY_REPOSITORY')
+    private managementRepository: Repository<TestInventory>,
   ) {}
 
-  async getStock(): Promise<any> {
-    return 'Stock status';
-  }
+  async managementUpdate(data: TestInventory): Promise<TestInventory> {
+    const {
+      관리구분,
+      품목,
+      품종,
+      등급,
+      전월재고,
+      전월중량,
+      입고수량,
+      입고중량,
+      출고수량,
+      출고중량,
+      현재고,
+      현재중량,
+      날짜,
+    } = data;
 
-  //기본적으로 DB에 insert하는 예제
-  async managementView(testValue1: string, testValue2: string): Promise<any> {
-    const dataExample = testValue1 + testValue2;
-    console.log(dataExample);
     await this.managementRepository
       .createQueryBuilder()
       .insert()
-      .into(Management)
-      .values([{ name: testValue1, description: testValue2 }])
+      .into(TestInventory)
+      .values({
+        관리구분,
+        품목,
+        품종,
+        등급,
+        전월재고,
+        전월중량,
+        입고수량,
+        입고중량,
+        출고수량,
+        출고중량,
+        현재고,
+        현재중량,
+        날짜,
+      })
       .execute();
-    return dataExample;
+    return this.managementRepository.findOneBy({ 관리구분 });
+  }
+
+  //요청에 따라 distinct된 옵션 선택지 제공
+  async handleEmpty(): Promise<any> {
+    const 관리구분 = await this.managementRepository
+      .createQueryBuilder()
+      .select('DISTINCT 관리구분', '관리구분')
+      .getRawMany();
+    return {
+      관리구분: 관리구분.map((option) => option.관리구분),
+    };
+  }
+  async handleOnlyManagement(op1: string): Promise<any> {
+    const 품목 = await this.managementRepository
+      .createQueryBuilder()
+      .select('DISTINCT 품목', '품목')
+      .where('관리구분 = :type', { type: op1 })
+      .getRawMany();
+    return { 품목: 품목.map((option) => option.품목) };
+  }
+  async handleManagementAndItem(op1: string, op2: string): Promise<any> {
+    const 품종 = await this.managementRepository
+      .createQueryBuilder()
+      .select('DISTINCT 품종', '품종')
+      .where('관리구분 = :type', { type: op1 })
+      .andWhere('품목 = :item', { item: op2 })
+      .getRawMany();
+    return { 품종: 품종.map((option) => option.품종) };
+  }
+  async handleWithoutGrade(
+    op1: string,
+    op2: string,
+    op3: string,
+  ): Promise<any> {
+    const 등급 = await this.managementRepository
+      .createQueryBuilder()
+      .select('DISTINCT 등급', '등급')
+      .where('관리구분 = :type', { type: op1 })
+      .andWhere('품목 = :item', { item: op2 })
+      .andWhere('품종 = :kind', { kind: op3 })
+      .getRawMany();
+    return { 등급: 등급.map((option) => option.등급) };
+  }
+
+  async handleAll(
+    op1: string,
+    op2: string,
+    op3: string,
+    op4: string,
+  ): Promise<any> {
+    const 날짜 = await this.managementRepository
+      .createQueryBuilder()
+      .select('DISTINCT 날짜', '날짜')
+      .where('관리구분 = :type', { type: op1 })
+      .andWhere('품목 = :item', { item: op2 })
+      .andWhere('품종 = :kind', { kind: op3 })
+      .andWhere('등급 = :grade', { grade: op4 })
+      .getRawMany();
+    return { 날짜: 날짜.map((option) => option.날짜) };
+  }
+
+  async getData(data: any): Promise<any> {
+    const options = await this.managementRepository
+      .createQueryBuilder()
+      .select(['현재고', '현재중량', '날짜'])
+      .where('관리구분 = :type', { type: data.관리구분 })
+      .andWhere('품목 = :item', { item: data.품목 })
+      .andWhere('품종 = :kind', { kind: data.품종 })
+      .andWhere('등급 = :grade', { grade: data.등급 })
+      .getRawMany();
+    return options;
+  }
+
+  async getCompare(data: any): Promise<any> {
+    const options = await this.managementRepository
+      .createQueryBuilder()
+      .select(['현재고', '전월재고', '날짜'])
+      .where('관리구분 = :type', { type: data.관리구분 })
+      .andWhere('품목 = :item', { item: data.품목 })
+      .andWhere('품종 = :kind', { kind: data.품종 })
+      .andWhere('등급 = :grade', { grade: data.등급 })
+      .orderBy('날짜', 'DESC')
+      .getRawOne();
+    return options;
   }
 
   //테이블 수치 정규화 함수
