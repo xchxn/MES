@@ -37,6 +37,6 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @Post('logout')
   logout(@Body() data: { token: any }): any {
-    return this.authService.logout(data.token.value);
+    return this.authService.logout(data.token);
   }
 }

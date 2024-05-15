@@ -24,6 +24,7 @@ async function updateServer(data: any, fileName: string) {
 
   if (!res.ok) {
     if (res.status === 401) {
+      window.alert("Token authentication failed. Please log in again.");
       throw new Error("Token authentication failed. Please log in again.");
     } else {
       throw new Error("Failed to fetch data");
