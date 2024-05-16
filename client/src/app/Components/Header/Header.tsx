@@ -1,7 +1,7 @@
 'use client'
 import Link from "next/link";
 import headerStyle from "./Header.module.css";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { useState, useEffect } from "react";
 
@@ -37,15 +37,16 @@ async function Logout(): Promise<any> {
     }
     // 서버에서의 응답을 JSON 형식으로 파싱
     const data = await res.json();
-    Cookies.remove('id');
-    Cookies.remove('token');
     // 사용자가 존재하는 경우
     if (data) {
+      Cookies.remove('id');
+      Cookies.remove('token');
       console.log("로그아웃 성공.");
-      redirect("/");
+      return true;
     } else {
       // 사용자가 존재하지 않는 경우
       console.log("로그아웃 실패.");
+      return false;
     }
   } catch (error) {
     console.error("Logout error:", error);
@@ -53,6 +54,7 @@ async function Logout(): Promise<any> {
 }
 
 export default function Header({ initialUserId }: any) {
+  const router = useRouter();
   const [userId, setUserId] = useState(initialUserId);
 
   useEffect(() => {
@@ -63,11 +65,18 @@ export default function Header({ initialUserId }: any) {
 
   const handleLogout = async () => {
     try {
-      await Logout();
+      const suc = await Logout();
+      if(suc){
+        router.push(`/`);
+      }
+      else {
+        window.alert("로그아웃 실패")
+      }
     } catch (error) {
       console.error('Logout failed:', error);
     }
   };
+  
   return (
     <div>
       {userId ? (

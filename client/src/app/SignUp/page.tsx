@@ -1,3 +1,4 @@
+import { redirect } from 'next/navigation';
 
 async function signUp(formData: FormData): Promise<any> {
   "use server";
@@ -22,7 +23,11 @@ async function signUp(formData: FormData): Promise<any> {
   if (!res.ok) {
     throw new Error("fail fetch data");
   }
-  else console.log("회원가입 성공");
+  else {
+    console.log("회원가입 성공");
+    window.alert("회원가입 성공, 로그인 해주세요");
+    redirect(`/Login`);
+  }
   //로그인 페이지로 리디렉션 로직 추가 요망
   return res.json();
 }

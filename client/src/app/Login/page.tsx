@@ -27,6 +27,7 @@ async function Login(formData: any) {
   if (data) {
     // 토큰 정보 저장
     console.log('로그인 성공.');
+    window.alert("로그인 성공, 홈으로 돌아갑니다.");
     return true;
   } else {
     // 사용자가 존재하지 않는 경우
