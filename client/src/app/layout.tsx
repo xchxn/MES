@@ -22,13 +22,13 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <div className={layoutstyle.container}>
-          <header>
-            <Header />
-          </header>
           <aside className={layoutstyle.sideBar}>
             <Sidebar />
           </aside>
           <main className={layoutstyle.content}>{children}</main>
+          <header>
+            <Header />
+          </header>
           <aside>{/* update header and footer after*/}</aside>
         </div>
       </body>

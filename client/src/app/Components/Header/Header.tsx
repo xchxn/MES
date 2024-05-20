@@ -2,25 +2,16 @@
 import Link from "next/link";
 import headerStyle from "./Header.module.css";
 import { redirect, useRouter } from "next/navigation";
+import Router from "next/router";
 import Cookies from "js-cookie";
 import { useState, useEffect } from "react";
 
-export async function getServerSideProps(context: any) {
-  const { req } = context;
-  const userId = Cookies.get('id');
-  return {
-    props: {
-      initialUserId: userId || null,
-    },
-  };
-}
-
-async function Logout(): Promise<any> {
+async function logout(): Promise<boolean> {
   try {
     const token = Cookies.get('token');
     if (!token) {
       console.log("로그아웃 실패: 토큰이 없습니다.");
-      return;
+      return false;
     }
     const requestOptions = {
       method: "POST",
@@ -50,68 +41,53 @@ async function Logout(): Promise<any> {
     }
   } catch (error) {
     console.error("Logout error:", error);
+    return false;
   }
 }
 
-export default function Header({ initialUserId }: any) {
+export default function Header() {
   const router = useRouter();
-  const [userId, setUserId] = useState(initialUserId);
+  const [userId, setUserId] = useState("");
 
   useEffect(() => {
-    if (!userId) {
-      setUserId(Cookies.get('id')); // 클라이언트 사이드에서 id 재확인
-    }
-  }, [userId]);
+    const fetchUserId = () => {
+      const id = Cookies.get('id');  // 'id' 쿠키에서 사용자 ID를 가져옵니다.
+      setUserId(id || "");  // 쿠키에서 가져온 값을 상태에 설정합니다.
+    };
+
+    fetchUserId();
+    // 쿠키 값의 변화를 감지하기 위해 setInterval을 사용할 수 있습니다.
+    const interval = setInterval(fetchUserId, 1000);  // 매 60분마다 쿠키를 확인합니다.
+    return () => clearInterval(interval);  // 컴포넌트 언마운트 시 인터벌을 정리합니다.
+  }, []);
 
   const handleLogout = async () => {
-    try {
-      const suc = await Logout();
-      if(suc){
-        router.push(`/`);
-      }
-      else {
-        window.alert("로그아웃 실패")
-      }
-    } catch (error) {
-      console.error('Logout failed:', error);
+    if (await logout()) {
+      setUserId("");
+      router.push(`/`);
+      window.alert("로그아웃 성공");
+    } else {
+      window.alert("로그아웃 실패");
     }
   };
-  
+
   return (
-    <div>
-      {userId ? (
-        <div>
-          <div className={headerStyle.navContainer}>
+    <div className={headerStyle.navContainer}>
+      <div>
+        <p className={headerStyle.title}>SPM</p>
+      </div>
+      <div>
+        {userId? (
+          <div>
+            <div>Welcome, {`${userId}`}!</div>
             <div>
-              <p className={headerStyle.title}>SPM</p>
-            </div>
-            <div>
-              <div>
-                <button onClick={handleLogout}>Logout</button>
-              </div>
-              <div className={headerStyle.navButton}>
-                <Link href="/Setting">Setting</Link>
-              </div>
+              <button onClick={handleLogout}>Logout</button>
             </div>
           </div>
-        </div>
-      ) : (
-        <div>
-          <div className={headerStyle.navContainer}>
-            <div>
-              <p className={headerStyle.title}>SPM</p>
-            </div>
-            <div>
-              <div className={headerStyle.navButton}>
-                <Link href="/Login">Login</Link>
-              </div>
-              <div className={headerStyle.navButton}>
-                <Link href="/Setting">Setting</Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+        ) : (
+          <button onClick={() => router.push('/Login')}>Login</button>
+        )}
+      </div>
     </div>
   );
 }

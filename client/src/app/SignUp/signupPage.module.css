@@ -1,0 +1,4 @@
+.inputValid::after {
+  content: '✓';
+  color: green;
+}
