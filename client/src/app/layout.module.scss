@@ -1,0 +1,37 @@
+.container {
+  display: flex;
+  flex: row;
+}
+
+.sidebar {
+  margin-left: 50px;
+  padding-left: 50px;
+  position: fixed;
+  justify-content: center;
+  border-top: 1px solid white;
+  border-right: 1px solid white;
+  border-bottom: 1px solid white;
+  width: 15vw;
+}
+
+.content {
+  width: 100%;
+  position: relative;
+
+  .header {
+    height: 5vh;
+    top: 0;
+    margin-bottom: 5px;
+    padding: 10px 20px;
+    position: relative;
+  }
+
+  .main {
+    display: flex;
+    height: 95vh;
+    top: 5vh;
+    margin-top: 5px;
+    position: relative;
+    justify-content: center;
+  }
+}

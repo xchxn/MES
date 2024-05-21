@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import styles from "./chart.module.css";
+import styles from "./chartStyles.module.scss";
 import { Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -51,11 +51,6 @@ async function getOptions(option: any) {
   }
   return res.json();
 }
-//첫번째 옵션=db에서 가져오는 관리구분
-//관리구분으로 품목 가져오기
-//품목으로 품종 가져오기
-//품종으로 등급 가져오기
-//최종 '조회하기'버튼으로 위의 옵션에 해당하는 값들 가져와서 chart와 연동
 export default function Page() {
   const [inventory, setInventory] = useState([]);
   const [options, setOptions] = useState({
@@ -223,8 +218,7 @@ export default function Page() {
   };
 
   return (
-    <div>
-      <div className={styles.optionContainer}>
+    <div className={styles.container}>
         <select
           id="관리구분"
           name="관리구분"
@@ -285,9 +279,8 @@ export default function Page() {
             </option>
           ))}
         </select>
-      </div>
-      <div className={styles.chartContainer}>
-        <Line data={chartData} options={chartOptions} />
+        <div className={styles.chartContainer}>
+          <Line data={chartData} options={chartOptions} />
       </div>
     </div>
   );

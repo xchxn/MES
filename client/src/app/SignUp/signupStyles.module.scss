@@ -1,0 +1,73 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 55vh;
+  width: 300px;
+  text-align: center;
+  border-radius: 15px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 40px;
+  background: #fff; // 백그라운드 색상
+
+  .title {
+    // "SPM 로그인" 타이틀
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #0049F0;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 50vw;
+
+    input {
+      margin-bottom: 10px;
+      padding: 7.5px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+
+    .button {
+      flex: 1;
+      padding: 12px 16px;
+      font-size: 16px;
+      background-color: transparent;
+      border: none;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.3s ease; // 확대 효과를 위한 전환 설정
+
+      &:hover {
+        transform: scale(1.25); // 마우스 오버시 5% 확대
+      }
+    }
+    .dupButton {
+      flex: 1;
+      margin-bottom: 5px;
+      margin-right: 15px;
+      font-size: 16px;
+      background-color: transparent;
+      border: none;
+      font-weight: bold;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.3s ease; // 확대 효과를 위한 전환 설정
+
+      &:hover {
+        transform: scale(1.1); // 마우스 오버시 5% 확대
+      }
+    }
+  }
+}
+.inputValid {
+  &::after {
+    content: '✓';
+    color: rgb(50, 162, 50);
+  }
+}

@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import styles from './signupPage.module.css'
+import styles from './signupStyles.module.scss'
 
 async function signUp(formData: FormData): Promise<any> {
   const rawFormData = {
@@ -94,10 +94,8 @@ export default function Page() {
   };
 
   return (
-    <div>
-      <div>
-        <div>ComoStation</div>
-        <div>
+      <div className={styles.container}>
+        <div className={styles.title}>SPM 회원가입</div>
           <form onSubmit={handleSubmit}>
             <div className={formData.idDupCheck ? styles.inputValid : ''}>
               <input
@@ -109,6 +107,7 @@ export default function Page() {
                 onChange={handleChange}
               />
               <button
+                className={styles.dupButton}
                 id="idDupCheck"
                 onClick={handleIdCheck}
                 >  
@@ -147,14 +146,13 @@ export default function Page() {
             </div>
             <div>
               <button
+                className={styles.button}
                 id="signUp"
                 type="submit">
                 Sign up
               </button>
             </div>
           </form>
-        </div>
       </div>
-    </div>
   );
 }

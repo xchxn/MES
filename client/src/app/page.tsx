@@ -1,5 +1,5 @@
 'use client'
-import styles from "./page.module.css";
+import styles from "./mainPageStyles.module.scss";
 import Cookies from "js-cookie";
 import { useState, useEffect } from "react";
 

@@ -1,0 +1,10 @@
+.container {
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 100%;
+
+  .chartContainer {
+    position: relative;
+  }
+}

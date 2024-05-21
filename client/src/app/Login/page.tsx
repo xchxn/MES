@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Cookies from 'js-cookie';
-
+import styles from './loginStyles.module.scss'
 async function Login(formData: any) {
   const rawFormData = {
     id: formData.get('id'),
@@ -59,9 +59,8 @@ export default function Page() {
   };
 
   return (
-    <div>
-      <div>SPM</div>
-      <div>
+    <div className={styles.container}>
+      <div className={styles.title}>SPM 로그인</div>
         <form onSubmit={handleSubmit}>
           <div>
             <input
@@ -84,10 +83,10 @@ export default function Page() {
             />
           </div>
           <div>
-            <button type="submit">
+            <button className={styles.button} type="submit">
               Login
             </button>
-            <button type="button">
+            <button className={styles.button} type="button">
               <Link href="/SignUp">Sign Up</Link>
             </button>
           </div>
@@ -95,7 +94,6 @@ export default function Page() {
             If you dont have an id, sign up
           </div>
         </form>
-      </div>
     </div>
   );
 }

@@ -1,5 +1,4 @@
 'use client'
-import headerStyle from "./Header.module.css";
 import styles from "./headerStyles.module.scss";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
@@ -74,12 +73,12 @@ export default function Header() {
     <div>
       <div>
         {userId? (
-            <div className={styles.container}>
+            <div className={styles.loginContainer}>
               <p> Welcome, {`${userId}`}!</p>
               <button className={styles.logoutButton} onClick={handleLogout}>Logout</button>
             </div>
         ) : (
-          <div>
+          <div className={styles.loginContainer}>
             <button className={styles.loginButton} onClick={() => router.push('/Login')}>Login</button>
           </div>
         )}
