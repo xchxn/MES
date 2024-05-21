@@ -1,8 +1,7 @@
 'use client'
-import Link from "next/link";
 import headerStyle from "./Header.module.css";
-import { redirect, useRouter } from "next/navigation";
-import Router from "next/router";
+import styles from "./headerStyles.module.scss";
+import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { useState, useEffect } from "react";
 
@@ -72,20 +71,17 @@ export default function Header() {
   };
 
   return (
-    <div className={headerStyle.navContainer}>
-      <div>
-        <p className={headerStyle.title}>SPM</p>
-      </div>
+    <div>
       <div>
         {userId? (
-          <div>
-            <div>Welcome, {`${userId}`}!</div>
-            <div>
-              <button onClick={handleLogout}>Logout</button>
+            <div className={styles.container}>
+              <p> Welcome, {`${userId}`}!</p>
+              <button className={styles.logoutButton} onClick={handleLogout}>Logout</button>
             </div>
-          </div>
         ) : (
-          <button onClick={() => router.push('/Login')}>Login</button>
+          <div>
+            <button className={styles.loginButton} onClick={() => router.push('/Login')}>Login</button>
+          </div>
         )}
       </div>
     </div>

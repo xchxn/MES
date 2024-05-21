@@ -1,5 +1,6 @@
 .container {
   display: flex;
+  height: 95vh;
 }
 .optionContainer {
   margin: 20px;

@@ -23,6 +23,7 @@ export default function Home() {
   return (
     <div className={styles.main}>
       CoD팀{userId ? `: ${userId}` : ''}
+      SPM 사용 설명서
     </div>
   );
 }

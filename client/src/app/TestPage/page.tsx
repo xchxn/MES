@@ -85,46 +85,6 @@ export default function Page() {
         {/* 해당 버튼으로 서버에 데이터 업데이트*/}
         {/* 드래그 데이터 테이블*/}
       </div>
-      <div>
-        <div className={styles.dataTable}>
-          <table>
-            <thead>
-              <tr>
-                <th>관리구분</th>
-                <th>품목</th>
-                <th>품종</th>
-                <th>등급</th>
-                <th>전월재고</th>
-                <th>전월중량</th>
-                <th>입고수량</th>
-                <th>입고중량</th>
-                <th>출고수량</th>
-                <th>출고중량</th>
-                <th>현재고</th>
-                <th>현재중량</th>
-              </tr>
-            </thead>
-            <tbody>
-              {inventory.map((item: any, index: number) => (
-                <tr key={index}>
-                  <td>{item.관리구분}</td>
-                  <td>{item.품목}</td>
-                  <td>{item.품종}</td>
-                  <td>{item.등급}</td>
-                  <td>{item.전월재고}</td>
-                  <td>{item.전월중량}</td>
-                  <td>{item.입고수량}</td>
-                  <td>{item.입고중량}</td>
-                  <td>{item.출고수량}</td>
-                  <td>{item.출고중량}</td>
-                  <td>{item.현재고}</td>
-                  <td>{item.현재중량}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
     </div>
   );
 }

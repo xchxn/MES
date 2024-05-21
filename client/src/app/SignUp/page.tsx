@@ -135,7 +135,7 @@ export default function Page() {
                 onChange={handleChange}
               />
             </div>
-            <div className={formData.password === formData.passwordCheck ? styles.inputValid : ''}>
+            <div className={(formData.passwordCheck !== "" && formData.password === formData.passwordCheck) ? styles.inputValid : ''}>
               <input
                 type="password"
                 id="passwordCheck"

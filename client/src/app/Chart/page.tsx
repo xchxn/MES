@@ -289,28 +289,6 @@ export default function Page() {
       <div className={styles.chartContainer}>
         <Line data={chartData} options={chartOptions} />
       </div>
-      <div className={styles.container}>
-        <div className={styles.dataTable}>
-          <table className={styles.table}>
-            <thead className={styles.thead}>
-              <tr>
-                <th>현재고</th>
-                <th>현재중량</th>
-                <th>날짜</th>
-              </tr>
-            </thead>
-            <tbody className={styles.tbody}>
-              {inventory.map((item: any, index: number) => (
-                <tr key={index}>
-                  <td>{item.현재고}</td>
-                  <td>{item.현재중량}</td>
-                  <td>{item.날짜}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
     </div>
   );
 }

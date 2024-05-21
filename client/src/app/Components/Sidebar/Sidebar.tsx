@@ -1,27 +1,27 @@
 "use client";
 import Link from "next/link";
-import sidebarstyle from "./Sidebar.module.css";
+import sidebarstyles from "./sidebarStyles.module.scss"
 
 export default function Sidebar() {
   return (
     <div>
-      <div className={sidebarstyle.navContainer}>
+      <div className={sidebarstyles.navContainer}>
       <div>
-        <p className={sidebarstyle.title}>SPM</p>
+        <p className={sidebarstyles.title}>SPM</p>
       </div>
-        <div className={sidebarstyle.navButton}>
+        <div className={sidebarstyles.linkButton}>
           <Link href="/">Home</Link>
         </div>
-        <div className={sidebarstyle.navButton}>
+        <div className={sidebarstyles.linkButton}>
           <Link href="/TestPage">TestPage</Link>
         </div>
-        <div className={sidebarstyle.navButton}>
+        <div className={sidebarstyles.linkButton}>
           <Link href="/DashBoard">DashBoard</Link>
         </div>
-        <div className={sidebarstyle.navButton}>
+        <div className={sidebarstyles.linkButton}>
           <Link href="/Chart">Chart</Link>
         </div>
-        <div className={sidebarstyle.navButton}>
+        <div className={sidebarstyles.linkButton}>
           <Link href="/Compare">Compare</Link>
         </div>
       </div>

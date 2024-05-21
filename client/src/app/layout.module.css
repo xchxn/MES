@@ -14,8 +14,11 @@
   border-bottom: 1px solid white;
   width: 300px;
 }
-
+.header {
+  height: 5vh;
+}
 .content {
+  height: 90vh;
   flex: 1; /* Occupy the remaining space */
   padding: 16px; /* Optional padding */
 }
