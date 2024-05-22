@@ -1,6 +1,6 @@
-'use client'
+"use client";
 import { useState, useEffect } from "react";
-import styles from "./dashboard.module.css";
+import styles from "./dashboardStyles.module.scss";
 async function getInventory() {
   const requestOptions = {
     method: "GET",
@@ -57,48 +57,52 @@ export default function Page() {
 
   return (
     <div className={styles.container}>
-      <div className={styles.dataTable}>
-        <table className={styles.table}>
-          <thead className={styles.thead}>
-            <tr>
-              <th>관리구분</th>
-              <th>품목</th>
-              <th>품종</th>
-              <th>등급</th>
-              <th>전월재고</th>
-              <th>전월중량</th>
-              <th>입고수량</th>
-              <th>입고중량</th>
-              <th>출고수량</th>
-              <th>출고중량</th>
-              <th>현재고</th>
-              <th>현재중량</th>
+      <table>
+        <thead>
+          <tr>
+            <th>관리구분</th>
+            <th>품목</th>
+            <th>품종</th>
+            <th>등급</th>
+            <th>전월재고</th>
+            <th>전월중량</th>
+            <th>입고수량</th>
+            <th>입고중량</th>
+            <th>출고수량</th>
+            <th>출고중량</th>
+            <th>현재고</th>
+            <th>현재중량</th>
+          </tr>
+        </thead>
+        <tbody>
+          {currentItems.map((item: any, index: number) => (
+            <tr key={index}>
+              <td>{item.관리구분}</td>
+              <td>{item.품목}</td>
+              <td>{item.품종}</td>
+              <td>{item.등급}</td>
+              <td>{item.전월재고}</td>
+              <td>{item.전월중량}</td>
+              <td>{item.입고수량}</td>
+              <td>{item.입고중량}</td>
+              <td>{item.출고수량}</td>
+              <td>{item.출고중량}</td>
+              <td>{item.현재고}</td>
+              <td>{item.현재중량}</td>
             </tr>
-          </thead>
-          <tbody className={styles.tbody}>
-            {currentItems.map((item: any, index: number) => (
-              <tr key={index}>
-                <td>{item.관리구분}</td>
-                <td>{item.품목}</td>
-                <td>{item.품종}</td>
-                <td>{item.등급}</td>
-                <td>{item.전월재고}</td>
-                <td>{item.전월중량}</td>
-                <td>{item.입고수량}</td>
-                <td>{item.입고중량}</td>
-                <td>{item.출고수량}</td>
-                <td>{item.출고중량}</td>
-                <td>{item.현재고}</td>
-                <td>{item.현재중량}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <div className={styles.pagination}>
-          <button onClick={prevPage} disabled={currentPage === 1}>이전</button>
-          <span>{currentPage}/{totalPages}</span>
-          <button onClick={nextPage} disabled={lastIndex >= inventoryData.length}>다음</button>
-        </div>
+          ))}
+        </tbody>
+      </table>
+      <div className={styles.pagination}>
+        <button onClick={prevPage} disabled={currentPage === 1}>
+          이전
+        </button>
+        <span>
+          {currentPage}/{totalPages}
+        </span>
+        <button onClick={nextPage} disabled={lastIndex >= inventoryData.length}>
+          다음
+        </button>
       </div>
     </div>
   );
