@@ -3,8 +3,36 @@
   align-items: center;
   position: relative;
   width: 100%;
-
-  .chartContainer {
+  flex-direction: column;
+  
+  .optionContainer{
     position: relative;
+    width: 100%;
+
+    select{
+      padding: 3px 5px;
+      margin: 5px 5px;
+      border-bottom: 3px dashed #0049F0;
+      border-top: transparent;
+      border-left: transparent;
+      border-right: transparent;
+      // border-bottom-left-radius: 5px;
+      // border-bottom-right-radius: 5px;
+      background: transparent;
+
+      option  {
+        border: 1px solid #0049F0;
+        border-radius: 5px;
+        padding: 3px 5px;
+      }
+    }
+  }
+  .chartContainer {
+    width: 100%;
+    position: relative;
+
+    .canvas {
+      width: 100%;
+    }
   }
 }

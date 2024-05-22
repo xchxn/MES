@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import styles from "./compare.module.css";
+import styles from "./compareStyles.module.scss";
 import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -215,7 +215,7 @@ export default function Page() {
   };
 
   return (
-    <div>
+    <div className={styles.container}>
       <div className={styles.optionContainer}>
         <select
           id="관리구분"
@@ -281,7 +281,7 @@ export default function Page() {
       <div className={styles.chartContainer}>
         <Bar data={chartData} options={chartOptions} />
       </div>
-      <div className={styles.container}>
+      <div>
         <div className={styles.dataTable}>
           <table className={styles.table}>
             <thead className={styles.thead}>

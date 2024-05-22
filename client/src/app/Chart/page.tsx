@@ -111,7 +111,7 @@ export default function Page() {
 
   useEffect(() => {
     if (inventory.length > 0) {
-      const newLabels = inventory.map((item: any) => item.날짜.substr(2,8)); //문자열 슬라이싱
+      const newLabels = inventory.map((item: any) => item.날짜.substr(2, 8)); //문자열 슬라이싱
       const newData = inventory.map((item: any) => item.현재고); // 예시 데이터 매핑
       setChartData({
         labels: newLabels,
@@ -218,70 +218,78 @@ export default function Page() {
   };
 
   return (
-    <div className={styles.container}>
-        <select
-          id="관리구분"
-          name="관리구분"
-          value={options.관리구분}
-          onChange={handleSelectChange}
-        >
-          <option value="" disabled={options.품목 === ""}>
-            선택하세요
-          </option>
-          {initialState.관리구분.map((option: any, index: any) => (
-            <option key={index} value={option}>
-              {option}
+    <>
+      <div className={styles.container}>
+        <div className={styles.optionContainer}>
+          <select
+            id="관리구분"
+            name="관리구분"
+            value={options.관리구분}
+            onChange={handleSelectChange}
+          >
+            <option value="" disabled={options.품목 === ""}>
+              선택하세요
             </option>
-          ))}
-        </select>
-        <select
-          id="품목"
-          name="품목"
-          value={options.품목}
-          onChange={handleSelectChange}
-        >
-          <option value="" disabled={options.품목 === ""}>
-            선택하세요
-          </option>
-          {initialState.품목.map((option, index) => (
-            <option key={index} value={option}>
-              {option}
+            {initialState.관리구분.map((option: any, index: any) => (
+              <option key={index} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+          <select
+            id="품목"
+            name="품목"
+            value={options.품목}
+            onChange={handleSelectChange}
+          >
+            <option value="" disabled={options.품목 === ""}>
+              선택하세요
             </option>
-          ))}
-        </select>
-        <select
-          id="품종"
-          name="품종"
-          value={options.품종}
-          onChange={handleSelectChange}
-        >
-          <option value="" disabled={options.품목 === ""}>
-            선택하세요
-          </option>
-          {initialState.품종.map((option, index) => (
-            <option key={index} value={option}>
-              {option}
+            {initialState.품목.map((option, index) => (
+              <option key={index} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+          <select
+            id="품종"
+            name="품종"
+            value={options.품종}
+            onChange={handleSelectChange}
+          >
+            <option value="" disabled={options.품목 === ""}>
+              선택하세요
             </option>
-          ))}
-        </select>
-        <select
-          id="등급"
-          name="등급"
-          value={options.등급}
-          onChange={handleSelectChange}
-        >
-          <option value="" disabled={options.품목 === ""}>
-            선택하세요
-          </option>
-          {initialState.등급.map((option, index) => (
-            <option key={index} value={option}>
-              {option}
+            {initialState.품종.map((option, index) => (
+              <option key={index} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+          <select
+            id="등급"
+            name="등급"
+            value={options.등급}
+            onChange={handleSelectChange}
+          >
+            <option value="" disabled={options.품목 === ""}>
+              선택하세요
             </option>
-          ))}
-        </select>
-        <div className={styles.chartContainer}>
-          <Line data={chartData} options={chartOptions} />
+            {initialState.등급.map((option, index) => (
+              <option key={index} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+          <div className={styles.chartContainer}>
+            <Line
+              className={styles.canvas}
+              data={chartData}
+              options={chartOptions}
+            />
+          </div>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
