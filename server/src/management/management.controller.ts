@@ -18,7 +18,7 @@ function extractAndFormatDate(fileName: string): string {
   const [yy, mm, dd] = datePart.split('.').map(Number);
 
   // Create a Date object
-  const date = new Date(2000 + yy, mm - 1, dd); // Add 2000 to the year to account for 21st century
+  const date = new Date(2000 + yy, mm, dd); // Add 2000 to the year to account for 21st century
 
   // Format the date as "YYYY-MM-DD"
   const formattedDate = date.toISOString().split('T')[0];
@@ -86,6 +86,16 @@ export class ManagementController {
 
     // 기본적으로 정의되지 않은 조건에 대해 처리
     return { error: 'Invalid request data' };
+  }
+  //getDateOptions
+  @Get('getDateOptions')
+  async getDateOptions() {
+    return this.managementService.getDateOptions();
+  }
+
+  @Post('getItems')
+  async getItems(@Body() data) {
+    return this.managementService.getItems(data.날짜);
   }
 
   @Post('getData')

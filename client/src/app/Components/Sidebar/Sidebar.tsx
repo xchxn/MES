@@ -13,7 +13,7 @@ export default function Sidebar() {
           <Link href="/">Home</Link>
         </div>
         <div className={sidebarstyles.linkButton}>
-          <Link href="/TestPage">TestPage</Link>
+          <Link href="/Update">Update</Link>
         </div>
         <div className={sidebarstyles.linkButton}>
           <Link href="/DashBoard">DashBoard</Link>

@@ -22,8 +22,12 @@ export default function Home() {
   
   return (
     <div className={styles.main}>
-      CoD팀{userId ? `: ${userId}` : ''}
-      SPM 사용 설명서
+      <p>SPM 서비스 Wiki</p>
+      <li>Update: 엑셀로된 재고 데이터를 업로드 하는 페이지</li> 
+      <li>Dashboard: 업로드 된 데이터들을 테이블 형태로 확인하는 페이지</li>
+      <li>Chart: 항목 별 데이터에 예측 수치를 추가하여 꺾은 선 그래프로 시각화한 재고 수치 흐름을 한눈에 파악할 수 있는 페이지</li>
+      <li>Compare: 항목 별 가장 최근 데이터와 최근 바로 이전, 예측 데이터를 한눈에 비교하기 위한 페이지</li>
+      <li>QuickView: 예측 결과 중 위험 혹은 과잉 데이터만 모아서 보여주는 페이지</li>
     </div>
   );
 }

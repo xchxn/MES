@@ -30,7 +30,7 @@ export default function RootLayout({
             <aside className={layoutstyle.header}>
               <Header />
             </aside>
-            <main className={layoutstyle.main}>{children}</main>
+            <main>{children}</main>
           </div>
         </div>
       </body>

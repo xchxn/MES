@@ -1,7 +1,7 @@
 "use client";
 import { useState, useCallback } from "react";
 import * as XLSX from "xlsx";
-import styles from "./testpage.module.css";
+import styles from "./updateStyles.module.scss";
 import Cookies from "js-cookie";
 
 async function updateServer(data: any, fileName: string) {
@@ -24,28 +24,36 @@ async function updateServer(data: any, fileName: string) {
 
   if (!res.ok) {
     if (res.status === 401) {
-      window.alert("Token authentication failed. Please log in again.");
+      window.alert("인증에 실패하였습니다. 로그인 후 진행해 주세요.");
       throw new Error("Token authentication failed. Please log in again.");
     } else {
+      window.alert("업로드 실패");
       throw new Error("Failed to fetch data");
     }
+    return false;
   }
-  return res.json();
+
+  return true;
 }
 
 export default function Page() {
   const [inventory, setInventory] = useState([]);
-  const handleFileUpload = (file: any) => {
+  const [uploadSuccess, setUploadSucecss] = useState(false);
+
+  const handleFileUpload = async (file: any) => {
     if (file) {
       const reader = new FileReader();
-      reader.onload = (event: any) => {
+      reader.onload = async (event: any) => {
         const data = new Uint8Array(event.target.result);
         const workbook = XLSX.read(data, { type: "array" });
         const sheet = workbook.Sheets[workbook.SheetNames[0]];
         const json: any = XLSX.utils.sheet_to_json(sheet);
         console.log(json);
         setInventory(json);
-        updateServer(json, file.name);
+        const suc = await updateServer(json, file.name);
+        if(suc){
+          setUploadSucecss(true);
+        }
         console.log(inventory);
       };
       reader.readAsArrayBuffer(file);
@@ -57,7 +65,6 @@ export default function Page() {
     e.stopPropagation();
 
     const files = e.dataTransfer.files;
-    console.log(files[0].name); //23.1.16-1.22.xlsx
     if (files.length > 0) {
       handleFileUpload(files[0]);
     }
@@ -82,6 +89,7 @@ export default function Page() {
         >
           <p>엑셀 파일을 업로드 하세요.</p>
         </div>
+        <div className={uploadSuccess ? styles.inputValid : ''} />
         {/* 해당 버튼으로 서버에 데이터 업데이트*/}
         {/* 드래그 데이터 테이블*/}
       </div>
