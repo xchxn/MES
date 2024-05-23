@@ -1,0 +1,32 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  button {
+    margin: 10px 10px;
+    padding: 5px 10px;
+    border: 1px solid #000000;
+    border-radius: 10px;
+    align-self: end;
+    cursor: pointer;
+      transition: transform 0.3s ease; // 확대 효과를 위한 전환 설정
+
+      &:hover {
+        transform: scale(1.25); // 마우스 오버시 5% 확대
+      }
+  }
+
+  .inputLine {
+    border-bottom: 1px solid #000000;
+    margin-bottom: 10px;
+
+    input {
+      padding: 5px 5px;
+      margin: 10px 10px;
+      border-radius: 5px;
+      border: 2px solid #000000;
+    }
+  }
+
+}

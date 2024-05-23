@@ -98,6 +98,14 @@ export class ManagementController {
     return this.managementService.getItems(data.날짜);
   }
 
+  @Get('getAdminOptions')
+  async getAdminOptions() {
+    return this.managementService.getAdminOptions();
+  }
+  @Post('setAdminOptions')
+  async setAdminOptions(@Body() data: any) {
+    return this.managementService.setAdminOptions(data);
+  }
   @Post('getData')
   async getData(@Body() data: any) {
     return this.managementService.getData(data);

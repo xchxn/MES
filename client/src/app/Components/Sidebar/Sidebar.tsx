@@ -24,6 +24,9 @@ export default function Sidebar() {
         <div className={sidebarstyles.linkButton}>
           <Link href="/Compare">Compare</Link>
         </div>
+        <div className={sidebarstyles.linkButton}>
+          <Link href="/Admin">Admin</Link>
+        </div>
       </div>
     </div>
   );

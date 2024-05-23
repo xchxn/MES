@@ -1,12 +1,15 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { TestInventory } from './management.entity';
+import { AdminInventory } from './admin.entity';
 
 @Injectable()
 export class ManagementService {
   constructor(
     @Inject('TESTING_INVENTORY_REPOSITORY')
     private managementRepository: Repository<TestInventory>,
+    @Inject('ADMIN_REPOSITORY')
+    private adminReopsitory: Repository<AdminInventory>,
   ) {}
 
   async managementUpdate(data: TestInventory): Promise<TestInventory> {
@@ -110,7 +113,6 @@ export class ManagementService {
     return { 날짜: 날짜.map((option) => option.날짜) };
   }
 
-
   async getDateOptions(): Promise<any> {
     const 날짜 = await this.managementRepository
       .createQueryBuilder()
@@ -123,11 +125,42 @@ export class ManagementService {
   async getItems(op1: string): Promise<any> {
     const items = await this.managementRepository
       .createQueryBuilder()
-      .select(['관리구분','품목','품종','등급','전월재고','전월중량','입고수량','입고중량','출고수량','출고중량','현재고','현재중량','날짜'])
-      .where('날짜 = :date', { date: op1})
+      .select([
+        '관리구분',
+        '품목',
+        '품종',
+        '등급',
+        '전월재고',
+        '전월중량',
+        '입고수량',
+        '입고중량',
+        '출고수량',
+        '출고중량',
+        '현재고',
+        '현재중량',
+        '날짜',
+      ])
+      .where('날짜 = :date', { date: op1 })
       .getRawMany();
-      console.log(items);
+    console.log(items);
     return items;
+  }
+  async getAdminOptions(): Promise<any> {
+    const options = await this.managementRepository
+      .createQueryBuilder()
+      .select('DISTINCT 관리구분,품목', '품목')
+      .getRawMany();
+    return options;
+  }
+  async setAdminOptions(data: any): Promise<any> {
+    const options = await this.adminReopsitory
+      .createQueryBuilder()
+      .update()
+      .set({ first: data.first, second: data.second })
+      .where('관리구분 = :type', { type: data.관리구분 })
+      .andWhere('품목 = :item', { item: data.품목 })
+      .execute();
+    return options;
   }
 
   async getData(data: any): Promise<any> {
