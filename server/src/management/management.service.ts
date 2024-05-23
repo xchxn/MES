@@ -116,9 +116,9 @@ export class ManagementService {
   async getDateOptions(): Promise<any> {
     const 날짜 = await this.managementRepository
       .createQueryBuilder()
-      .select('DISTINCT 날짜', '날짜')
+      .select("DATE_FORMAT(날짜, '%Y-%m-%d')", '날짜')
+      .distinct(true)
       .getRawMany();
-    console.log(날짜);
     return { 날짜: 날짜.map((option) => option.날짜) };
   }
 
@@ -171,6 +171,7 @@ export class ManagementService {
       .andWhere('품목 = :item', { item: data.품목 })
       .andWhere('품종 = :kind', { kind: data.품종 })
       .andWhere('등급 = :grade', { grade: data.등급 })
+      .orderBy("날짜", "ASC")
       .getRawMany();
     return options;
   }
