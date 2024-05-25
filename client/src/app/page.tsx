@@ -19,6 +19,36 @@ export default function Home() {
 
     return () => clearInterval(interval);  // 컴포넌트 언마운트 시 인터벌을 정리합니다.
   }, []);
+
+  // 컴포넌트가 마운트 될 때 권한 요청
+  useEffect(() => {
+    requestNotificationPermission();
+  }, []);
+
+  // 알림 권한 요청 함수
+  function requestNotificationPermission() {
+    if ('Notification' in window) {
+      Notification.requestPermission().then(permission => {
+        if (permission === 'granted') {
+          console.log('Notification permission granted.');
+        } else {
+          console.log('Notification permission denied.');
+        }
+      });
+    } else {
+      console.error("This browser does not support desktop notification");
+    }
+  }
+  //알림 보내기
+  function sendNotification() {
+    if ('Notification' in window && Notification.permission === 'granted') {
+      const notification = new Notification('New Message!', {
+        body: 'Here is a notification from your Next.js app.',
+      });
+    } else {
+      console.error("Notification permission has not been granted");
+    }
+  }
   
   return (
     <div className={styles.main}>
@@ -28,6 +58,8 @@ export default function Home() {
       <li>Chart: 항목 별 데이터에 예측 수치를 추가하여 꺾은 선 그래프로 시각화한 재고 수치 흐름을 한눈에 파악할 수 있는 페이지</li>
       <li>Compare: 항목 별 가장 최근 데이터와 최근 바로 이전, 예측 데이터를 한눈에 비교하기 위한 페이지</li>
       <li>QuickView: 예측 결과 중 위험 혹은 과잉 데이터만 모아서 보여주는 페이지</li>
+      <button onClick={sendNotification}>Send Notification</button>
     </div>
+    
   );
 }
