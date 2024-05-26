@@ -104,9 +104,19 @@ export class ManagementController {
     return this.managementService.getAdminOptions();
   }
   //관리자 페이지에서 설정한 값 반영
+  // @Post('setAdminOptions')
+  // async setAdminOptions(@Body() data: any) {
+  //   return this.managementService.setAdminOptions(data);
+  // }
   @Post('setAdminOptions')
-  async setAdminOptions(@Body() data: any) {
-    return this.managementService.setAdminOptions(data);
+  async setAdminOptions(@Body() data: any[]) {
+    // 각 데이터 항목에 대해 setAdminOptions 호출
+    const results = [];
+    for (const item of data) {
+      const result = await this.managementService.setAdminOptions(item);
+      results.push(result);
+    }
+    return results;
   }
 
   //

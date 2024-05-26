@@ -21,12 +21,17 @@
     border-bottom: 1px solid #000000;
     margin-bottom: 10px;
 
-    input {
+    input[type="text"] {
       padding: 5px 5px;
       margin: 10px 10px;
       border-radius: 5px;
       border: 2px solid #000000;
     }
-  }
 
+    input[type="checkbox"] {
+      margin: 10px 10px; // 체크박스의 마진 조정
+      width: auto; // 체크박스의 너비를 자동으로 설정
+      transform: scale(1.5); // 체크박스 크기를 1.5배로 확대
+    }
+  }
 }

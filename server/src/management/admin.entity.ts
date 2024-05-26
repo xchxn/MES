@@ -12,9 +12,12 @@ export class AdminInventory {
   품목: string;
 
   //판매량과 설정비율?
-  @Column({ type: 'varchar', length: 255 })
-  first: string;
+  @Column({ type: 'decimal', default: 100 })
+  first: number;
 
-  @Column({ type: 'varchar', length: 255 })
-  second: string;
+  @Column({ type: 'decimal', default: 100 })
+  second: number;
+  //알림 설정 여부
+  @Column({ type: 'bool', default: true })
+  NotiSet: boolean;
 }

@@ -41,6 +41,7 @@ export default function Home() {
   }
   //알림 보내기
   function sendNotification() {
+    //DB에서 알림 설정이 TRUE인 항목들 읽어서 계산 로직 처리 후 알림 보내기.
     if ('Notification' in window && Notification.permission === 'granted') {
       const notification = new Notification('New Message!', {
         body: 'Here is a notification from your Next.js app.',
