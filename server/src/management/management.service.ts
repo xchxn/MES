@@ -171,11 +171,12 @@ export class ManagementService {
       .andWhere('품목 = :item', { item: data.품목 })
       .andWhere('품종 = :kind', { kind: data.품종 })
       .andWhere('등급 = :grade', { grade: data.등급 })
-      .orderBy("날짜", "ASC")
+      .orderBy('날짜', 'ASC')
       .getRawMany();
     return options;
   }
 
+  //현재고와 전월재고를 비교
   async getCompare(data: any): Promise<any> {
     const options = await this.managementRepository
       .createQueryBuilder()

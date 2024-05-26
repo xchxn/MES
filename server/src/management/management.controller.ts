@@ -98,14 +98,18 @@ export class ManagementController {
     return this.managementService.getItems(data.날짜);
   }
 
+  //관리자 페이지에 보여질 옵션 반환
   @Get('getAdminOptions')
   async getAdminOptions() {
     return this.managementService.getAdminOptions();
   }
+  //관리자 페이지에서 설정한 값 반영
   @Post('setAdminOptions')
   async setAdminOptions(@Body() data: any) {
     return this.managementService.setAdminOptions(data);
   }
+
+  //
   @Post('getData')
   async getData(@Body() data: any) {
     return this.managementService.getData(data);
