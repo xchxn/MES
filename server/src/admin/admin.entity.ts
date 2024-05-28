@@ -11,6 +11,12 @@ export class AdminInventory {
   @Column({ type: 'varchar', length: 255 })
   품목: string;
 
+  @Column({ type: 'varchar', length: 255 })
+  품종: string;
+
+  @Column({ type: 'varchar', length: 255 })
+  등급: string;
+
   //판매량과 설정비율?
   @Column({ type: 'decimal', default: 100 })
   first: number;

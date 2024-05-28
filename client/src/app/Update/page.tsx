@@ -26,11 +26,13 @@ async function updateServer(data: any, fileName: string) {
     if (res.status === 401) {
       window.alert("인증에 실패하였습니다. 로그인 후 진행해 주세요.");
       throw new Error("Token authentication failed. Please log in again.");
+    } else if ( res.status === 400) {
+      window.alert("중복 업로드");
+      throw new Error("Failed to fetch data");
     } else {
       window.alert("업로드 실패");
       throw new Error("Failed to fetch data");
     }
-    return false;
   }
 
   return true;
@@ -39,6 +41,7 @@ async function updateServer(data: any, fileName: string) {
 export default function Page() {
   const [inventory, setInventory] = useState([]);
   const [uploadSuccess, setUploadSucecss] = useState(false);
+  const [uploadedFilename, setUploadedFilename] = useState("");
 
   const handleFileUpload = async (file: any) => {
     if (file) {
@@ -53,6 +56,7 @@ export default function Page() {
         const suc = await updateServer(json, file.name);
         if(suc){
           setUploadSucecss(true);
+          setUploadedFilename(file.name);
         }
         console.log(inventory);
       };
@@ -89,7 +93,7 @@ export default function Page() {
         >
           <p>엑셀 파일을 업로드 하세요.</p>
         </div>
-        <div className={uploadSuccess ? styles.inputValid : ''} />
+        <div className={uploadSuccess ? styles.inputValid : ''}> {uploadedFilename}</div>
         {/* 해당 버튼으로 서버에 데이터 업데이트*/}
         {/* 드래그 데이터 테이블*/}
       </div>

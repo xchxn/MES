@@ -16,7 +16,11 @@
         transform: scale(1.25); // 마우스 오버시 5% 확대
       }
   }
-
+  .optionField {
+    border: 1px solid #000000;
+    margin-bottom: 10px;
+    flex-direction: row;
+  }
   .inputLine {
     border-bottom: 1px solid #000000;
     margin-bottom: 10px;

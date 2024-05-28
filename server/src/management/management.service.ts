@@ -1,7 +1,7 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable, Inject, HttpException, HttpStatus } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { TestInventory } from './management.entity';
-import { AdminInventory } from './admin.entity';
+import { AdminInventory } from '../admin/admin.entity';
 
 @Injectable()
 export class ManagementService {
@@ -50,6 +50,11 @@ export class ManagementService {
           날짜,
         })
         .execute();
+    } else {
+      throw new HttpException(
+        '해당 데이터의 날짜가 이미 존재합니다.',
+        HttpStatus.BAD_REQUEST,
+      );
     }
     return this.managementRepository.findOneBy({ 관리구분 });
   }
@@ -144,69 +149,6 @@ export class ManagementService {
       .getRawMany();
     console.log(items);
     return items;
-  }
-  async getAdminOptions(): Promise<any> {
-    const initRepo = await this.managementRepository
-      .createQueryBuilder()
-      .select('DISTINCT 관리구분,품목', '품목')
-      .getRawMany();
-    for (const option of initRepo) {
-      const exists = await this.adminRepository.findOne({
-        where: {
-          관리구분: option.관리구분,
-          품목: option.품목,
-        },
-      });
-
-      if (!exists) {
-        const newAdminOption = this.adminRepository.create(option);
-        await this.adminRepository.save(newAdminOption);
-      }
-    }
-    const options = await this.adminRepository
-      .createQueryBuilder()
-      .select('관리구분,품목,first,second,NotiSet')
-      .getRawMany();
-    return options;
-  }
-  async setAdminOptions(data: any): Promise<any> {
-    if (data.first === '' && data.second === '') {
-      const options = await this.adminRepository
-        .createQueryBuilder()
-        .update()
-        .set({ NotiSet: data.NotiSet })
-        .where('관리구분 = :type', { type: data.관리구분 })
-        .andWhere('품목 = :item', { item: data.품목 })
-        .execute();
-      return options;
-    } else if (data.first !== '' && data.second === '') {
-      const options = await this.adminRepository
-        .createQueryBuilder()
-        .update()
-        .set({ first: data.first, NotiSet: data.NotiSet })
-        .where('관리구분 = :type', { type: data.관리구분 })
-        .andWhere('품목 = :item', { item: data.품목 })
-        .execute();
-      return options;
-    } else if (data.first === '' && data.second !== '') {
-      const options = await this.adminRepository
-        .createQueryBuilder()
-        .update()
-        .set({ second: data.second, NotiSet: data.NotiSet })
-        .where('관리구분 = :type', { type: data.관리구분 })
-        .andWhere('품목 = :item', { item: data.품목 })
-        .execute();
-      return options;
-    } else {
-      const options = await this.adminRepository
-        .createQueryBuilder()
-        .update()
-        .set({ first: data.first, second: data.second, NotiSet: data.NotiSet })
-        .where('관리구분 = :type', { type: data.관리구분 })
-        .andWhere('품목 = :item', { item: data.품목 })
-        .execute();
-      return options;
-    }
   }
 
   async getData(data: any): Promise<any> {

@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 interface AdminOption {
   관리구분: string;
   품목: string;
+  품종: string;
+  등급: string;
   first: string;
   second: string;
   NotiSet: boolean;
@@ -14,6 +16,8 @@ interface AdminOption {
 interface Update {
   관리구분: string;
   품목: string;
+  품종: string;
+  등급: string;
   first: string;
   second: string;
   NotiSet: boolean;
@@ -22,16 +26,17 @@ interface Update {
 // 서버로부터 받은 데이터와 관련된 타입
 type AdminOptions = AdminOption[];
 
-async function getAdminOptions(): Promise<AdminOptions> {
+async function getAdminOptions(params: any): Promise<AdminOptions> {
   const requestOptions: RequestInit = {
-    method: "GET",
+    method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
+    body: JSON.stringify(params)
   };
 
   const response = await fetch(
-    `http://localhost:3001/management/getAdminOptions`,
+    `http://localhost:3001/admin/getAdminOptions`,
     requestOptions
   );
 
@@ -51,7 +56,7 @@ async function setAdminOptions(params: Update[]): Promise<void> {
   };
 
   const response = await fetch(
-    `http://localhost:3001/management/setAdminOptions`,
+    `http://localhost:3001/admin/setAdminOptions`,
     requestOptions
   );
 
@@ -63,14 +68,28 @@ async function setAdminOptions(params: Update[]): Promise<void> {
 export default function Page() {
   const [field, setField] = useState<AdminOptions>([]);
   const [updates, setUpdates] = useState<Update[]>([]);
-
+  const [data, setData] = useState({
+    관리구분: [],
+    품목: [],
+    품종: [],
+    등급: []
+  });
+  const [selected, setSelected] = useState({
+    관리구분: [],
+    품목: [],
+    품종: [],
+    등급: []
+  });
+  const temp = "";
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await getAdminOptions();
+        const data = await getAdminOptions(temp);
         const initialUpdates: Update[] = data.map((item: AdminOption) => ({
           관리구분: item.관리구분,
           품목: item.품목,
+          품종: item.품종,
+          등급: item.등급,
           first: '',
           second: '',
           NotiSet: item.NotiSet
@@ -105,6 +124,17 @@ export default function Page() {
 
   return (
     <div className={styles.container}>
+      <div className={styles.optionField}>
+        {/* 관리 구분 필드 */}
+        {field.map((item, index) => (
+          <div className={styles.inputLine} key={item.관리구분}>
+            <p>{item.관리구분}</p>
+          </div>
+        ))}
+        {/* 품목 필드 */}
+        {/* 품종 필드 */}
+        {/* 등급 필드 */}
+      </div>
       <button onClick={handleClick} type="button">저장하기</button>
       {field.map((item, index) => (
         <div className={styles.inputLine} key={index}>

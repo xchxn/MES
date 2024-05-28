@@ -5,6 +5,7 @@
   justify-content: center; /* 세로 축을 기준으로 중앙 정렬 (필요한 경우) */
   height: 95vh; /* 최소 높이를 뷰포트의 100%로 설정하여 전체 페이지를 채움 */
   text-align: center; /* 텍스트를 중앙 정렬 */
+
 }
 .dataTable {
   display: flex;
@@ -27,8 +28,9 @@
   background-color: #e0e0e0;
 }
 .inputValid {
+  color: rgb(50, 162, 50);
   &::after {
-    content: '업로드 성공!';
+    content: ': 업로드 성공!';
     color: rgb(50, 162, 50);
   }
 }
