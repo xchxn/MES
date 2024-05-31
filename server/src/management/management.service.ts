@@ -123,6 +123,7 @@ export class ManagementService {
       .createQueryBuilder()
       .select("DATE_FORMAT(날짜, '%Y-%m-%d')", '날짜')
       .distinct(true)
+      .orderBy('날짜', 'ASC')
       .getRawMany();
     return { 날짜: 날짜.map((option) => option.날짜) };
   }
