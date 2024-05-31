@@ -17,9 +17,31 @@
       }
   }
   .optionField {
+    display: flex;
+    flex-direction: column;
     border: 1px solid #000000;
     margin-bottom: 10px;
-    flex-direction: row;
+    width: 100%;
+
+    .fieldOptions{
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 10px 10px;
+
+      div {
+        // Style for each item container
+        display: flex;
+        padding: 5px;
+        border: 1px solid #2c2c2c;
+        border-radius: 4px;
+      }
+
+      p {
+        margin-right: 15px;
+        white-space: nowrap;
+      }
+    }
   }
   .inputLine {
     border-bottom: 1px solid #000000;

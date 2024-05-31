@@ -2,31 +2,32 @@
 import styles from "./adminStyles.module.scss";
 import { useEffect, useState } from "react";
 
-// 인터페이스 정의
-interface AdminOption {
+interface OptionField {
+  관리구분: string[];
+  품목: string[];
+  품종: string[];
+}
+
+interface SelectedItems {
+  관리구분: Set<string>;
+  품목: Set<string>;
+  품종: Set<string>;
+}
+
+interface ProductDetails {
   관리구분: string;
   품목: string;
   품종: string;
   등급: string;
-  first: string;
-  second: string;
+  판매량: number;
+  비율: number;
   NotiSet: boolean;
 }
-
-interface Update {
-  관리구분: string;
-  품목: string;
-  품종: string;
-  등급: string;
-  first: string;
-  second: string;
-  NotiSet: boolean;
+interface ProductsState {
+  products: ProductDetails[];
 }
 
-// 서버로부터 받은 데이터와 관련된 타입
-type AdminOptions = AdminOption[];
-
-async function getOptionField(): Promise<AdminOptions> {
+async function getOptionField(): Promise<any> {
   const requestOptions: RequestInit = {
     method: "GET",
     headers: {
@@ -45,13 +46,17 @@ async function getOptionField(): Promise<AdminOptions> {
   return response.json();
 }
 
-async function getAdminOptions(params: any): Promise<AdminOptions> {
+async function getAdminOptions(params: SelectedItems): Promise<any> {
   const requestOptions: RequestInit = {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(params)
+    body: JSON.stringify({
+      관리구분: Array.from(params.관리구분),
+      품목: Array.from(params.품목),
+      품종: Array.from(params.품종)
+    })
   };
 
   const response = await fetch(
@@ -65,7 +70,7 @@ async function getAdminOptions(params: any): Promise<AdminOptions> {
   return response.json();
 }
 
-async function setAdminOptions(params: Update[]): Promise<void> {
+async function setAdminOptions(params: any): Promise<void> {
   const requestOptions: RequestInit = {
     method: "POST",
     headers: {
@@ -82,151 +87,151 @@ async function setAdminOptions(params: Update[]): Promise<void> {
   if (!response.ok) {
     throw new Error("Failed to set data");
   }
+  
+  return response.json();
 }
 
 export default function Page() {
-  const [field, setField] = useState<AdminOptions>([]);
-  const [updates, setUpdates] = useState<Update[]>([]);
-  const [optionState, setOptionState] = useState({
+  const [field, setField] = useState({
     관리구분: [],
     품목: [],
-    품종: [],
-    등급: []
+    품종: []
   });
-  const [selected, setSelected] = useState<{ [key: string]: boolean }>({});
+  const [selected, setSelected] = useState<SelectedItems>({
+    관리구분: new Set<string>(),
+    품목: new Set<string>(),
+    품종: new Set<string>()
+  });
+  const [products, setProducts] = useState<ProductDetails[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const data = await getOptionField();
-        const initialUpdates: Update[] = data.map((item: AdminOption) => ({
-          관리구분: item.관리구분,
-          품목: item.품목,
-          품종: item.품종,
-          등급: item.등급,
-          first: '',
-          second: '',
-          NotiSet: item.NotiSet
-        }));
         setField(data);
-        setUpdates(initialUpdates);
       } catch (error) {
-        console.error("Error fetching options:", error);
+        console.error("Error fetching inventory:", error);
       }
     };
     fetchData();
-  }, [optionState]);
+  }, [selected]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
-    const { name, value, type, checked } = e.target;
-    const updatedUpdates = updates.map((update, idx) => {
-      if (idx === index) {
-        return type === 'checkbox' ? { ...update, NotiSet: checked } : { ...update, [name]: value };
+  const handleCheckboxChange = (category: keyof SelectedItems, item: string) => {
+    setSelected(prev => {
+      const updatedSelection = new Set(prev[category]);
+      if (updatedSelection.has(item)) {
+        updatedSelection.delete(item);
+      } else {
+        updatedSelection.add(item);
       }
-      return update;
-    });
-    setUpdates(updatedUpdates);
-  };
-
-  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>, category: string, type: keyof typeof optionState) => {
-    const isChecked = e.target.checked;
-    setSelected(prev => ({ ...prev, [`${type}-${category}`]: isChecked }));
-    setOptionState(prev => {
-      const currentCategory = prev[type];
-      const updatedCategory = isChecked
-        ? [...currentCategory, category]
-        : currentCategory.filter(item => item !== category);
-      return { ...prev, [type]: updatedCategory };
+      return {
+        ...prev,
+        [category]: updatedSelection
+      };
     });
   };
 
   const handleClick = async () => {
-    try {
-      await setAdminOptions(updates);
-    } catch (error) {
-      console.error("Failed to save settings:", error);
-    }
+    console.log(selected);
+    const getOptions = await getAdminOptions(selected);
+    const optionData: ProductDetails[] = getOptions;
+    setProducts(optionData);
+  };
+
+  const handleUpdate = async () => {
+    console.log(products);
+    setAdminOptions(products);
+  };
+
+  const handleProductChange = (index: number, field: keyof ProductDetails, value: string) => {
+    const updatedProducts = products.map((product, idx) => {
+      if (idx === index) {
+        return { ...product, [field]: parseFloat(value) || 0 };
+      }
+      return product;
+    });
+    setProducts(updatedProducts);
+  };
+
+  const handleNotiChange = (index: number, field: keyof ProductDetails, checked: boolean) => {
+    const updatedProducts = products.map((product, idx) => {
+      if (idx === index) {
+        return { ...product, [field]: checked };
+      }
+      return product;
+    });
+    setProducts(updatedProducts);
   };
 
   return (
     <div className={styles.container}>
       <div className={styles.optionField}>
-        <div>
-        {field.map((item, index) => (
+        관리구분
+        <div className={styles.fieldOptions}>{field.관리구분.map((item, index) => (
           <div key={index}>
-            <input
+             <input
               type="checkbox"
-              checked={!!selected[`관리구분-${item.관리구분}`]}
-              onChange={e => handleCheckboxChange(e, item.관리구분, "관리구분")}
+              checked={selected.관리구분.has(item)}
+              onChange={() => handleCheckboxChange('관리구분', item)}
             />
-            <span>{item.관리구분}</span>
+            <p>{item}</p>
           </div>
         ))}
         </div>
-        <div>
-        {field.map((item, index) => (
+        품목
+        <div className={styles.fieldOptions}>{field.품목.map((item, index) => (
           <div key={index}>
-            <input
+             <input
               type="checkbox"
-              checked={!!selected[`품목-${item.품목}`]}
-              onChange={e => handleCheckboxChange(e, item.품목, "품목")}
+              checked={selected.품목.has(item)}
+              onChange={() => handleCheckboxChange('품목', item)}
             />
-            <span>{item.품목}</span>
+            <p>{item}</p>
           </div>
         ))}
         </div>
-        <div>
-        {field.map((item, index) => (
+        품종
+        <div className={styles.fieldOptions}>{field.품종.map((item, index) => (
           <div key={index}>
-            <input
+             <input
               type="checkbox"
-              checked={!!selected[`품종-${item.품종}`]}
-              onChange={e => handleCheckboxChange(e, item.품종, "품종")}
+              checked={selected.품종.has(item)}
+              onChange={() => handleCheckboxChange('품종', item)}
             />
-            <span>{item.품종}</span>
-          </div>
-        ))}
-        </div>
-        <div>
-        {field.map((item, index) => (
-          <div key={index}>
-            <input
-              type="checkbox"
-              checked={!!selected[`등급-${item.등급}`]}
-              onChange={e => handleCheckboxChange(e, item.등급, "등급")}
-            />
-            <span>{item.등급}</span>
+            <p>{item}</p>
           </div>
         ))}
         </div>
       </div>
-      <button onClick={handleClick} type="button">저장하기</button>
-      {field.map((item, index) => (
-        <div className={styles.inputLine} key={index}>
-          <p>{item.관리구분}: {item.품목}</p>
+      <button onClick={handleClick} type="button">검색하기</button>
+      <div>
+      {products.map((product:any, index) => (
+          <li key={index}>
+          <strong>관리구분:</strong> {product.관리구분}, 
+          <strong>품목:</strong> {product.품목}, 
+          <strong>품종:</strong> {product.품종}, 
+          <strong>등급:</strong> {product.등급}
           <input
-            type="text"
-            name="first"
-            placeholder={item.first}
-            value={updates[index]?.first}
-            onChange={(e) => handleChange(e, index)}
+            type="number"
+            value={product.판매량}
+            onChange={(e) => handleProductChange(index, '판매량', e.target.value)}
           />
           <input
-            type="text"
-            name="second"
-            placeholder={item.second}
-            value={updates[index]?.second}
-            onChange={(e) => handleChange(e, index)}
+            type="number"
+            value={product.비율}
+            onChange={(e) => handleProductChange(index, '비율', e.target.value)}
           />
           <input
             type="checkbox"
-            name="notiCheck"
-            checked={updates[index]?.NotiSet}
-            onChange={(e) => handleChange(e, index)}
+            checked={product.NotiSet}
+            onChange={(e) => handleNotiChange(index, 'NotiSet', e.target.checked)}
           />
-          <label htmlFor="notiCheck">알림 설정</label>
-        </div>
-      ))}
+        </li>
+        ))}
+      </div>
+      <button onClick={handleUpdate} type="button">
+        업데이트
+      </button>
     </div>
   );
 };
