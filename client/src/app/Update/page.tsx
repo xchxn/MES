@@ -82,16 +82,17 @@ export default function Page() {
   return (
     <div>
       <div className={styles.body}>
-        <p>테스트 페이지</p>
-        <p>서버 컴포넌트에서 폼 데이터와 엑셀 업로드 데이터를 넘기는 테스트</p>
-
         {/* 엑셀 파일을 업로드 하는 부분, DnD이 되면 자동으로 updateServer 수행 */}
+        <strong> * 파일명 예시: 22.1.24-1.30.xlsx *</strong>
         <div
           className={styles.dropZone}
           onDrop={handleDrop}
           onDragOver={handleDragOver}
         >
-          <p>엑셀 파일을 업로드 하세요.</p>
+          <p>엑셀 파일을 </p>
+          <strong>하나씩 
+            </strong>
+          <p> 업로드 하세요.</p>
         </div>
         <div className={uploadSuccess ? styles.inputValid : ''}> {uploadedFilename}</div>
         {/* 해당 버튼으로 서버에 데이터 업데이트*/}

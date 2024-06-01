@@ -204,7 +204,7 @@ export default function Page() {
         </div>
       </div>
       <button onClick={handleClick} type="button">검색하기</button>
-      <div>
+      <div className={styles.selectedItems}>
       {products.map((product:any, index) => (
           <li key={index}>
           <strong>관리구분:</strong> {product.관리구분}, 
@@ -226,12 +226,13 @@ export default function Page() {
             checked={product.NotiSet}
             onChange={(e) => handleNotiChange(index, 'NotiSet', e.target.checked)}
           />
+          <label>알림설정</label>
         </li>
         ))}
       </div>
       <button onClick={handleUpdate} type="button">
-        업데이트
-      </button>
+          업데이트
+        </button>
     </div>
   );
 };
