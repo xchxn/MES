@@ -26,6 +26,4 @@ export class UsersService {
     user.password = password;
     return this.usersRepository.save(user);
   }
-  //해쉬값 리턴받고 데이터베이스에 저장하는 함수 작성 필요
-  //로그인시 데이터베이스와 연동하여 인증받는 함수
 }
