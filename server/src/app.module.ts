@@ -5,7 +5,7 @@ import { ApiModule } from './api/api.module';
 // import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { AdminModule } from './admin/admin.module';
-import { ForecastModule } from './forecast/forecast.module'
+import { ForecastModule } from './forecast/forecast.module';
 @Module({
   imports: [
     DatabaseModule,
@@ -13,7 +13,7 @@ import { ForecastModule } from './forecast/forecast.module'
     ApiModule,
     AuthModule,
     AdminModule,
-    ForecastModule
+    ForecastModule,
   ],
   controllers: [],
   providers: [],
