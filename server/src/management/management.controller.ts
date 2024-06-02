@@ -1,6 +1,14 @@
-import { Controller, Get, Post, Body, Headers } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Headers,
+  UseGuards,
+} from '@nestjs/common';
 import { ManagementService } from './management.service';
 import { TestInventory } from './management.entity';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 function extractAndFormatDate(fileName: string): string {
   // Split the filename using "-" as a delimiter
@@ -10,18 +18,19 @@ function extractAndFormatDate(fileName: string): string {
   const [yy, mm, dd] = datePart.split('.').map(Number);
 
   // Create a Date object
-  const date = new Date(2000 + yy, mm - 1, dd); // Add 2000 to the year to account for 21st century
+  const date = new Date(2000 + yy, mm, dd); // Add 2000 to the year to account for 21st century
 
   // Format the date as "YYYY-MM-DD"
   const formattedDate = date.toISOString().split('T')[0];
 
   return formattedDate;
 }
-//{url}/management/*로 이루어지는 컨트롤러
+
 @Controller('management')
 export class ManagementController {
   constructor(private managementService: ManagementService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Post('update')
   async updateData(
     @Body() data: TestInventory[],
@@ -77,6 +86,16 @@ export class ManagementController {
 
     // 기본적으로 정의되지 않은 조건에 대해 처리
     return { error: 'Invalid request data' };
+  }
+  //getDateOptions
+  @Get('getDateOptions')
+  async getDateOptions() {
+    return this.managementService.getDateOptions();
+  }
+
+  @Post('getItems')
+  async getItems(@Body() data) {
+    return this.managementService.getItems(data.날짜);
   }
 
   @Post('getData')

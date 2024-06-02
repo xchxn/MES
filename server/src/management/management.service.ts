@@ -1,12 +1,15 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable, Inject, HttpException, HttpStatus } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { TestInventory } from './management.entity';
+import { AdminInventory } from '../admin/admin.entity';
 
 @Injectable()
 export class ManagementService {
   constructor(
     @Inject('TESTING_INVENTORY_REPOSITORY')
     private managementRepository: Repository<TestInventory>,
+    @Inject('ADMIN_REPOSITORY')
+    private adminRepository: Repository<AdminInventory>,
   ) {}
 
   async managementUpdate(data: TestInventory): Promise<TestInventory> {
@@ -25,27 +28,34 @@ export class ManagementService {
       현재중량,
       날짜,
     } = data;
-
-    await this.managementRepository
-      .createQueryBuilder()
-      .insert()
-      .into(TestInventory)
-      .values({
-        관리구분,
-        품목,
-        품종,
-        등급,
-        전월재고,
-        전월중량,
-        입고수량,
-        입고중량,
-        출고수량,
-        출고중량,
-        현재고,
-        현재중량,
-        날짜,
-      })
-      .execute();
+    const existingEntry = await this.managementRepository.findOneBy({ 날짜 });
+    if (!existingEntry) {
+      await this.managementRepository
+        .createQueryBuilder()
+        .insert()
+        .into(TestInventory)
+        .values({
+          관리구분,
+          품목,
+          품종,
+          등급,
+          전월재고,
+          전월중량,
+          입고수량,
+          입고중량,
+          출고수량,
+          출고중량,
+          현재고,
+          현재중량,
+          날짜,
+        })
+        .execute();
+    } else {
+      throw new HttpException(
+        '해당 데이터의 날짜가 이미 존재합니다.',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
     return this.managementRepository.findOneBy({ 관리구분 });
   }
 
@@ -108,6 +118,40 @@ export class ManagementService {
     return { 날짜: 날짜.map((option) => option.날짜) };
   }
 
+  async getDateOptions(): Promise<any> {
+    const 날짜 = await this.managementRepository
+      .createQueryBuilder()
+      .select("DATE_FORMAT(날짜, '%Y-%m-%d')", '날짜')
+      .distinct(true)
+      .orderBy('날짜', 'ASC')
+      .getRawMany();
+    return { 날짜: 날짜.map((option) => option.날짜) };
+  }
+
+  async getItems(op1: string): Promise<any> {
+    const items = await this.managementRepository
+      .createQueryBuilder()
+      .select([
+        '관리구분',
+        '품목',
+        '품종',
+        '등급',
+        '전월재고',
+        '전월중량',
+        '입고수량',
+        '입고중량',
+        '출고수량',
+        '출고중량',
+        '현재고',
+        '현재중량',
+        '날짜',
+      ])
+      .where('날짜 = :date', { date: op1 })
+      .getRawMany();
+    console.log(items);
+    return items;
+  }
+
   async getData(data: any): Promise<any> {
     const options = await this.managementRepository
       .createQueryBuilder()
@@ -116,10 +160,12 @@ export class ManagementService {
       .andWhere('품목 = :item', { item: data.품목 })
       .andWhere('품종 = :kind', { kind: data.품종 })
       .andWhere('등급 = :grade', { grade: data.등급 })
+      .orderBy('날짜', 'ASC')
       .getRawMany();
     return options;
   }
 
+  //현재고와 전월재고를 비교
   async getCompare(data: any): Promise<any> {
     const options = await this.managementRepository
       .createQueryBuilder()

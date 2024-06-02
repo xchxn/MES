@@ -1,38 +1,26 @@
 "use client";
 import { useState, useEffect } from "react";
-import styles from "./compareStyles.module.scss";
-import { Bar } from "react-chartjs-2";
-import {
-  Chart as ChartJS,
-  LineElement,
-  PointElement,
-  BarElement,
-  LinearScale,
-  Title,
-  CategoryScale,
-} from "chart.js";
+import styles from "./forecastStyles.module.scss";
 
-ChartJS.register(LineElement, PointElement, BarElement, LinearScale, Title, CategoryScale);
-
-async function getInventory(option: any) {
+//옵션을 선택된 항목들의 예측값 요청
+async function getForecast(options: any) {
   const requestOptions = {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(option),
+    body: JSON.stringify(options),
   };
 
-  const res = await fetch(
-    `http://localhost:3001/management/getCompare`,
-    requestOptions
-  );
-  console.log(res);
+  const res = await fetch(`http://localhost:3001/forecast/data`, requestOptions);
+
   if (!res.ok) {
     throw new Error("Failed to fetch data");
   }
   return res.json();
 }
+
+//DB에서 항목을 구별할 수 있는 옵션 요청
 async function getOptions(option: any) {
   const requestOptions = {
     method: "POST",
@@ -43,7 +31,7 @@ async function getOptions(option: any) {
   };
 
   const res = await fetch(
-    `http://localhost:3001/management/getOptions`,
+    `http://localhost:3001/forecast/getOptions`,
     requestOptions
   );
 
@@ -52,13 +40,28 @@ async function getOptions(option: any) {
   }
   return res.json();
 }
-//첫번째 옵션=db에서 가져오는 관리구분
-//관리구분으로 품목 가져오기
-//품목으로 품종 가져오기
-//품종으로 등급 가져오기
-//최종 '조회하기'버튼으로 위의 옵션에 해당하는 값들 가져와서 chart와 연동
+
+//anomaly값이 있는 항목 전부 요청
+async function getAll() {
+  const requestOptions = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+
+  const res = await fetch(
+    `http://localhost:3001/forecast/getAll`,
+    requestOptions
+  );
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch data");
+  }
+  return res.json();
+}
 export default function Page() {
-  const [inventory, setInventory] = useState([]);
+  const [inventory, setInventory] = useState<[]>([]);
   const [options, setOptions] = useState({
     관리구분: "",
     품목: "",
@@ -72,23 +75,10 @@ export default function Page() {
     등급: [],
   });
 
-  const [chartData, setChartData] = useState({
-    labels: [],
-    datasets: [
-      {
-        label: "My First Dataset",
-        data: [],
-        fill: false,
-        borderColor: "rgb(75, 192, 192)",
-        tension: 0.1,
-      },
-    ],
-  });
-
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await getInventory(options);
+        const data = await getForecast(options);
         setInventory(data);
       } catch (error) {
         console.error("Error fetching inventory:", error);
@@ -101,7 +91,6 @@ export default function Page() {
     const fetchData = async () => {
       try {
         const data = await getOptions(options);
-        //해당 set함수 확인필요 05.06
         setInitialState((prevStates) => ({
           관리구분: data.관리구분 || prevStates.관리구분,
           품목: data.품목 || prevStates.품목,
@@ -114,31 +103,6 @@ export default function Page() {
     };
     fetchData();
   }, [options]);
-
-  useEffect(() => {
-    const newLabels = "ㅇ"; //문자열 슬라이싱
-    const newData = inventory.현재고;
-    const newData2 = inventory.전월재고;
-    setChartData({
-      labels: newLabels,
-      datasets: [
-        {
-          label: '현재고',
-          data: inventory.현재고,
-          backgroundColor: 'rgba(255, 99, 132, 0.5)', // 현재고 데이터 색상
-          borderColor: 'rgba(255, 99, 132, 1)', // 테두리 색상
-          borderWidth: 1
-        },
-        {
-          label: '전월재고',
-          data: inventory.전월재고,
-          backgroundColor: 'rgba(54, 162, 235, 0.5)', // 전월재고 데이터 색상
-          borderColor: 'rgba(54, 162, 235, 1)', // 테두리 색상
-          borderWidth: 1
-        }
-      ],
-    });
-  }, [inventory]);
 
   const handleSelectChange = async (event: any) => {
     const { name, value } = event.target;
@@ -192,28 +156,10 @@ export default function Page() {
     console.log(options);
   };
 
-  const chartOptions: any = {
-    responsive: true,
-    plugins: {
-      legend: {
-        position: 'top',
-      },
-      title: {
-        display: true,
-        text: 'Chart.js Floating Bar Chart'
-      }
-    },
-    scales: {
-      x: {
-        beginAtZero: true,
-      },
-      y: {
-        beginAtZero: true, // Y축을 0부터 시작하도록 설정
-        max: Math.max(inventory.현재고, inventory.전월재고),
-      }
-    },
-  };
-
+  const handleClick = async () => {
+    const values = await getAll();
+    setInventory(values);
+  }
   return (
     <div className={styles.container}>
       <div className={styles.optionContainer}>
@@ -223,7 +169,7 @@ export default function Page() {
           value={options.관리구분}
           onChange={handleSelectChange}
         >
-          <option value="" disabled={options.관리구분 === ""}>
+          <option value="" disabled={options.품목 === ""}>
             선택하세요
           </option>
           {initialState.관리구분.map((option: any, index: any) => (
@@ -253,7 +199,7 @@ export default function Page() {
           value={options.품종}
           onChange={handleSelectChange}
         >
-          <option value="" disabled={options.품종 === ""}>
+          <option value="" disabled={options.품목 === ""}>
             선택하세요
           </option>
           {initialState.품종.map((option, index) => (
@@ -268,7 +214,7 @@ export default function Page() {
           value={options.등급}
           onChange={handleSelectChange}
         >
-          <option value="" disabled={options.등급 === ""}>
+          <option value="" disabled={options.품목 === ""}>
             선택하세요
           </option>
           {initialState.등급.map((option, index) => (
@@ -277,28 +223,19 @@ export default function Page() {
             </option>
           ))}
         </select>
-      </div>
-      <div className={styles.chartContainer}>
-        <Bar data={chartData} options={chartOptions} />
-      </div>
-      <div>
-        <div className={styles.dataTable}>
-          <table className={styles.table}>
-            <thead className={styles.thead}>
-              <tr>
-                <th>현재고</th>
-                <th>전월재고</th>
-                <th>날짜</th>
-              </tr>
-            </thead>
-            <tbody className={styles.tbody}>
-              <tr>
-                <td>{inventory.현재고}</td>
-                <td>{inventory.전월재고}</td>
-                <td>{inventory.날짜}</td>
-              </tr>
-            </tbody>
-          </table>
+        <div>
+          <button onClick={handleClick} type="button">
+            전부 가져오기
+          </button>
+          {inventory.map((item:any, index) => (
+            <li key={index}>
+              <strong>예측날짜: </strong>{item.예측날짜},
+              <strong>현재고: </strong>{item.현재고},
+              <strong>현재중량: </strong>{item.현재중량},
+              <strong>재고상태: </strong>{item.재고상태},
+              <strong>중량상태: </strong>{item.중량상태},
+            </li>
+          ))}
         </div>
       </div>
     </div>

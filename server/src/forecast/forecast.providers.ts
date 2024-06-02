@@ -1,12 +1,12 @@
 import { DataSource } from 'typeorm';
-import { TestInventory } from './management.entity';
-import { AdminInventory } from '../admin/admin.entity';
-export const managementProviders = [
+import { Forecast } from './forecast.entity';
+import { AdminInventory } from '../admin/admin.entity'
+export const forecastProviders = [
   {
     //해당 provider형식으로 db의 테이블을 데이터소스로서 가져온다
-    provide: 'TESTING_INVENTORY_REPOSITORY',
+    provide: 'FORECAST_REPOSITORY',
     useFactory: (dataSource: DataSource) =>
-      dataSource.getRepository(TestInventory),
+      dataSource.getRepository(Forecast),
     inject: ['DATA_SOURCE'],
   },
   {
@@ -14,5 +14,5 @@ export const managementProviders = [
     useFactory: (dataSource: DataSource) =>
       dataSource.getRepository(AdminInventory),
     inject: ['DATA_SOURCE'],
-  },
+  }
 ];

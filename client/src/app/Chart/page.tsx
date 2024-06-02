@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import styles from "./chart.module.css";
+import styles from "./chartStyles.module.scss";
 import { Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -51,11 +51,6 @@ async function getOptions(option: any) {
   }
   return res.json();
 }
-//첫번째 옵션=db에서 가져오는 관리구분
-//관리구분으로 품목 가져오기
-//품목으로 품종 가져오기
-//품종으로 등급 가져오기
-//최종 '조회하기'버튼으로 위의 옵션에 해당하는 값들 가져와서 chart와 연동
 export default function Page() {
   const [inventory, setInventory] = useState([]);
   const [options, setOptions] = useState({
@@ -116,7 +111,7 @@ export default function Page() {
 
   useEffect(() => {
     if (inventory.length > 0) {
-      const newLabels = inventory.map((item: any) => item.날짜.substr(2,8)); //문자열 슬라이싱
+      const newLabels = inventory.map((item: any) => item.날짜.substr(2, 8)); //문자열 슬라이싱
       const newData = inventory.map((item: any) => item.현재고); // 예시 데이터 매핑
       setChartData({
         labels: newLabels,
@@ -223,94 +218,78 @@ export default function Page() {
   };
 
   return (
-    <div>
-      <div className={styles.optionContainer}>
-        <select
-          id="관리구분"
-          name="관리구분"
-          value={options.관리구분}
-          onChange={handleSelectChange}
-        >
-          <option value="" disabled={options.품목 === ""}>
-            선택하세요
-          </option>
-          {initialState.관리구분.map((option: any, index: any) => (
-            <option key={index} value={option}>
-              {option}
-            </option>
-          ))}
-        </select>
-        <select
-          id="품목"
-          name="품목"
-          value={options.품목}
-          onChange={handleSelectChange}
-        >
-          <option value="" disabled={options.품목 === ""}>
-            선택하세요
-          </option>
-          {initialState.품목.map((option, index) => (
-            <option key={index} value={option}>
-              {option}
-            </option>
-          ))}
-        </select>
-        <select
-          id="품종"
-          name="품종"
-          value={options.품종}
-          onChange={handleSelectChange}
-        >
-          <option value="" disabled={options.품목 === ""}>
-            선택하세요
-          </option>
-          {initialState.품종.map((option, index) => (
-            <option key={index} value={option}>
-              {option}
-            </option>
-          ))}
-        </select>
-        <select
-          id="등급"
-          name="등급"
-          value={options.등급}
-          onChange={handleSelectChange}
-        >
-          <option value="" disabled={options.품목 === ""}>
-            선택하세요
-          </option>
-          {initialState.등급.map((option, index) => (
-            <option key={index} value={option}>
-              {option}
-            </option>
-          ))}
-        </select>
-      </div>
-      <div className={styles.chartContainer}>
-        <Line data={chartData} options={chartOptions} />
-      </div>
+    <>
       <div className={styles.container}>
-        <div className={styles.dataTable}>
-          <table className={styles.table}>
-            <thead className={styles.thead}>
-              <tr>
-                <th>현재고</th>
-                <th>현재중량</th>
-                <th>날짜</th>
-              </tr>
-            </thead>
-            <tbody className={styles.tbody}>
-              {inventory.map((item: any, index: number) => (
-                <tr key={index}>
-                  <td>{item.현재고}</td>
-                  <td>{item.현재중량}</td>
-                  <td>{item.날짜}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div className={styles.optionContainer}>
+          <select
+            id="관리구분"
+            name="관리구분"
+            value={options.관리구분}
+            onChange={handleSelectChange}
+          >
+            <option value="" disabled={options.품목 === ""}>
+              선택하세요
+            </option>
+            {initialState.관리구분.map((option: any, index: any) => (
+              <option key={index} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+          <select
+            id="품목"
+            name="품목"
+            value={options.품목}
+            onChange={handleSelectChange}
+          >
+            <option value="" disabled={options.품목 === ""}>
+              선택하세요
+            </option>
+            {initialState.품목.map((option, index) => (
+              <option key={index} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+          <select
+            id="품종"
+            name="품종"
+            value={options.품종}
+            onChange={handleSelectChange}
+          >
+            <option value="" disabled={options.품목 === ""}>
+              선택하세요
+            </option>
+            {initialState.품종.map((option, index) => (
+              <option key={index} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+          <select
+            id="등급"
+            name="등급"
+            value={options.등급}
+            onChange={handleSelectChange}
+          >
+            <option value="" disabled={options.품목 === ""}>
+              선택하세요
+            </option>
+            {initialState.등급.map((option, index) => (
+              <option key={index} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+          <div className={styles.chartContainer}>
+            <Line
+              className={styles.canvas}
+              data={chartData}
+              options={chartOptions}
+            />
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

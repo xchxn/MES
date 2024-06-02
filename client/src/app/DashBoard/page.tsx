@@ -1,7 +1,29 @@
-'use client'
+"use client";
 import { useState, useEffect } from "react";
-import styles from "./dashboard.module.css";
-async function getInventory() {
+import styles from "./dashboardStyles.module.scss";
+import { color } from "chart.js/helpers";
+
+async function getInventory(options: string) {
+  console.log("아이템요청", options);
+  const requestOptions = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ 날짜: options }),
+  };
+
+  const res = await fetch(
+    `http://localhost:3001/management/getItems`,
+    requestOptions
+  );
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch data");
+  }
+  return res.json();
+}
+async function getOptions() {
   const requestOptions = {
     method: "GET",
     headers: {
@@ -9,27 +31,50 @@ async function getInventory() {
     },
   };
 
-  const res = await fetch(`http://localhost:3001/api/test`, requestOptions);
+  const res = await fetch(
+    `http://localhost:3001/management/getDateOptions`,
+    requestOptions
+  );
 
   if (!res.ok) {
     throw new Error("Failed to fetch data");
   }
   return res.json();
 }
-
 export default function Page() {
   const [inventoryData, setInventoryData] = useState([]);
+  const [dateOptions, setDateOptions] = useState({
+    날짜: [],
+  });
+  const [targetDate, setTartgetDate] = useState("");
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const inventoryData = await getInventory();
+        const data = await getOptions();
+        setDateOptions(data);
+      } catch (error) {
+        console.error("Error fetching options:", error);
+      }
+    };
+    fetchData();
+  }, [dateOptions]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const inventoryData = await getInventory(targetDate);
         setInventoryData(inventoryData);
       } catch (error) {
         console.error("Error fetching inventory:", error);
       }
     };
     fetchData();
-  }, []);
+  }, [targetDate]);
+
+  const handleSelectChange = async (event: any) => {
+    setTartgetDate(event.target.value);
+  };
 
   //날짜별로 테이블을 관리할 옵션
 
@@ -56,10 +101,24 @@ export default function Page() {
   };
 
   return (
-    <div className={styles.container}>
-      <div className={styles.dataTable}>
-        <table className={styles.table}>
-          <thead className={styles.thead}>
+      <div className={styles.container}>
+        <select
+          id="날짜"
+          name="날짜"
+          value={targetDate}
+          onChange={handleSelectChange}
+        >
+          <option value="" disabled={targetDate === ""}>
+            날짜를 선택하세요
+          </option>
+          {dateOptions.날짜.map((option: any, index: any) => (
+            <option key={index} value={option}>
+              {option.substr(0, 10)}
+            </option>
+          ))}
+        </select>
+        <table>
+          <thead>
             <tr>
               <th>관리구분</th>
               <th>품목</th>
@@ -75,7 +134,7 @@ export default function Page() {
               <th>현재중량</th>
             </tr>
           </thead>
-          <tbody className={styles.tbody}>
+          <tbody>
             {currentItems.map((item: any, index: number) => (
               <tr key={index}>
                 <td>{item.관리구분}</td>
@@ -95,11 +154,16 @@ export default function Page() {
           </tbody>
         </table>
         <div className={styles.pagination}>
-          <button onClick={prevPage} disabled={currentPage === 1}>이전</button>
-          <span>{currentPage}/{totalPages}</span>
-          <button onClick={nextPage} disabled={lastIndex >= inventoryData.length}>다음</button>
-        </div>
+        <button onClick={prevPage} disabled={currentPage === 1}>
+          이전
+        </button>
+        <span>
+          {currentPage}/{totalPages}
+        </span>
+        <button onClick={nextPage} disabled={lastIndex >= inventoryData.length}>
+          다음
+        </button>
       </div>
-    </div>
+      </div>
   );
 }
