@@ -26,4 +26,8 @@ export class AdminController {
     }
     return results;
   }
+  @Get('getNotiItems')
+  async getNotiItems() {
+    return this.adminService.getNotiItems();
+  }
 }

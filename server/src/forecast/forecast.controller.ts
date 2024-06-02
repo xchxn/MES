@@ -5,13 +5,13 @@ import { ForecastService } from './forecast.service';
 export class ForecastController {
   constructor(private forecastService: ForecastService) {}
 
-  @Get('test')
-  register(): any {
-    return this.forecastService.test();
+  @Get('makeNoti')
+  async register(): Promise<any> {
+    return this.forecastService.makeNoti();
   }
-  @Get('getAll')
-  getAll(): any {
-    return this.forecastService.getAll();
+  @Get('getAnomalyItems')
+  async getAnomalyItems(): Promise<any> {
+    return this.forecastService.getAnomalyItems();
   }
   @Post('data')
   async getData(@Body() data: any) {
@@ -61,8 +61,8 @@ export class ForecastController {
     return { error: 'Invalid request data' };
   }
 
-  @Get('test')
-  async testing(): Promise<any> {
+  @Post('test')
+  async testing(@Body() dataSet: any): Promise<any> {
     const data = [
       {
         예측날짜: '2000-01-26',
@@ -72,9 +72,16 @@ export class ForecastController {
         중량상태: '0',
       },
       {
-        예측날짜: '2000-01-26',
-        현재고: 1234,
-        현재중량: 1234,
+        예측날짜: '2000-01-27',
+        현재고: 134,
+        현재중량: 134,
+        재고상태: '0',
+        중량상태: '0',
+      },
+      {
+        예측날짜: '2000-01-28',
+        현재고: 123,
+        현재중량: 123,
         재고상태: '0',
         중량상태: '0',
       },

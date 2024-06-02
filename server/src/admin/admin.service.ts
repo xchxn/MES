@@ -122,4 +122,11 @@ export class AdminService {
       return options;
     }
   }
+  async getNotiItems(): Promise<any> {
+    const notiItems = await this.adminRepository
+        .createQueryBuilder()
+        .where('NotiSet= :status', { status: 1 })
+        .getCount();
+      return notiItems;
+  }
 }

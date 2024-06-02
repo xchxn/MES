@@ -51,7 +51,7 @@ async function getAll() {
   };
 
   const res = await fetch(
-    `http://localhost:3001/forecast/getAll`,
+    `http://localhost:3001/forecast/getAnomalyItems`,
     requestOptions
   );
 

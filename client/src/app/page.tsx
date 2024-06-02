@@ -2,7 +2,22 @@
 import styles from "./mainPageStyles.module.scss";
 import Cookies from "js-cookie";
 import { useState, useEffect } from "react";
+//노티 설정된 항목들 가져오는 함수
+async function getAnomalyItems() {
+  const requestOptions = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
 
+  const res = await fetch(`http://localhost:3001/forecast/getAnomalyItems`, requestOptions);
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch data");
+  }
+  return res.json();
+}
 export default function Home() {
   const [userId,setUserID] = useState("");
     // 컴포넌트가 마운트될 때 한 번 쿠키에서 userId를 읽어오고,
@@ -40,13 +55,18 @@ export default function Home() {
     }
   }
   //알림 보내기
-  function sendNotification() {
+  async function sendNotification() {
     //DB에서 알림 설정이 TRUE인 항목들 읽어서 계산 로직 처리 후 알림 보내기.
     if ('Notification' in window && Notification.permission === 'granted') {
-      const notification = new Notification('New Message!', {
-        body: 'Here is a notification from your Next.js app.',
+      const anomalyItemList = await getAnomalyItems();  // 알림 대상 항목 조회
+      let bodyMessage = '다음 항목들을 확인해주세요:\n';
+      anomalyItemList.forEach((item: any) => {
+        bodyMessage += `품목: ${item.품목}, 품종: ${item.품종}, 등급: ${item.등급}, 현재고: ${item.현재고}\n`;
       });
-    } else {
+      const notification = new Notification('알림: 재고 확인 요망', {
+        body: bodyMessage
+      });
+    }else {
       console.error("Notification permission has not been granted");
     }
   }
