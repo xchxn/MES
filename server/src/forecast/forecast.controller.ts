@@ -5,7 +5,7 @@ import { ForecastService } from './forecast.service';
 export class ForecastController {
   constructor(private forecastService: ForecastService) {}
 
-  @Get('data')
+  @Get('test')
   register(): any {
     return this.forecastService.test();
   }
@@ -13,7 +13,10 @@ export class ForecastController {
   getAll(): any {
     return this.forecastService.getAll();
   }
-
+  @Post('data')
+  async getData(@Body() data: any) {
+    return this.forecastService.getTargetData(data);
+  }
   //옵션 선택지
   @Post('getOptions')
   async getOptions(@Body() data: any) {
@@ -56,5 +59,26 @@ export class ForecastController {
     }
     // 기본적으로 정의되지 않은 조건에 대해 처리
     return { error: 'Invalid request data' };
+  }
+
+  @Get('test')
+  async testing(): Promise<any> {
+    const data = [
+      {
+        예측날짜: '2000-01-26',
+        현재고: 1234,
+        현재중량: 1234,
+        재고상태: '0',
+        중량상태: '0',
+      },
+      {
+        예측날짜: '2000-01-26',
+        현재고: 1234,
+        현재중량: 1234,
+        재고상태: '0',
+        중량상태: '0',
+      },
+    ];
+    return data;
   }
 }
