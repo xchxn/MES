@@ -1,7 +1,8 @@
 "use client";
 import styles from "./adminStyles.module.scss";
 import { useEffect, useState } from "react";
-
+import Cookies from "js-cookie";
+import { useRouter } from 'next/navigation';
 interface OptionField {
   관리구분: string[];
   품목: string[];
@@ -28,11 +29,14 @@ interface ProductsState {
 }
 
 async function getOptionField(): Promise<any> {
+  const token = Cookies.get('token');
   const requestOptions: RequestInit = {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`,
     },
+    next: { revalidate: 3600 },
   };
 
   const response = await fetch(
@@ -41,7 +45,10 @@ async function getOptionField(): Promise<any> {
   );
 
   if (!response.ok) {
-    throw new Error("Failed to fetch data");
+    if (response.status === 401) {
+      window.alert("인증에 실패하였습니다. 로그인 후 진행해 주세요.");
+      throw new Error("Token authentication failed. Please log in again.");
+    }else throw new Error("Failed to fetch data");
   }
   return response.json();
 }
@@ -71,12 +78,15 @@ async function getAdminOptions(params: SelectedItems): Promise<any> {
 }
 
 async function setAdminOptions(params: any): Promise<void> {
+  const token = Cookies.get('token');
   const requestOptions: RequestInit = {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`,
     },
-    body: JSON.stringify(params)
+    body: JSON.stringify(params),
+    next: { revalidate: 3600 },
   };
 
   const response = await fetch(
@@ -166,7 +176,7 @@ export default function Page() {
   return (
     <div className={styles.container}>
       <div className={styles.optionField}>
-        관리구분
+      <strong>관리구분</strong>
         <div className={styles.fieldOptions}>{field.관리구분.map((item, index) => (
           <div key={index}>
              <input
@@ -178,7 +188,7 @@ export default function Page() {
           </div>
         ))}
         </div>
-        품목
+        <strong>품목</strong>
         <div className={styles.fieldOptions}>{field.품목.map((item, index) => (
           <div key={index}>
              <input
@@ -190,7 +200,7 @@ export default function Page() {
           </div>
         ))}
         </div>
-        품종
+        <strong>품종</strong>
         <div className={styles.fieldOptions}>{field.품종.map((item, index) => (
           <div key={index}>
              <input

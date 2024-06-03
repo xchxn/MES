@@ -38,6 +38,7 @@ export default function Home() {
   // 컴포넌트가 마운트 될 때 권한 요청
   useEffect(() => {
     requestNotificationPermission();
+    sendNotification();
   }, []);
 
   // 알림 권한 요청 함수
