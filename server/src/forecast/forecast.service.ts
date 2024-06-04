@@ -3,8 +3,7 @@ import { HttpService } from '@nestjs/axios';
 import { Forecast } from './forecast.entity';
 import { Repository } from 'typeorm';
 import { AdminInventory } from '../admin/admin.entity';
-import { catchError, map } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { firstValueFrom } from 'rxjs';
 @Injectable()
 export class ForecastService {
@@ -17,7 +16,7 @@ export class ForecastService {
   ) {}
 
   //알림설정 항목으로 ai에 예측 데이터 요청
-  async getData(data:any): Promise<any> {
+  async getData(data: any): Promise<any> {
     //추후 모델 배포 주소로 URL 변경
     const url = 'http://localhost:3001/forecast/test';
     const headers = {
@@ -25,23 +24,24 @@ export class ForecastService {
     };
     try {
       const observable = this.httpService.post(url, data, { headers }).pipe(
-        map(response => {
+        map((response) => {
           // 여기서 response.data가 배열인지 확인하고 적합한 형태로 매핑
           if (Array.isArray(response.data)) {
-            return response.data.map(item => ({
+            return response.data.map((item) => ({
               ...item,
               관리구분: data.관리구분,
               품목: data.품목,
               품종: data.품종,
-              등급: data.등급
+              등급: data.등급,
             }));
           } else {
             throw new Error('Expected an array of data');
           }
-        })
+        }),
       );
       const result = await firstValueFrom(observable);
-      await this.forecastRepository.createQueryBuilder()
+      await this.forecastRepository
+        .createQueryBuilder()
         .insert()
         .into(Forecast)
         .values(result)
@@ -65,44 +65,51 @@ export class ForecastService {
       .addSelect('비율', '비율')
       .where('NotiSet = :NotiSet', { NotiSet: 1 })
       .getRawMany();
+    console.log(makeReq);
     //알림 설정된 항목들 가져온 후 예측 모델에 데이터 요청
     //const result = this.getData(makeReq);
-    makeReq.map((item) => {
-      // const req = this.getData(item);
-    });
+    // makeReq.map((item) => {
+    //   // const req = this.getData(item);
+    // });
     const dataExample = [
       {
-        관리구분: "고구마",
-        품목: "일반고구마",
-        품종: "하루까",
-        등급: "대1",
+        관리구분: '고구마',
+        품목: '일반고구마',
+        품종: '하루까',
+        등급: '대1',
       },
       {
-        관리구분: "고구마",
-        품목: "적색고구마",
-        품종: "카라유타까",
-        등급: "비1",
-      }
-    ]
+        관리구분: '고구마',
+        품목: '적색고구마',
+        품종: '카라유타까',
+        등급: '비1',
+      },
+    ];
     dataExample.map((item) => {
       const req = this.getData(item);
+      console.log(req);
     });
-    return "done";
+    return 'done';
   }
 
   //성태 이상값인 데이터 전부 가져오기
   async getAnomalyItems(): Promise<any> {
+    // const makeReq = await this.forecastRepository
+    //   .createQueryBuilder()
+    //   .select('관리구분', '관리구분')
+    //   .addSelect('품목', '품목')
+    //   .addSelect('품종', '품종')
+    //   .addSelect('등급', '등급')
+    //   .addSelect("DATE_FORMAT(예측날짜, '%Y-%m-%d')", '예측날짜')
+    //   .addSelect('현재중량', '현재중량')
+    //   .addSelect('현재고', '현재고')
+    //   .where('재고상태 = :state', { state: 'X' })
+    //   .orWhere('중량상태 = :state', { state: 'X' })
+    //   .getRawMany();
     const makeReq = await this.forecastRepository
       .createQueryBuilder()
-      .select('DISTINCT 관리구분', '관리구분')
-      .addSelect('품목', '품목')
-      .addSelect('품종', '품종')
-      .addSelect('등급', '등급')
+      .select(['관리구분', '품목', '품종', '등급', '현재고', '현재중량'])
       .addSelect("DATE_FORMAT(예측날짜, '%Y-%m-%d')", '예측날짜')
-      .addSelect('현재중량', '현재중량')
-      .addSelect('현재고', '현재고')
-      .where('재고상태 = :state', { state: 'X' })
-      .orWhere('중량상태 = :state', { state: 'X' })
       .getRawMany();
     return makeReq;
   }
@@ -166,12 +173,11 @@ export class ForecastService {
       .addSelect('현재고', '현재고')
       .addSelect('재고상태', '재고상태')
       .addSelect('중량상태', '중량상태')
+      // 첫 번째 그룹: 관리구분, 품목, 품종, 등급, 재고상태 = 'X'
       .where('관리구분 = :type', { type: op1 })
       .andWhere('품목 = :item', { item: op2 })
       .andWhere('품종 = :kind', { kind: op3 })
       .andWhere('등급 = :grade', { grade: op4 })
-      .andWhere('재고상태 = :state', { state: 'X' })
-      .orWhere('중량상태 = :state', { state: 'X' })
       .getRawMany();
     console.log(res);
     return res;

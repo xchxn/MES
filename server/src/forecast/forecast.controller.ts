@@ -63,29 +63,29 @@ export class ForecastController {
 
   @Post('test')
   async testing(@Body() dataSet: any): Promise<any> {
-    const data = [
+    const exampleData = [
       {
         예측날짜: '2000-01-26',
         현재고: 1234,
         현재중량: 1234,
-        재고상태: '0',
-        중량상태: '0',
+        재고상태: 'O',
+        중량상태: 'O',
       },
       {
         예측날짜: '2000-01-27',
         현재고: 134,
         현재중량: 134,
-        재고상태: '0',
-        중량상태: '0',
+        재고상태: 'O',
+        중량상태: 'O',
       },
       {
         예측날짜: '2000-01-28',
         현재고: 123,
         현재중량: 123,
-        재고상태: '0',
-        중량상태: '0',
+        재고상태: 'X',
+        중량상태: 'X',
       },
     ];
-    return data;
+    return exampleData;
   }
 }
