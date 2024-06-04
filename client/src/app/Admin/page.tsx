@@ -72,7 +72,16 @@ async function getAdminOptions(params: SelectedItems): Promise<any> {
   );
 
   if (!response.ok) {
-    throw new Error("Failed to fetch data");
+    if (response.status === 401) {
+      window.alert("권한이 없습니다. 관리자로 로그인 해주세요.");
+      throw new Error("Token authentication failed. Please log in again.");
+    } else if ( response.status === 400) {
+      window.alert("중복 업로드");
+      throw new Error("Failed to fetch data");
+    } else {
+      window.alert("필터 조건을 1체크해주세요.");
+      throw new Error("Failed to fetch data");
+    }
   }
   return response.json();
 }

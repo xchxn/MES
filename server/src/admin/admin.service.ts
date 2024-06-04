@@ -57,22 +57,39 @@ export class AdminService {
 
   // client state기반으로 목록 반환
   async getAdminOptions(data: any): Promise<any> {
-    //관리구분과 품목, 품종까지 설정
-    const options = await this.adminRepository
-      .createQueryBuilder()
-      .select('DISTINCT 관리구분', '관리구분')
-      .addSelect('품목', '품목')
-      .addSelect('품종', '품종')
-      .addSelect('등급', '등급')
-      .addSelect('판매량', '판매량')
-      .addSelect('비율', '비율')
-      .addSelect('NotiSet', 'NotiSet')
-      .where('관리구분 IN (:...types)', { types: data.관리구분 })
-      .andWhere('품목 IN (:...item)', { item: data.품목 })
-      .andWhere('품종 IN (:...kind)', { kind: data.품종 })
-      .getRawMany();
-    console.log(options);
-    return options;
+    // 데이터가 유효한지 검사
+    if (
+      !data.관리구분 ||
+      data.관리구분.length === 0 ||
+      !data.품목 ||
+      data.품목.length === 0 ||
+      !data.품종 ||
+      data.품종.length === 0
+    ) {
+      // 오류 메시지 반환하거나 빈 결과 세트 반환
+      return Promise.reject(new Error('입력 데이터가 비어 있습니다.'));
+    }
+
+    try {
+      const options = await this.adminRepository
+        .createQueryBuilder()
+        .select('DISTINCT 관리구분', '관리구분')
+        .addSelect('품목', '품목')
+        .addSelect('품종', '품종')
+        .addSelect('등급', '등급')
+        .addSelect('판매량', '판매량')
+        .addSelect('비율', '비율')
+        .addSelect('NotiSet', 'NotiSet')
+        .where('관리구분 IN (:...types)', { types: data.관리구분 })
+        .andWhere('품목 IN (:...item)', { item: data.품목 })
+        .andWhere('품종 IN (:...kind)', { kind: data.품종 })
+        .getRawMany();
+      return options;
+    } catch (error) {
+      // 데이터베이스 쿼리 오류 처리
+      console.error('데이터베이스 쿼리 중 오류 발생:', error);
+      return Promise.reject(error);
+    }
   }
 
   async setAdminOptions(data: any): Promise<any> {
@@ -124,9 +141,9 @@ export class AdminService {
   }
   async getNotiItems(): Promise<any> {
     const notiItems = await this.adminRepository
-        .createQueryBuilder()
-        .where('NotiSet= :status', { status: 1 })
-        .getCount();
-      return notiItems;
+      .createQueryBuilder()
+      .where('NotiSet= :status', { status: 1 })
+      .getCount();
+    return notiItems;
   }
 }

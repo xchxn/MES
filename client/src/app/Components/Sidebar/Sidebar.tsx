@@ -1,14 +1,13 @@
 "use client";
 import Link from "next/link";
-import sidebarstyles from "./sidebarStyles.module.scss"
+import sidebarstyles from "./sidebarStyles.module.scss";
 
 export default function Sidebar() {
   return (
-    <div>
       <div className={sidebarstyles.navContainer}>
-      <div>
-        <p className={sidebarstyles.title}>SPM</p>
-      </div>
+          <button className={sidebarstyles.btn3} type="button">
+            <span>SPM</span>
+          </button>
         <div className={sidebarstyles.linkButton}>
           <Link href="/">Home</Link>
         </div>
@@ -28,6 +27,5 @@ export default function Sidebar() {
           <Link href="/Admin">Admin</Link>
         </div>
       </div>
-    </div>
   );
 }
