@@ -187,7 +187,7 @@ export class ForecastService {
   async getTargetData(data: any): Promise<any> {
     const options = await this.forecastRepository
       .createQueryBuilder()
-      .select(['관리구분', '품목', '품종', '등급', '현재고', '현재중량'])
+      .select(['관리구분', '품목', '품종', '등급', '현재고', '현재중량','재고상태','중량상태'])
       .addSelect("DATE_FORMAT(예측날짜, '%Y-%m-%d')", '예측날짜')
       .where('관리구분 = :type', { type: data.관리구분 })
       .andWhere('품목 = :item', { item: data.품목 })

@@ -87,8 +87,8 @@ export default function Page() {
     등급: [],
   });
 
-   // Inventory 데이터를 그룹화하는 함수
-   const groupInventory = (inventory: InventoryItem[]) => {
+  // Inventory 데이터를 그룹화하는 함수
+  const groupInventory = (inventory: InventoryItem[]) => {
     const grouped: { [key: string]: InventoryItem[] } = {};
 
     inventory.forEach((item) => {
@@ -254,26 +254,28 @@ export default function Page() {
           ))}
         </select>
         <div>
-          <button onClick={handleClick} type="button">
-            전부 가져오기
-          </button>
-          {Object.keys(groupedInventory).map((groupKey, index) => (
-          <div key={index}>
-            <h3>{groupKey.replace(/-/g, ' ')}</h3>
-            <ul>
-              {groupedInventory[groupKey].map((item:any, idx:any) => (
-                <li key={idx}>
-                  <strong>예측날짜: </strong>{item.예측날짜},
-                  <strong>현재고: </strong>{item.현재고},
-                  <strong>현재중량: </strong>{item.현재중량},
-                  <strong>재고상태: </strong>{item.재고상태},
-                  <strong>중량상태: </strong>{item.중량상태}
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
         </div>
+      </div>
+      <button onClick={handleClick} type="button">
+        전부 가져오기
+      </button>
+      <div className={styles.itemsContainer}>
+      {Object.keys(groupedInventory).map((groupKey, index) => (
+        <div key={index}>
+          <h3>{groupKey.replace(/-/g, ' ')}</h3>
+          <ul>
+            {groupedInventory[groupKey].map((item: any, idx: any) => (
+              <li key={idx}>
+                <strong>예측날짜: </strong>{item.예측날짜},
+                <strong>현재고: </strong>{item.현재고},
+                <strong>현재중량: </strong>{item.현재중량},
+                <strong>재고상태: </strong>{item.재고상태},
+                <strong>중량상태: </strong>{item.중량상태}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
       </div>
     </div>
   );

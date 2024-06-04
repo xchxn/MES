@@ -75,6 +75,7 @@ export default function Header() {
         {userId? (
             <div className={styles.loginContainer}>
               <p> Welcome, {`${userId}`}!</p>
+              <button className={styles.loginButton} onClick={() => router.push('/Admin')}>⚙관리자 페이지</button>
               <button className={styles.logoutButton} onClick={handleLogout}>Logout</button>
             </div>
         ) : (
