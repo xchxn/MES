@@ -18,7 +18,7 @@ export class ForecastService {
   //알림설정 항목으로 ai에 예측 데이터 요청
   async getData(data: any): Promise<any> {
     //추후 모델 배포 주소로 URL 변경
-    const url = 'http://localhost:3001/forecast/test';
+    const url = 'https://172.200.208.9/predict';
     const headers = {
       'Content-Type': 'application/json',
     };
@@ -61,35 +61,17 @@ export class ForecastService {
       .addSelect('품목', '품목')
       .addSelect('품종', '품종')
       .addSelect('등급', '등급')
-      .addSelect('판매량', '판매량')
-      .addSelect('비율', '비율')
+      .addSelect('판매량', '기준수량')
+      .addSelect('비율', '기준중량')
+      .addSelect('관리자', '관리자')
       .where('NotiSet = :NotiSet', { NotiSet: 1 })
       .getRawMany();
-    console.log(makeReq);
     //알림 설정된 항목들 가져온 후 예측 모델에 데이터 요청
     //const result = this.getData(makeReq);
-    // makeReq.map((item) => {
-    //   // const req = this.getData(item);
-    // });
-    const dataExample = [
-      {
-        관리구분: '고구마',
-        품목: '일반고구마',
-        품종: '하루까',
-        등급: '대1',
-      },
-      {
-        관리구분: '고구마',
-        품목: '적색고구마',
-        품종: '카라유타까',
-        등급: '비1',
-      },
-    ];
-    dataExample.map((item) => {
+    makeReq.map((item) => {
       const req = this.getData(item);
-      console.log(req);
     });
-    return 'done';
+    return true;
   }
 
   //성태 이상값인 데이터 전부 가져오기

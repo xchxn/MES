@@ -28,8 +28,8 @@ export class Forecast {
   현재중량: string;
 
   @Column({ type: 'varchar', length: 255 })
-  재고상태: string;
+  stock_status: string;
 
   @Column({ type: 'varchar', length: 255 })
-  중량상태: string;
+  weight_status: string;
 }

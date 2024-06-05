@@ -26,4 +26,7 @@ export class AdminInventory {
   //알림 설정 여부
   @Column({ type: 'bool', default: true })
   NotiSet: boolean;
+
+  @Column({ type: 'bool', default: true })
+  관리자: boolean;
 }
