@@ -92,10 +92,10 @@ def predict(request: PredictionRequest):
         # Add the result to the list
         results.append({
             "예측날짜": prediction_date.strftime('%Y-%m-%d'),
-            "현재고": pred_stock,
-            "현재중량": pred_weight,
-            "stock_status": stock_status,
-            "weight_status": weight_status
+            "예측고": pred_stock,
+            "예측중량": pred_weight,
+            "재고상태": stock_status,
+            "중량상태": weight_status
         })
 
     # Return the results
