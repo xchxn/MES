@@ -3,10 +3,19 @@ import pandas as pd
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import LSTM, Dense
+from tensorflow.keras.models import load_model
+from tensorflow.keras.losses import MeanSquaredError
 from datetime import datetime, timedelta
 import numpy as np
+import joblib
+
+# Load models and scalers
+model_stock = load_model('model_stock.h5', custom_objects={'MeanSquaredError': MeanSquaredError})
+model_weight = load_model('model_weight.h5', custom_objects={'MeanSquaredError': MeanSquaredError})
+scaler = joblib.load('scaler.pkl')
+stock_scaler = joblib.load('stock_scaler.pkl')
+weight_scaler = joblib.load('weight_scaler.pkl')
+column_names = joblib.load('column_names.pkl')
 
 # Step 1: Read the Excel files
 extract_dir = 'excel'
@@ -41,82 +50,32 @@ class PredictionRequest(BaseModel):
     기준중량: int
     관리자: bool
 
-def filter_data(data, category, item, variety, grade):
-    filtered_data = data[
-        (data['관리구분'] == category) & 
-        (data['품목'] == item) & 
-        (data['품종'] == variety) & 
-        (data['등급'] == grade)
-    ]
-    return filtered_data
+def prepare_input_data(request: PredictionRequest, prediction_date: datetime):
+    input_data = {
+        '날짜': prediction_date.toordinal(),
+        '관리구분': request.관리구분,
+        '품목': request.품목,
+        '품종': request.품종,
+        '등급': request.등급
+    }
 
-def build_lstm_model(input_shape):
-    model = Sequential([
-        LSTM(35, activation='relu', input_shape=input_shape),
-        Dense(1)
-    ])
-    model.compile(optimizer='adam', loss='mse', metrics=['mae'])
-    return model
+    input_df = pd.DataFrame([input_data])
+    input_encoded = pd.get_dummies(input_df).reindex(columns=column_names, fill_value=0)
+    input_scaled = scaler.transform(input_encoded)
+    input_scaled = input_scaled.reshape((input_scaled.shape[0], 1, input_scaled.shape[1]))
+    return input_scaled
 
 @app.post("/predict")
 def predict(request: PredictionRequest):
-    # Step 3: Filter data based on the input parameters
-    filtered_data = filter_data(data, request.관리구분, request.품목, request.품종, request.등급)
-    if filtered_data.empty:
-        raise HTTPException(status_code=404, detail="No matching data found")
-
-    # Prepare the data
-    X = filtered_data[['날짜', '관리구분', '품목', '품종', '등급']]
-    y_current_stock = filtered_data['현재고']
-    y_current_weight = filtered_data['현재중량']
-
-    # Convert date to ordinal for model training
-    X['날짜'] = X['날짜'].map(datetime.toordinal)
-
-    # One-hot encode categorical variables
-    X_encoded = pd.get_dummies(X, columns=['관리구분', '품목', '품종', '등급'])
-
-    # Scale the features
-    scaler = StandardScaler()
-    X_scaled = scaler.fit_transform(X_encoded)
-
-    # Normalize the targets
-    stock_scaler = MinMaxScaler()
-    weight_scaler = MinMaxScaler()
-
-    y_current_stock_scaled = stock_scaler.fit_transform(y_current_stock.values.reshape(-1, 1))
-    y_current_weight_scaled = weight_scaler.fit_transform(y_current_weight.values.reshape(-1, 1))
-
-    # Reshape data for LSTM [samples, timesteps, features]
-    X_scaled = X_scaled.reshape((X_scaled.shape[0], 1, X_scaled.shape[1]))
-
-    # Step 4: Train the TensorFlow LSTM model
-    model_stock = build_lstm_model((X_scaled.shape[1], X_scaled.shape[2]))
-    model_stock.fit(X_scaled, y_current_stock_scaled, epochs=10, batch_size=32, validation_split=0.2, verbose=1)
-
-    model_weight = build_lstm_model((X_scaled.shape[1], X_scaled.shape[2]))
-    model_weight.fit(X_scaled, y_current_weight_scaled, epochs=10, batch_size=32, validation_split=0.2, verbose=1)
-
-    # Step 5: Prediction
+    # Determine the number of days for prediction
     prediction_days = 7 if request.관리자 else 2
     results = []
 
-    for i in range(1, prediction_days + 1):
+    for i in range(prediction_days):
         prediction_date = datetime.now() + timedelta(days=i)
 
         # Prepare the input data for prediction
-        input_data = {
-            '날짜': prediction_date.toordinal(),
-            '관리구분': request.관리구분,
-            '품목': request.품목,
-            '품종': request.품종,
-            '등급': request.등급
-        }
-
-        input_df = pd.DataFrame([input_data])
-        input_encoded = pd.get_dummies(input_df).reindex(columns=X_encoded.columns, fill_value=0)
-        input_scaled = scaler.transform(input_encoded)
-        input_scaled = input_scaled.reshape((input_scaled.shape[0], 1, input_scaled.shape[1]))
+        input_scaled = prepare_input_data(request, prediction_date)
 
         # Predict current stock and weight
         pred_stock_scaled = model_stock.predict(input_scaled)[0][0]
@@ -133,10 +92,10 @@ def predict(request: PredictionRequest):
         # Add the result to the list
         results.append({
             "예측날짜": prediction_date.strftime('%Y-%m-%d'),
-            "현재고": pred_stock,
-            "현재중량": pred_weight,
-            "stock_status": stock_status,
-            "weight_status": weight_status
+            "예측고": pred_stock,
+            "예측중량": pred_weight,
+            "재고상태": stock_status,
+            "중량상태": weight_status
         })
 
     # Return the results
@@ -144,4 +103,3 @@ def predict(request: PredictionRequest):
 
 # Run the app with uvicorn (not in the script itself, use command line)
 # uvicorn main:app --reload
-
