@@ -27,7 +27,7 @@ export default function RootLayout({
             </aside>
           </div>
           <div className={layoutstyle.content}>
-            <aside className={layoutstyle.header}>
+            <aside>
               <Header />
             </aside>
             <main>{children}</main>

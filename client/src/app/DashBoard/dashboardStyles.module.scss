@@ -2,31 +2,39 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 100%;
-  margin: 10px 20px;
 
-  select {
+  select{
     position: relative;
-    margin: 5px 5px;
-    border-radius: 3px solid transparent;
-    box-shadow: inset;
-    padding-top: 2px;
-    padding-bottom: 2px;
-    padding-left: 5px;
-    padding-right: 5px;
-
+    padding: 6px 12px;
+    margin: 12px 6px;
+    border: 3px solid #275efe;
+    background: #eceaea;
+    font-size: medium;
+    font-weight: bold;
+    border-radius: 10px;
+    
     option  {
-        position: relative;
-        border-radius: 3px solid #000000;
-        padding-top: 3px;
-        padding-bottom: 3px;
-        margin-top: 5px;
-      }
+      border: 3px solid #000000;
+      border-radius: 5px;
+      margin-top: 5px;
+    }
+    &:focus {
+      border: 3px dashed #000000;
+      box-sizing: border-box;
+      border-radius: 10px;
+      outline: 3px dashed #F8E4FF;
+    }
+    &:hover {
+      border: 3px dashed #000000;
+      background-color: #d6d6d6;
+      box-shadow: #000000;
   }
+  }
+
   table {
     border-collapse: collapse;
     padding: 5px 5px;
-    margin: 5px 5px;
+    margin: 6px 5px;
     th, td {
       padding: 1px;
       border: 1px solid #000000;
@@ -47,29 +55,74 @@
 }
 
 .pagination {
-  position: relative;
+  position: fixed;
   bottom: 0; // 하단에 위치
-  left: 0; // 왼쪽 끝에서 시작
-  right: 0; // 오른쪽 끝까지 이어짐
-  display: flex; // Flexbox 사용
   justify-content: center; // 수평 중앙 정렬
+  align-self: center;
   align-items: center; // 수직 중앙 정렬
   margin: 10px 15px;
   padding: 10px 0; // 상단과 하단 패딩 설정
 
   button {
-    margin: 20px 25px;
-    padding: 5px 10px;
-    border: 1px solid #000000;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: transform 0.3s ease; // 확대 효과를 위한 전환 설정
-
-    &:hover {
-      transform: scale(1.25); // 마우스 오버시 5% 확대
+    --background: #275efe;
+    --text: #fff;
+    --font-size: 16px;
+    --duration: .44s;
+    --move-hover: -4px;
+    --shadow: 0 2px 8px -1px #{rgba(#275efe, .32)};
+    --shadow-hover: 0 4px 20px -2px #{rgba(#275efe, .5)};
+    --font-shadow: var(--font-size);
+    align-self: flex-end;
+    padding: 12px 16px;
+    margin: 12px 18px;
+    font-family: 'Roboto';
+    font-weight: 500;
+    line-height: var(--font-size);
+    border-radius: 24px;
+    outline: none;
+    appearance: none;
+    border: none;
+    text-decoration: none;
+    font-size: var(--font-size);
+    letter-spacing: .5px;
+    background: var(--background);
+    color: var(--text);
+    box-shadow: var(--shadow);
+    transform: translateY(var(--y)) translateZ(0);
+    transition: transform var(--duration) ease, box-shadow var(--duration) ease;
+    div {
+        display: flex;
+        overflow: hidden;
+        text-shadow: 0 var(--font-shadow) 0 var(--text);
+        span {
+            display: block;
+            backface-visibility: hidden;
+            font-style: normal;
+            transition: transform var(--duration) ease;
+            transform: translateY(var(--m)) translateZ(0);
+            $i: 1;
+            @while $i < 12 {
+                &:nth-child(#{$i}) {
+                    transition-delay: $i / 20 + s;
+                }
+                $i: $i + 1;
+            }
+        }
     }
-  }
-  span {
-    border-bottom: 3px solid #000000;
-  }
+    &:hover {
+        --y: var(--move-hover);
+        --shadow: var(--shadow-hover);
+        span {
+            --m: calc(var(--font-size) * -1);
+        }
+    }
+    &.reverse {
+        --font-shadow: calc(var(--font-size) * -1);
+        &:hover {
+            span {
+                --m: calc(var(--font-size));
+            }
+        }
+    }
+}
 }

@@ -1,9 +1,7 @@
 .container {
   display: flex;
   flex-direction: column;
-  width: 100%;
   font-family: 'Roboto', Arial;
-  margin: 6px 12px;
 
   button {
     --background: #275efe;
@@ -14,8 +12,10 @@
     --shadow: 0 2px 8px -1px #{rgba(#275efe, .32)};
     --shadow-hover: 0 4px 20px -2px #{rgba(#275efe, .5)};
     --font-shadow: var(--font-size);
-    padding: 16px 32px;
-    margin: 12px 6px;
+    align-self: flex-end;
+    width: 18vw;
+    padding: 16px 24px;
+    margin: 12px 18px;
     font-family: 'Roboto';
     font-weight: 500;
     line-height: var(--font-size);
@@ -69,7 +69,6 @@
 }
 
   .optionField {
-    display: flex;
     flex-direction: column;
     border: 1px solid #000000;
     margin: 10px 10px;

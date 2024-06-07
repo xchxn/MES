@@ -224,6 +224,9 @@ export default function Page() {
       </div>
       <button onClick={handleClick} type="button">검색하기</button>
       <div className={styles.selectedItems}>
+        <div>
+          <p>관리구분</p>
+        </div>
       {products.map((product:any, index) => (
           <li key={index}>
           <strong>관리구분:</strong> {product.관리구분}, 

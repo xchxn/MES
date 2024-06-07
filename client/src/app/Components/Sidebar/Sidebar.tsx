@@ -3,10 +3,13 @@ import Link from "next/link";
 import sidebarstyles from "./sidebarStyles.module.scss";
 
 export default function Sidebar() {
+  function onClick(){
+
+  }
   return (
       <div className={sidebarstyles.navContainer}>
-          <button className={sidebarstyles.btn3} type="button">
-            <span>SPM</span>
+          <button className={sidebarstyles.btn3} type="button" onClick={onClick}>
+            <span><Link href="/">SFM</Link></span>
           </button>
         <div className={sidebarstyles.linkButton}>
           <Link href="/">Home</Link>
@@ -22,9 +25,6 @@ export default function Sidebar() {
         </div>
         <div className={sidebarstyles.linkButton}>
           <Link href="/Forecast">Forecast</Link>
-        </div>
-        <div className={sidebarstyles.linkButton}>
-          <Link href="/Admin">Admin</Link>
         </div>
       </div>
   );

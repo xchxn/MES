@@ -76,22 +76,12 @@ export class ForecastService {
 
   //성태 이상값인 데이터 전부 가져오기
   async getAnomalyItems(): Promise<any> {
-    // const makeReq = await this.forecastRepository
-    //   .createQueryBuilder()
-    //   .select('관리구분', '관리구분')
-    //   .addSelect('품목', '품목')
-    //   .addSelect('품종', '품종')
-    //   .addSelect('등급', '등급')
-    //   .addSelect("DATE_FORMAT(예측날짜, '%Y-%m-%d')", '예측날짜')
-    //   .addSelect('현재중량', '현재중량')
-    //   .addSelect('현재고', '현재고')
-    //   .where('재고상태 = :state', { state: 'X' })
-    //   .orWhere('중량상태 = :state', { state: 'X' })
-    //   .getRawMany();
     const makeReq = await this.forecastRepository
       .createQueryBuilder()
       .select(['관리구분', '품목', '품종', '등급', '현재고', '현재중량'])
       .addSelect("DATE_FORMAT(예측날짜, '%Y-%m-%d')", '예측날짜')
+      .addSelect('stock_status', '재고상태')
+      .addSelect('weight_status', '중량상태')
       .getRawMany();
     return makeReq;
   }
@@ -153,8 +143,8 @@ export class ForecastService {
       .addSelect('등급', '등급')
       .addSelect('현재중량', '현재중량')
       .addSelect('현재고', '현재고')
-      .addSelect('재고상태', '재고상태')
-      .addSelect('중량상태', '중량상태')
+      .addSelect('stock_status', '재고상태')
+      .addSelect('weight_status', '중량상태')
       // 첫 번째 그룹: 관리구분, 품목, 품종, 등급, 재고상태 = 'X'
       .where('관리구분 = :type', { type: op1 })
       .andWhere('품목 = :item', { item: op2 })
@@ -176,8 +166,8 @@ export class ForecastService {
         '등급',
         '현재고',
         '현재중량',
-        '재고상태',
-        '중량상태',
+        'stock_status',
+        'weight_status',
       ])
       .addSelect("DATE_FORMAT(예측날짜, '%Y-%m-%d')", '예측날짜')
       .where('관리구분 = :type', { type: data.관리구분 })

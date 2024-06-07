@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import styles from "./forecastStyles.module.scss";
+import Image from "next/image";
 interface InventoryItem {
   관리구분: string;
   품목: string;
@@ -23,7 +24,10 @@ async function getForecast(options: any) {
     body: JSON.stringify(options),
   };
 
-  const res = await fetch(`http://localhost:3001/forecast/data`, requestOptions);
+  const res = await fetch(
+    `http://localhost:3001/forecast/data`,
+    requestOptions
+  );
 
   if (!res.ok) {
     throw new Error("Failed to fetch data");
@@ -189,7 +193,7 @@ export default function Page() {
     setInventory(values);
     const groupedData = groupInventory(values);
     setGroupedInventory(groupedData);
-  }
+  };
   return (
     <div className={styles.container}>
       <div className={styles.optionContainer}>
@@ -253,29 +257,46 @@ export default function Page() {
             </option>
           ))}
         </select>
-        <div>
-        </div>
+        <div></div>
       </div>
       <button onClick={handleClick} type="button">
         전부 가져오기
       </button>
       <div className={styles.itemsContainer}>
-      {Object.keys(groupedInventory).map((groupKey, index) => (
-        <div key={index}>
-          <h3>{groupKey.replace(/-/g, ' ')}</h3>
-          <ul>
-            {groupedInventory[groupKey].map((item: any, idx: any) => (
-              <li key={idx}>
-                <strong>예측날짜: </strong>{item.예측날짜},
-                <strong>현재고: </strong>{item.현재고},
-                <strong>현재중량: </strong>{item.현재중량},
-                <strong>재고상태: </strong>{item.재고상태},
-                <strong>중량상태: </strong>{item.중량상태}
-              </li>
-            ))}
-          </ul>
-        </div>
-      ))}
+        {Object.keys(groupedInventory).map((groupKey, index) => (
+          <div key={index}>
+            <h3>{groupKey.replace(/-/g, " : ")}</h3>
+            <ul>
+              {groupedInventory[groupKey].map((item: any, idx: any) => (
+                <li key={idx}>
+                  <strong>{item.예측날짜}</strong>
+                  <strong>예측고: {item.현재고} </strong>
+                  <strong>예측중량: {item.현재중량}</strong>
+                  <Image
+                    src={
+                      item.재고상태 === "X" ? "/noti.svg" : "/check.svg"
+                    } // public 폴더 내의 경로
+                    alt="설명"
+                    width={66} // 이미지의 폭
+                    height={66} // 이미지의 높이
+                    layout="fixed" // 레이아웃 옵션: fixed, intrinsic, responsive, fill 등
+                  />
+                  <Image
+                    src={
+                      item.중량상태 === "X" ? "/noti.svg" : "/check.svg"
+                    } // public 폴더 내의 경로
+                    alt="설명"
+                    width={66}
+                    height={66}
+                    layout="fixed"
+                  />
+                  {/* <strong>{item.재고상태}</strong>
+                  <strong>{item.중량상태}</strong> */}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
       </div>
     </div>
   );

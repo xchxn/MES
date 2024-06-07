@@ -70,8 +70,7 @@ export default function Header() {
   };
 
   return (
-    <div>
-      <div>
+      <div className={styles.container}>
         {userId? (
             <div className={styles.loginContainer}>
               <p> Welcome, {`${userId}`}!</p>
@@ -84,6 +83,5 @@ export default function Header() {
           </div>
         )}
       </div>
-    </div>
   );
 }
