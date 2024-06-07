@@ -3,6 +3,7 @@ import styles from "./adminStyles.module.scss";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { useRouter } from 'next/navigation';
+import Image from "next/image";
 interface OptionField {
   관리구분: string[];
   품목: string[];
@@ -48,7 +49,7 @@ async function getOptionField(): Promise<any> {
     if (response.status === 401) {
       window.alert("인증에 실패하였습니다. 로그인 후 진행해 주세요.");
       throw new Error("Token authentication failed. Please log in again.");
-    }else throw new Error("Failed to fetch data");
+    } else throw new Error("Failed to fetch data");
   }
   return response.json();
 }
@@ -75,7 +76,7 @@ async function getAdminOptions(params: SelectedItems): Promise<any> {
     if (response.status === 401) {
       window.alert("권한이 없습니다. 관리자로 로그인 해주세요.");
       throw new Error("Token authentication failed. Please log in again.");
-    } else if ( response.status === 400) {
+    } else if (response.status === 400) {
       window.alert("중복 업로드");
       throw new Error("Failed to fetch data");
     } else {
@@ -106,7 +107,7 @@ async function setAdminOptions(params: any): Promise<void> {
   if (!response.ok) {
     throw new Error("Failed to set data");
   }
-  
+
   return response.json();
 }
 
@@ -122,15 +123,18 @@ export default function Page() {
     품종: new Set<string>()
   });
   const [products, setProducts] = useState<ProductDetails[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoading(true);
       try {
         const data = await getOptionField();
         setField(data);
       } catch (error) {
         console.error("Error fetching inventory:", error);
       }
+      setIsLoading(false);
     };
     fetchData();
   }, [selected]);
@@ -182,13 +186,27 @@ export default function Page() {
     setProducts(updatedProducts);
   };
 
+  if (isLoading) {
+    return (
+      <div>
+        <Image
+          src={"/noti.svg"} // public 폴더 내의 경로
+          alt="설명"
+          width={66} // 이미지의 폭
+          height={66} // 이미지의 높이
+          layout="fixed" // 레이아웃 옵션: fixed, intrinsic, responsive, fill 등
+        />
+      </div>
+    );
+  }
+
   return (
     <div className={styles.container}>
       <div className={styles.optionField}>
-      <strong>관리구분</strong>
+        <strong>관리구분</strong>
         <div className={styles.fieldOptions}>{field.관리구분.map((item, index) => (
           <div key={index}>
-             <input
+            <input
               type="checkbox"
               checked={selected.관리구분.has(item)}
               onChange={() => handleCheckboxChange('관리구분', item)}
@@ -200,7 +218,7 @@ export default function Page() {
         <strong>품목</strong>
         <div className={styles.fieldOptions}>{field.품목.map((item, index) => (
           <div key={index}>
-             <input
+            <input
               type="checkbox"
               checked={selected.품목.has(item)}
               onChange={() => handleCheckboxChange('품목', item)}
@@ -212,7 +230,7 @@ export default function Page() {
         <strong>품종</strong>
         <div className={styles.fieldOptions}>{field.품종.map((item, index) => (
           <div key={index}>
-             <input
+            <input
               type="checkbox"
               checked={selected.품종.has(item)}
               onChange={() => handleCheckboxChange('품종', item)}
@@ -227,34 +245,34 @@ export default function Page() {
         <div>
           <p>관리구분</p>
         </div>
-      {products.map((product:any, index) => (
+        {products.map((product: any, index) => (
           <li key={index}>
-          <strong>관리구분:</strong> {product.관리구분}, 
-          <strong>품목:</strong> {product.품목}, 
-          <strong>품종:</strong> {product.품종}, 
-          <strong>등급:</strong> {product.등급}
-          <input
-            type="number"
-            value={product.판매량}
-            onChange={(e) => handleProductChange(index, '판매량', e.target.value)}
-          />
-          <input
-            type="number"
-            value={product.비율}
-            onChange={(e) => handleProductChange(index, '비율', e.target.value)}
-          />
-          <input
-            type="checkbox"
-            checked={product.NotiSet}
-            onChange={(e) => handleNotiChange(index, 'NotiSet', e.target.checked)}
-          />
-          <label>알림설정</label>
-        </li>
+            <strong>관리구분:</strong> {product.관리구분},
+            <strong>품목:</strong> {product.품목},
+            <strong>품종:</strong> {product.품종},
+            <strong>등급:</strong> {product.등급}
+            <input
+              type="number"
+              value={product.판매량}
+              onChange={(e) => handleProductChange(index, '판매량', e.target.value)}
+            />
+            <input
+              type="number"
+              value={product.비율}
+              onChange={(e) => handleProductChange(index, '비율', e.target.value)}
+            />
+            <input
+              type="checkbox"
+              checked={product.NotiSet}
+              onChange={(e) => handleNotiChange(index, 'NotiSet', e.target.checked)}
+            />
+            <label>알림설정</label>
+          </li>
         ))}
       </div>
       <button onClick={handleUpdate} type="button">
-          업데이트
-        </button>
+        업데이트
+      </button>
     </div>
   );
 };

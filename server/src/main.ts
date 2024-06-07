@@ -6,10 +6,10 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
 
   const config = new DocumentBuilder()
-    .setTitle('SPM example')
-    .setDescription('The SPM API description')
+    .setTitle('SFM example')
+    .setDescription('The SFM API description')
     .setVersion('1.0')
-    .addTag('SPM')
+    .addTag('SFM')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document);
