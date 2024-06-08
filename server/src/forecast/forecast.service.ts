@@ -17,9 +17,10 @@ export class ForecastService {
 
   //알림설정 항목으로 ai에 예측 데이터 요청
   async getData(data: any): Promise<any> {
+    console.log(data);
     //추후 모델 배포 주소로 URL 변경
-    // const url = 'https://172.200.208.9/predict';
-    const url = 'http://localhost:3001/forecast/test';
+    const url = 'http://172.200.208.9/predict';
+    // const url = 'http://localhost:3001/forecast/test';
     const headers = {
       'Content-Type': 'application/json',
     };
@@ -49,7 +50,7 @@ export class ForecastService {
         .execute();
       return result;
     } catch (error) {
-      console.error('Error during data fetching and insertion', error);
+      console.error('Error during data fetching and insertion');
       throw error;
     }
   }
@@ -67,11 +68,11 @@ export class ForecastService {
       .addSelect('관리자', '관리자')
       .where('NotiSet = :NotiSet', { NotiSet: 1 })
       .getRawMany();
-    //알림 설정된 항목들 가져온 후 예측 모델에 데이터 요청
-    const result = this.getData(makeReq);
-    // makeReq.map((item) => {
-    //   const req = this.getData(item);
-    // });
+    // //알림 설정된 항목들 가져온 후 예측 모델에 데이터 요청
+    // const result = this.getData(makeReq);
+    makeReq.map((item) => {
+      const req = this.getData(item);
+    });
     return true;
   }
 

@@ -106,8 +106,30 @@ async function setAdminOptions(params: any): Promise<void> {
 
   if (!response.ok) {
     throw new Error("Failed to set data");
+  } else {
+    window.alert("업데이트 완료.")
   }
 
+  return response.json();
+}
+
+async function makeForecast(): Promise<any> {
+  const requestOptions: RequestInit = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    next: { revalidate: 3600 },
+  };
+
+  const response = await fetch(
+    `http://localhost:3001/forecast/makeNoti`,
+    requestOptions
+  );
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch data");
+  }
   return response.json();
 }
 
@@ -155,15 +177,17 @@ export default function Page() {
   };
 
   const handleClick = async () => {
-    console.log(selected);
     const getOptions = await getAdminOptions(selected);
     const optionData: ProductDetails[] = getOptions;
     setProducts(optionData);
   };
 
   const handleUpdate = async () => {
-    console.log(products);
     setAdminOptions(products);
+  };
+
+  const handleForecast = async () => {
+    await makeForecast();
   };
 
   const handleProductChange = (index: number, field: keyof ProductDetails, value: string) => {
@@ -272,6 +296,9 @@ export default function Page() {
       </div>
       <button onClick={handleUpdate} type="button">
         업데이트
+      </button>
+      <button onClick={handleForecast} type="button">
+        예측 결과 생성하기
       </button>
     </div>
   );

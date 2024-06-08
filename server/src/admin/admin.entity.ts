@@ -24,7 +24,7 @@ export class AdminInventory {
   @Column({ type: 'decimal', default: 100 })
   기준중량: number;
   //알림 설정 여부
-  @Column({ type: 'bool', default: true })
+  @Column({ type: 'bool', default: false })
   NotiSet: boolean;
 
   @Column({ type: 'bool', default: true })
