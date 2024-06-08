@@ -2,7 +2,22 @@
 import styles from "./mainPageStyles.module.scss";
 import Cookies from "js-cookie";
 import { useState, useEffect } from "react";
+//노티 설정된 항목들 가져오는 함수
+async function getAnomalyItems() {
+  const requestOptions = {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
 
+  const res = await fetch(`http://localhost:3001/forecast/getAnomalyItems`, requestOptions);
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch data");
+  }
+  return res.json();
+}
 export default function Home() {
   const [userId,setUserID] = useState("");
     // 컴포넌트가 마운트될 때 한 번 쿠키에서 userId를 읽어오고,
@@ -23,6 +38,7 @@ export default function Home() {
   // 컴포넌트가 마운트 될 때 권한 요청
   useEffect(() => {
     requestNotificationPermission();
+    sendNotification();
   }, []);
 
   // 알림 권한 요청 함수
@@ -40,27 +56,30 @@ export default function Home() {
     }
   }
   //알림 보내기
-  function sendNotification() {
+  async function sendNotification() {
     //DB에서 알림 설정이 TRUE인 항목들 읽어서 계산 로직 처리 후 알림 보내기.
     if ('Notification' in window && Notification.permission === 'granted') {
-      const notification = new Notification('New Message!', {
-        body: 'Here is a notification from your Next.js app.',
+      const anomalyItemList = await getAnomalyItems();  // 알림 대상 항목 조회
+      let bodyMessage = '다음 항목들을 확인해주세요:\n';
+      anomalyItemList.forEach((item: any) => {
+        bodyMessage += `품목: ${item.품목}, 품종: ${item.품종}, 등급: ${item.등급}, 예측고: ${item.예측고}\n`;
       });
-    } else {
+      const notification = new Notification('알림: 재고 확인 요망', {
+        body: bodyMessage
+      });
+    }else {
       console.error("Notification permission has not been granted");
     }
   }
   
   return (
-    <div className={styles.main}>
-      <p>SPM 서비스 Wiki</p>
+    <ol className={styles.numbered}>
+      <li>SPM 서비스 Wiki</li>
       <li>Update: 엑셀로된 재고 데이터를 업로드 하는 페이지</li> 
       <li>Dashboard: 업로드 된 데이터들을 테이블 형태로 확인하는 페이지</li>
       <li>Chart: 항목 별 데이터에 예측 수치를 추가하여 꺾은 선 그래프로 시각화한 재고 수치 흐름을 한눈에 파악할 수 있는 페이지</li>
       <li>Compare: 항목 별 가장 최근 데이터와 최근 바로 이전, 예측 데이터를 한눈에 비교하기 위한 페이지</li>
       <li>QuickView: 예측 결과 중 위험 혹은 과잉 데이터만 모아서 보여주는 페이지</li>
-      <button onClick={sendNotification}>Send Notification</button>
-    </div>
-    
+    </ol>
   );
 }

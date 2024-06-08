@@ -19,11 +19,14 @@ export class AdminInventory {
 
   //판매량과 설정비율?
   @Column({ type: 'decimal', default: 100 })
-  판매량: number;
+  기준수량: number;
 
   @Column({ type: 'decimal', default: 100 })
-  비율: number;
+  기준중량: number;
   //알림 설정 여부
-  @Column({ type: 'bool', default: true })
+  @Column({ type: 'bool', default: false })
   NotiSet: boolean;
+
+  @Column({ type: 'bool', default: true })
+  관리자: boolean;
 }

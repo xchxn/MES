@@ -281,13 +281,13 @@ export default function Page() {
               </option>
             ))}
           </select>
-          <div className={styles.chartContainer}>
-            <Line
-              className={styles.canvas}
-              data={chartData}
-              options={chartOptions}
-            />
-          </div>
+        </div>
+        <div className={styles.chartContainer}>
+          <Line
+            className={styles.canvas}
+            data={chartData}
+            options={chartOptions}
+          />
         </div>
       </div>
     </>

@@ -1,14 +1,16 @@
 "use client";
 import Link from "next/link";
-import sidebarstyles from "./sidebarStyles.module.scss"
+import sidebarstyles from "./sidebarStyles.module.scss";
 
 export default function Sidebar() {
+  function onClick(){
+
+  }
   return (
-    <div>
       <div className={sidebarstyles.navContainer}>
-      <div>
-        <p className={sidebarstyles.title}>SPM</p>
-      </div>
+          <button className={sidebarstyles.btn3} type="button" onClick={onClick}>
+            <span><Link href="/">SFM</Link></span>
+          </button>
         <div className={sidebarstyles.linkButton}>
           <Link href="/">Home</Link>
         </div>
@@ -22,9 +24,8 @@ export default function Sidebar() {
           <Link href="/Chart">Chart</Link>
         </div>
         <div className={sidebarstyles.linkButton}>
-          <Link href="/Admin">Admin</Link>
+          <Link href="/Forecast">Forecast</Link>
         </div>
       </div>
-    </div>
   );
 }

@@ -1,6 +1,18 @@
 "use client";
 import { useState, useEffect } from "react";
 import styles from "./forecastStyles.module.scss";
+import Image from "next/image";
+interface InventoryItem {
+  관리구분: string;
+  품목: string;
+  품종: string;
+  등급: string;
+  예측날짜: string;
+  예측고: number;
+  예측중량: number;
+  재고상태: string;
+  중량상태: string;
+}
 
 //옵션을 선택된 항목들의 예측값 요청
 async function getForecast(options: any) {
@@ -12,7 +24,10 @@ async function getForecast(options: any) {
     body: JSON.stringify(options),
   };
 
-  const res = await fetch(`http://localhost:3001/forecast/data`, requestOptions);
+  const res = await fetch(
+    `http://localhost:3001/forecast/data`,
+    requestOptions
+  );
 
   if (!res.ok) {
     throw new Error("Failed to fetch data");
@@ -51,7 +66,7 @@ async function getAll() {
   };
 
   const res = await fetch(
-    `http://localhost:3001/forecast/getAll`,
+    `http://localhost:3001/forecast/getAnomalyItems`,
     requestOptions
   );
 
@@ -62,6 +77,7 @@ async function getAll() {
 }
 export default function Page() {
   const [inventory, setInventory] = useState<[]>([]);
+  const [groupedInventory, setGroupedInventory] = useState({});
   const [options, setOptions] = useState({
     관리구분: "",
     품목: "",
@@ -75,11 +91,27 @@ export default function Page() {
     등급: [],
   });
 
+  // Inventory 데이터를 그룹화하는 함수
+  const groupInventory = (inventory: InventoryItem[]) => {
+    const grouped: { [key: string]: InventoryItem[] } = {};
+
+    inventory.forEach((item) => {
+      const key = `${item.관리구분}-${item.품목}-${item.품종}-${item.등급}`;
+      if (!grouped[key]) {
+        grouped[key] = [];
+      }
+      grouped[key].push(item);
+    });
+    return grouped;
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const data = await getForecast(options);
         setInventory(data);
+        const groupedData = groupInventory(data);
+        setGroupedInventory(groupedData);
       } catch (error) {
         console.error("Error fetching inventory:", error);
       }
@@ -159,7 +191,9 @@ export default function Page() {
   const handleClick = async () => {
     const values = await getAll();
     setInventory(values);
-  }
+    const groupedData = groupInventory(values);
+    setGroupedInventory(groupedData);
+  };
   return (
     <div className={styles.container}>
       <div className={styles.optionContainer}>
@@ -223,20 +257,46 @@ export default function Page() {
             </option>
           ))}
         </select>
-        <div>
-          <button onClick={handleClick} type="button">
-            전부 가져오기
-          </button>
-          {inventory.map((item:any, index) => (
-            <li key={index}>
-              <strong>예측날짜: </strong>{item.예측날짜},
-              <strong>현재고: </strong>{item.현재고},
-              <strong>현재중량: </strong>{item.현재중량},
-              <strong>재고상태: </strong>{item.재고상태},
-              <strong>중량상태: </strong>{item.중량상태},
-            </li>
-          ))}
-        </div>
+        <div></div>
+      </div>
+      <button onClick={handleClick} type="button">
+        전부 가져오기
+      </button>
+      <div className={styles.itemsContainer}>
+        {Object.keys(groupedInventory).map((groupKey, index) => (
+          <div key={index}>
+            <h3>{groupKey.replace(/-/g, " : ")}</h3>
+            <ul>
+              {groupedInventory[groupKey].map((item: any, idx: any) => (
+                <li key={idx}>
+                  <strong>{item.예측날짜}</strong>
+                  <strong>예측고: {item.예측고} </strong>
+                  <strong>예측중량: {item.예측중량}</strong>
+                  <Image
+                    src={
+                      item.재고상태 === "X" ? "/noti.svg" : "/check.svg"
+                    } // public 폴더 내의 경로
+                    alt="설명"
+                    width={66} // 이미지의 폭
+                    height={66} // 이미지의 높이
+                    layout="fixed" // 레이아웃 옵션: fixed, intrinsic, responsive, fill 등
+                  />
+                  <Image
+                    src={
+                      item.중량상태 === "X" ? "/noti.svg" : "/check.svg"
+                    } // public 폴더 내의 경로
+                    alt="설명"
+                    width={66}
+                    height={66}
+                    layout="fixed"
+                  />
+                  {/* <strong>{item.재고상태}</strong>
+                  <strong>{item.중량상태}</strong> */}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
       </div>
     </div>
   );

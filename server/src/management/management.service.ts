@@ -128,7 +128,7 @@ export class ManagementService {
     return { 날짜: 날짜.map((option) => option.날짜) };
   }
 
-  async getItems(op1: string): Promise<any> {
+  async getTargetDateItems(op1: string): Promise<any> {
     const items = await this.managementRepository
       .createQueryBuilder()
       .select([

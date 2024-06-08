@@ -3,7 +3,7 @@ import { Injectable, Inject } from '@nestjs/common';
 // import { promisify } from 'util';
 import * as bcrypt from 'bcrypt';
 import { Repository } from 'typeorm';
-import { User } from '../users/users.entity';
+import { Users } from './auth.entity';
 import { JwtService } from '@nestjs/jwt';
 import { jwtConstants } from './constants';
 
@@ -11,7 +11,7 @@ import { jwtConstants } from './constants';
 export class AuthService {
   constructor(
     @Inject('USER_REPOSITORY')
-    private userRepository: Repository<User>,
+    private userRepository: Repository<Users>,
     private jwtService: JwtService,
   ) {}
 
@@ -26,7 +26,7 @@ export class AuthService {
     const user = await this.userRepository
       .createQueryBuilder()
       .insert()
-      .into(User)
+      .into(Users)
       .values({ id: id, name: name, password: hash })
       .execute();
     return user;
@@ -39,7 +39,7 @@ export class AuthService {
     const user = await this.userRepository
       .createQueryBuilder()
       .select('u.id') // id 필드만 선택
-      .from(User, 'u')
+      .from(Users, 'u')
       .where('u.id = :id', { id: id })
       .getOne();
     // user가 존재하면 true, 존재하지 않으면 false 반환
@@ -56,7 +56,7 @@ export class AuthService {
     const user = await this.userRepository
       .createQueryBuilder('user')
       .select('u.password')
-      .from(User, 'u')
+      .from(Users, 'u')
       .where('u.id = :id', { id: id })
       .getOne();
     if (user === null) return false;

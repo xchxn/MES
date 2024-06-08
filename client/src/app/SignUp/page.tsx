@@ -90,6 +90,8 @@ export default function Page() {
     e.preventDefault();
     if (await IdCheck(formData.id)) {
       setFormData({...formData, idDupCheck: true});
+    } else {
+      setFormData({...formData, idDupCheck:false})
     }
   };
 
