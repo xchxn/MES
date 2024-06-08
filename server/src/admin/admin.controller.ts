@@ -1,8 +1,21 @@
 import { Post, Body, Controller, Get, UseGuards } from '@nestjs/common';
 import { AdminService } from './admin.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { AdminDto, NotiItemsDto, OptionFieldDto, ProductDetailDto } from './admin.dto';
-import { ApiBearerAuth, ApiTags, ApiOperation, ApiBody, ApiResponse, ApiExcludeEndpoint, ApiProduces, ApiConsumes} from '@nestjs/swagger'
+import {
+  AdminDto,
+  NotiItemsDto,
+  OptionFieldDto,
+  ProductDetailDto,
+} from './admin.dto';
+import {
+  ApiBearerAuth,
+  ApiTags,
+  ApiOperation,
+  ApiBody,
+  ApiResponse,
+  ApiProduces,
+  ApiConsumes,
+} from '@nestjs/swagger';
 
 @ApiTags('관리자 페이지 API')
 @Controller('admin')
@@ -12,7 +25,11 @@ export class AdminController {
   @ApiBearerAuth()
   @ApiProduces('application/json')
   @ApiOperation({ summary: '관리자가 설정할 항목을 보여줄 옵션 선택지 제공' })
-  @ApiResponse({ status: 200, description: '알림 설정 항목 반환', type: [OptionFieldDto] })
+  @ApiResponse({
+    status: 200,
+    description: '알림 설정 항목 반환',
+    type: [OptionFieldDto],
+  })
   @UseGuards(JwtAuthGuard)
   @Get('getOptionField')
   async getOptionField() {
@@ -54,7 +71,11 @@ export class AdminController {
 
   @ApiOperation({ summary: '알림 설정된 항목들 가져오기' })
   @ApiProduces('application/json')
-  @ApiResponse({ status: 200, description: '알림 설정 항목 반환', type: [NotiItemsDto] })
+  @ApiResponse({
+    status: 200,
+    description: '알림 설정 항목 반환',
+    type: [NotiItemsDto],
+  })
   @Get('getNotiItems')
   async getNotiItems() {
     return this.adminService.getNotiItems();

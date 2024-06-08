@@ -9,9 +9,23 @@ import {
 import { ManagementService } from './management.service';
 import { TestInventory } from './management.entity';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { ApiBearerAuth, ApiTags, ApiOperation, ApiBody, ApiResponse, ApiExcludeEndpoint, ApiProduces, ApiConsumes} from '@nestjs/swagger'
-import { GetDateOptionsDto, GetItemsDto, GetOptionsDto, TargetDateItemsReturnDto, TargetDateOptionsDto } from './management.dto';
-
+import {
+  ApiBearerAuth,
+  ApiTags,
+  ApiOperation,
+  ApiBody,
+  ApiResponse,
+  ApiExcludeEndpoint,
+  ApiProduces,
+  ApiConsumes,
+} from '@nestjs/swagger';
+import {
+  GetDateOptionsDto,
+  GetItemsDto,
+  GetOptionsDto,
+  TargetDateItemsReturnDto,
+  TargetDateOptionsDto,
+} from './management.dto';
 
 function extractAndFormatDate(fileName: string): string {
   // Split the filename using "-" as a delimiter
@@ -33,8 +47,6 @@ function extractAndFormatDate(fileName: string): string {
 @Controller('management')
 export class ManagementController {
   constructor(private managementService: ManagementService) {}
-
-
 
   @ApiBearerAuth()
   @ApiOperation({ summary: '엑셀 데이터 업로드' })
@@ -59,7 +71,11 @@ export class ManagementController {
     description: '옵션 상태에 따라 다음 옵션 요청',
     type: GetOptionsDto,
   })
-  @ApiResponse({ status: 200, description: '옵션 선택에 따른 다음 선택 반환', type: [GetOptionsDto] })
+  @ApiResponse({
+    status: 200,
+    description: '옵션 선택에 따른 다음 선택 반환',
+    type: [GetOptionsDto],
+  })
   @Post('getOptions')
   async getOptions(@Body() data: GetOptionsDto) {
     console.log(data);
@@ -105,7 +121,11 @@ export class ManagementController {
 
   @ApiProduces('application/json')
   @ApiOperation({ summary: '날짜 옵션 선택지 제공' })
-  @ApiResponse({ status: 200, description: '날짜 배열 반환', type: [GetDateOptionsDto] })
+  @ApiResponse({
+    status: 200,
+    description: '날짜 배열 반환',
+    type: [GetDateOptionsDto],
+  })
   @Get('getDateOptions')
   async getDateOptions() {
     return this.managementService.getDateOptions();
@@ -118,9 +138,13 @@ export class ManagementController {
     description: '옵션 상태에 따라 다음 옵션 요청',
     type: TargetDateOptionsDto,
   })
-  @ApiResponse({ status: 200, description: '데이터 반환', type: TargetDateItemsReturnDto })
+  @ApiResponse({
+    status: 200,
+    description: '데이터 반환',
+    type: TargetDateItemsReturnDto,
+  })
   @Post('getItems')
-  async getTargetDateItems(@Body() data:TargetDateOptionsDto) {
+  async getTargetDateItems(@Body() data: TargetDateOptionsDto) {
     return this.managementService.getTargetDateItems(data.날짜);
   }
 

@@ -1,11 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsOptional, IsString } from "class-validator";
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 // 공통 필드를 가지는 기본 클래스 생성
 class BaseUserDto {
   @ApiProperty({
     description: '유저 아이디',
-    example: "string"
+    example: 'userid',
   })
   @IsNotEmpty()
   @IsString()
@@ -13,7 +13,7 @@ class BaseUserDto {
 
   @ApiProperty({
     description: '유저 비밀번호',
-    example: "string"
+    example: 'password',
   })
   @IsNotEmpty()
   @IsString()
@@ -24,7 +24,7 @@ class BaseUserDto {
 export class SignUpDto extends BaseUserDto {
   @ApiProperty({
     description: '일반 회원가입 시 입력 이름',
-    example: "Jung"
+    example: 'Jung',
   })
   @IsOptional()
   @IsString()
@@ -32,7 +32,7 @@ export class SignUpDto extends BaseUserDto {
 
   @ApiProperty({
     description: '일반 회원가입 시 비밀번호 확인',
-    example: "Same_Password"
+    example: 'Same_Password',
   })
   @IsOptional()
   @IsString()
@@ -42,21 +42,20 @@ export class SignUpDto extends BaseUserDto {
 // LoginDto는 BaseUserDto를 그대로 활용
 export class LoginDto extends BaseUserDto {}
 
-
 export class TokenDto extends BaseUserDto {
   @ApiProperty({
     description: '로그인 성공 시 토큰 반환',
-    example: "ttookkeenn"
+    example: 'ttookkeenn',
   })
   @IsOptional()
   @IsString()
   readonly token: string;
 }
 
-export class ValidCheckDto{
+export class ValidCheckDto {
   @ApiProperty({
     description: '회원가입 시 아이디 중복 확인',
-    example: "id"
+    example: 'id',
   })
   @IsNotEmpty()
   @IsString()

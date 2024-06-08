@@ -18,7 +18,8 @@ export class ForecastService {
   //알림설정 항목으로 ai에 예측 데이터 요청
   async getData(data: any): Promise<any> {
     //추후 모델 배포 주소로 URL 변경
-    const url = 'https://172.200.208.9/predict';
+    // const url = 'https://172.200.208.9/predict';
+    const url = 'http://localhost:3001/forecast/test';
     const headers = {
       'Content-Type': 'application/json',
     };
@@ -61,16 +62,16 @@ export class ForecastService {
       .addSelect('품목', '품목')
       .addSelect('품종', '품종')
       .addSelect('등급', '등급')
-      .addSelect('판매량', '기준수량')
-      .addSelect('비율', '기준중량')
+      .addSelect('기준수량', '기준수량')
+      .addSelect('기준중량', '기준중량')
       .addSelect('관리자', '관리자')
       .where('NotiSet = :NotiSet', { NotiSet: 1 })
       .getRawMany();
     //알림 설정된 항목들 가져온 후 예측 모델에 데이터 요청
-    //const result = this.getData(makeReq);
-    makeReq.map((item) => {
-      const req = this.getData(item);
-    });
+    const result = this.getData(makeReq);
+    // makeReq.map((item) => {
+    //   const req = this.getData(item);
+    // });
     return true;
   }
 
@@ -78,10 +79,16 @@ export class ForecastService {
   async getAnomalyItems(): Promise<any> {
     const makeReq = await this.forecastRepository
       .createQueryBuilder()
-      .select(['관리구분', '품목', '품종', '등급', '현재고', '현재중량'])
+      .select([
+        '관리구분',
+        '품목',
+        '품종',
+        '등급',
+        '예측고',
+        '예측중량, 중량상태, 재고상태',
+      ])
       .addSelect("DATE_FORMAT(예측날짜, '%Y-%m-%d')", '예측날짜')
-      .addSelect('stock_status', '재고상태')
-      .addSelect('weight_status', '중량상태')
+      .where('재고상태 = :status OR 중량상태 = :status', { status: 'X' })
       .getRawMany();
     return makeReq;
   }
@@ -141,10 +148,10 @@ export class ForecastService {
       .addSelect('품목', '품목')
       .addSelect('품종', '품종')
       .addSelect('등급', '등급')
-      .addSelect('현재중량', '현재중량')
-      .addSelect('현재고', '현재고')
-      .addSelect('stock_status', '재고상태')
-      .addSelect('weight_status', '중량상태')
+      .addSelect('예측고', '예측고')
+      .addSelect('예측중량', '예측중량')
+      .addSelect('재고상태', '재고상태')
+      .addSelect('중량상태', '중량상태')
       // 첫 번째 그룹: 관리구분, 품목, 품종, 등급, 재고상태 = 'X'
       .where('관리구분 = :type', { type: op1 })
       .andWhere('품목 = :item', { item: op2 })
@@ -164,10 +171,10 @@ export class ForecastService {
         '품목',
         '품종',
         '등급',
-        '현재고',
-        '현재중량',
-        'stock_status',
-        'weight_status',
+        '예측고',
+        '예측중량',
+        '재고상태',
+        '중량상태',
       ])
       .addSelect("DATE_FORMAT(예측날짜, '%Y-%m-%d')", '예측날짜')
       .where('관리구분 = :type', { type: data.관리구분 })

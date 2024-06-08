@@ -1,35 +1,42 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumber, IsOptional, IsBoolean, IsString, IsArray } from "class-validator";
+import {
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsBoolean,
+  IsString,
+  IsArray,
+} from 'class-validator';
 
 export class AdminDto {
-    @ApiProperty({
-      description: '해당하는 데이터들을 가져오기 위한 관리구분',
-      example: "고구마"
-    })
-    @IsNotEmpty()
-    @IsString()
-    readonly 관리구분: string;
+  @ApiProperty({
+    description: '해당하는 데이터들을 가져오기 위한 관리구분',
+    example: '고구마',
+  })
+  @IsNotEmpty()
+  @IsString()
+  readonly 관리구분: string;
 
-    @ApiProperty({
-      description: '해당하는 데이터들을 가져오기 위한 품목',
-      example: "일반고구마"
-    })
-    @IsNotEmpty()
-    @IsString()
-    readonly 품목: string;
+  @ApiProperty({
+    description: '해당하는 데이터들을 가져오기 위한 품목',
+    example: '일반고구마',
+  })
+  @IsNotEmpty()
+  @IsString()
+  readonly 품목: string;
 
-    @ApiProperty({
-      description: '해당하는 데이터들을 가져오기 위한 품종',
-      example: "하루까"
-    })
-    @IsNotEmpty()
-    @IsString()
-    readonly 품종: string;
+  @ApiProperty({
+    description: '해당하는 데이터들을 가져오기 위한 품종',
+    example: '하루까',
+  })
+  @IsNotEmpty()
+  @IsString()
+  readonly 품종: string;
 }
-export class OptionFieldDto{
+export class OptionFieldDto {
   @ApiProperty({
     description: '옵션으로 제공되는 관리구분 요소 배열',
-    example: ["고구마","수입과일","자재"]
+    example: ['고구마', '수입과일', '자재'],
   })
   @IsNotEmpty()
   @IsArray()
@@ -37,7 +44,7 @@ export class OptionFieldDto{
 
   @ApiProperty({
     description: '옵션으로 제공되는 품목 배열',
-    example: ["일반고구마","자색고구마","레몬","용기"]
+    example: ['일반고구마', '자색고구마', '레몬', '용기'],
   })
   @IsNotEmpty()
   @IsArray()
@@ -45,7 +52,7 @@ export class OptionFieldDto{
 
   @ApiProperty({
     description: '옵션으로 제공되는 품종 배열',
-    example: ["하루까","베니","세코야","삼성포장"]
+    example: ['하루까', '베니', '세코야', '삼성포장'],
   })
   @IsNotEmpty()
   @IsArray()
@@ -55,7 +62,7 @@ export class OptionFieldDto{
 export class ProductDetailDto {
   @ApiProperty({
     description: '요소를 구분짓기 위한 관리구분',
-    example: "고구마"
+    example: '고구마',
   })
   @IsString()
   @IsNotEmpty()
@@ -63,7 +70,7 @@ export class ProductDetailDto {
 
   @ApiProperty({
     description: '요소를 구분짓기 위한 품목',
-    example: "일반고구마"
+    example: '일반고구마',
   })
   @IsString()
   @IsNotEmpty()
@@ -71,7 +78,7 @@ export class ProductDetailDto {
 
   @ApiProperty({
     description: '요소를 구분짓기 위한 품종',
-    example: "하루까"
+    example: '하루까',
   })
   @IsString()
   @IsNotEmpty()
@@ -79,7 +86,7 @@ export class ProductDetailDto {
 
   @ApiProperty({
     description: '요소를 구분짓기 위한 등급',
-    example: "대1"
+    example: '대1',
   })
   @IsString()
   @IsNotEmpty()
@@ -87,22 +94,25 @@ export class ProductDetailDto {
 
   @ApiProperty({
     description: '변경된 값',
-    example: 800
+    example: 800,
   })
+  @IsOptional()
   @IsNumber()
   판매량: number;
 
   @ApiProperty({
     description: '변경된 값',
-    example: 99
+    example: 99,
   })
+  @IsOptional()
   @IsNumber()
   비율: number;
 
   @ApiProperty({
     description: '변경된 알림설정 여부',
-    example: 1
+    example: 1,
   })
+  @IsOptional()
   @IsBoolean()
   NotiSet: boolean;
 }
@@ -133,4 +143,3 @@ export class NotiItemsDto {
   @IsBoolean()
   NotiSet: boolean;
 }
-

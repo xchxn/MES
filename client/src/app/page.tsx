@@ -62,7 +62,7 @@ export default function Home() {
       const anomalyItemList = await getAnomalyItems();  // 알림 대상 항목 조회
       let bodyMessage = '다음 항목들을 확인해주세요:\n';
       anomalyItemList.forEach((item: any) => {
-        bodyMessage += `품목: ${item.품목}, 품종: ${item.품종}, 등급: ${item.등급}, 현재고: ${item.현재고}\n`;
+        bodyMessage += `품목: ${item.품목}, 품종: ${item.품종}, 등급: ${item.등급}, 예측고: ${item.예측고}\n`;
       });
       const notification = new Notification('알림: 재고 확인 요망', {
         body: bodyMessage

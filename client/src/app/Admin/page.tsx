@@ -21,8 +21,8 @@ interface ProductDetails {
   품목: string;
   품종: string;
   등급: string;
-  판매량: number;
-  비율: number;
+  기준수량: number;
+  기준중량: number;
   NotiSet: boolean;
 }
 interface ProductsState {
@@ -137,7 +137,7 @@ export default function Page() {
       setIsLoading(false);
     };
     fetchData();
-  }, [selected]);
+  }, []);
 
   const handleCheckboxChange = (category: keyof SelectedItems, item: string) => {
     setSelected(prev => {
@@ -190,7 +190,7 @@ export default function Page() {
     return (
       <div>
         <Image
-          src={"/noti.svg"} // public 폴더 내의 경로
+          src={"/loading.svg"} // public 폴더 내의 경로
           alt="설명"
           width={66} // 이미지의 폭
           height={66} // 이미지의 높이
@@ -253,13 +253,13 @@ export default function Page() {
             <strong>등급:</strong> {product.등급}
             <input
               type="number"
-              value={product.판매량}
-              onChange={(e) => handleProductChange(index, '판매량', e.target.value)}
+              value={product.기준수량}
+              onChange={(e) => handleProductChange(index, '기준수량', e.target.value)}
             />
             <input
               type="number"
-              value={product.비율}
-              onChange={(e) => handleProductChange(index, '비율', e.target.value)}
+              value={product.기준중량}
+              onChange={(e) => handleProductChange(index, '기준중량', e.target.value)}
             />
             <input
               type="checkbox"

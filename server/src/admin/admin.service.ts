@@ -77,8 +77,8 @@ export class AdminService {
         .addSelect('품목', '품목')
         .addSelect('품종', '품종')
         .addSelect('등급', '등급')
-        .addSelect('판매량', '판매량')
-        .addSelect('비율', '비율')
+        .addSelect('기준수량', '기준수량')
+        .addSelect('기준중량', '기준중량')
         .addSelect('NotiSet', 'NotiSet')
         .where('관리구분 IN (:...types)', { types: data.관리구분 })
         .andWhere('품목 IN (:...item)', { item: data.품목 })
@@ -93,7 +93,7 @@ export class AdminService {
   }
 
   async setAdminOptions(data: any): Promise<any> {
-    if (data.판매량 === '' && data.비율 === '') {
+    if (data.기준수량 === '' && data.기준중량 === '') {
       const options = await this.adminRepository
         .createQueryBuilder()
         .update()
@@ -104,22 +104,22 @@ export class AdminService {
         .andWhere('등급 = :grade', { grade: data.등급 })
         .execute();
       return options;
-    } else if (data.판매량 !== '' && data.비율 === '') {
+    } else if (data.기준수량 !== '' && data.기준중량 === '') {
       const options = await this.adminRepository
         .createQueryBuilder()
         .update()
-        .set({ 판매량: data.판매량, NotiSet: data.NotiSet })
+        .set({ 기준수량: data.기준수량, NotiSet: data.NotiSet })
         .where('관리구분 = :type', { type: data.관리구분 })
         .andWhere('품목 = :item', { item: data.품목 })
         .andWhere('품종 = :kind', { kind: data.품종 })
         .andWhere('등급 = :grade', { grade: data.등급 })
         .execute();
       return options;
-    } else if (data.판매량 === '' && data.비율 !== '') {
+    } else if (data.기준수량 === '' && data.기준중량 !== '') {
       const options = await this.adminRepository
         .createQueryBuilder()
         .update()
-        .set({ 비율: data.비율, NotiSet: data.NotiSet })
+        .set({ 기준중량: data.기준중량, NotiSet: data.NotiSet })
         .where('관리구분 = :type', { type: data.관리구분 })
         .andWhere('품목 = :item', { item: data.품목 })
         .andWhere('품종 = :kind', { kind: data.품종 })
@@ -130,7 +130,11 @@ export class AdminService {
       const options = await this.adminRepository
         .createQueryBuilder()
         .update()
-        .set({ 판매량: data.판매량, 비율: data.비율, NotiSet: data.NotiSet })
+        .set({
+          기준수량: data.기준수량,
+          기준중량: data.기준중량,
+          NotiSet: data.NotiSet,
+        })
         .where('관리구분 = :type', { type: data.관리구분 })
         .andWhere('품목 = :item', { item: data.품목 })
         .andWhere('품종 = :kind', { kind: data.품종 })

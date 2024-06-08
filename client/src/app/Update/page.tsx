@@ -35,7 +35,7 @@ async function updateServer(data: any, fileName: string) {
     }
   }
 
-  return true;
+  return res.json();
 }
 
 export default function Page() {

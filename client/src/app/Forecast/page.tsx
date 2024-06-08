@@ -8,8 +8,8 @@ interface InventoryItem {
   품종: string;
   등급: string;
   예측날짜: string;
-  현재고: number;
-  현재중량: number;
+  예측고: number;
+  예측중량: number;
   재고상태: string;
   중량상태: string;
 }
@@ -270,8 +270,8 @@ export default function Page() {
               {groupedInventory[groupKey].map((item: any, idx: any) => (
                 <li key={idx}>
                   <strong>{item.예측날짜}</strong>
-                  <strong>예측고: {item.현재고} </strong>
-                  <strong>예측중량: {item.현재중량}</strong>
+                  <strong>예측고: {item.예측고} </strong>
+                  <strong>예측중량: {item.예측중량}</strong>
                   <Image
                     src={
                       item.재고상태 === "X" ? "/noti.svg" : "/check.svg"

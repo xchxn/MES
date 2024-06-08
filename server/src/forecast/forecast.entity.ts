@@ -22,14 +22,14 @@ export class Forecast {
   예측날짜: number;
 
   @Column({ type: 'decimal', precision: 8, scale: 1, default: 0 })
-  현재고: string;
+  예측고: string;
 
   @Column({ type: 'decimal', precision: 8, scale: 1, default: 0 })
-  현재중량: string;
+  예측중량: string;
 
   @Column({ type: 'varchar', length: 255 })
-  stock_status: string;
+  재고상태: string;
 
   @Column({ type: 'varchar', length: 255 })
-  weight_status: string;
+  중량상태: string;
 }

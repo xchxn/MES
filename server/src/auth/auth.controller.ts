@@ -2,9 +2,16 @@ import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
 // import { LocalAuthGuard } from './local-auth.guard';
-import { ApiBearerAuth, ApiTags, ApiOperation, ApiBody, ApiResponse, ApiExcludeEndpoint, ApiProduces, ApiConsumes} from '@nestjs/swagger'
+import {
+  ApiTags,
+  ApiOperation,
+  ApiBody,
+  ApiResponse,
+  ApiExcludeEndpoint,
+  ApiProduces,
+  ApiConsumes,
+} from '@nestjs/swagger';
 import { LoginDto, SignUpDto, TokenDto, ValidCheckDto } from './auth.dto';
-
 
 @ApiTags('인증 처리 API')
 @Controller('auth')
@@ -18,11 +25,11 @@ export class AuthController {
     description: '회원가입 정보',
     type: SignUpDto,
   })
-  @ApiResponse({ status: 200, description: '데이터 반환'})
+  @ApiResponse({ status: 200, description: '데이터 반환' })
   @Post('signup')
   signUp(
     @Body()
-    data: SignUpDto
+    data: SignUpDto,
   ): any {
     return this.authService.saveUserInformation(
       data.id,

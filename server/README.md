@@ -1,30 +1,33 @@
 # Backend Guide
 ### Using Stack
 <div align=center>
-<img src="https://img.shields.io/badge/firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=white">
 <img src="https://img.shields.io/badge/amazonecs-FF9900?style=for-the-badge&logo=amazonecs&logoColor=white">
 <img src="https://img.shields.io/badge/typescript-3178C6?style=for-the-badge&logo=typescript&logoColor=white">
 <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
 <img src="https://img.shields.io/badge/notion-000000?style=for-the-badge&logo=notion&logoColor=white">
 <img src="https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=npm&logoColor=white">
+
 <img src="https://img.shields.io/badge/nestjs-E0234E?style=for-the-badge&logo=nestjs&logoColor=white">
 <img src="https://img.shields.io/badge/visualstudiocode-007ACC?style=for-the-badge&logo=visualstudiocode&logoColor=white">
-<img src="https://img.shields.io/badge/dotenv-ECD53F?style=for-the-badge&logo=dotenv&logoColor=white">
 <img src="https://img.shields.io/badge/postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white">
 <img src="https://img.shields.io/badge/swagger-85EA2D?style=for-the-badge&logo=swagger&logoColor=white">
 <img src="https://img.shields.io/badge/eslint-4B32C3?style=for-the-badge&logo=eslint&logoColor=white">
+<img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white">
+<img src="https://img.shields.io/badge/axios-5A29E4?style=for-the-badge&logo=axios&logoColor=white">
+<img src="https://img.shields.io/badge/slack-4A154B?style=for-the-badge&logo=slack&logoColor=white">
+<img src="https://img.shields.io/badge/openai-412991?style=for-the-badge&logo=openai&logoColor=white">
 </div>
 
 ### Service Wiki
 - Swagger docs ver.
   - /api/docs
 - To Notion ver.
-  - 
+  - notion.so
 
 
 # To Start
 ## 0. Need Environment
-- Node.js v20.11.1
+- <a href="https://nodejs.org/en">Node.js</a>
 - <img src="https://img.shields.io/npm/v/npm.svg?logo=npm">
 
 <a src=https://nodejs.org/en/download/prebuilt-installer>Click to Install Node.js</a>
@@ -35,38 +38,26 @@
 cd server
 npm install
 ```
-## 2. Generate Firebase Private Key 
-- Go to firebase console - project setting - Service accounts - Firebase Admin SDK - Generate New Private Key
-- And locate root folder
-  - /server/example-private-key.json
-- Last, Add a filename to .gitignore
-## 3. Setting .env
-```env
-NAVER_CLIENT_ID=Naver-api-application-Client ID
-NAVER_CLIENT_SECRET=Naver-api-application-Client-Secret
-FIREBASE_SERVICE_ACCOUNT_PATH=./example-private-key.json
-FIREBASE_DATABASE_URL=example.firebaseio.com
-KAKAO_CLIENT_ID=kakao-application-id
-JWT_SECRET=
-```
-- And location .env for root folder
-  - /server/.env
-## 4. If you want start server in local
-```bash
-npm run start
+## 2. Generate Database Config 
+- For, example.
+```ts
+// datasource.config.ts
+import { DataSource } from 'typeorm';
+
+export const AppDataSource = new DataSource({
+  type: 'mysql2',
+  host: 'localhost',
+  port: 3306,
+  username: 'username',
+  password: 'password',
+  database: 'database',
+  entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+  synchronize: true,
+});
+
 ```
 
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Installation
-
-```bash
-$ npm install
-```
-
-## Running the app
+## 3. Running the app
 
 ```bash
 # development
