@@ -14,6 +14,11 @@ interface InventoryItem {
   중량상태: string;
 }
 
+// groupedInventory 객체의 타입을 명시합니다.
+interface GroupedInventory {
+  [key: string]: InventoryItem[];
+}
+
 //옵션을 선택된 항목들의 예측값 요청
 async function getForecast(options: any) {
   const requestOptions = {
@@ -77,7 +82,7 @@ async function getAll() {
 }
 export default function Page() {
   const [inventory, setInventory] = useState<[]>([]);
-  const [groupedInventory, setGroupedInventory] = useState({});
+  const [groupedInventory, setGroupedInventory] = useState<GroupedInventory>({});
   const [options, setOptions] = useState({
     관리구분: "",
     품목: "",
