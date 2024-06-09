@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import styles from "./forecastStyles.module.scss";
+import forecastStyles from "./forecastStyles.module.scss";
 import Image from "next/image";
 interface InventoryItem {
   관리구분: string;
@@ -195,8 +195,8 @@ export default function Page() {
     setGroupedInventory(groupedData);
   };
   return (
-    <div className={styles.container}>
-      <div className={styles.optionContainer}>
+    <div className={forecastStyles.aaacontainer}>
+      <div className={forecastStyles.optionContainer}>
         <select
           id="관리구분"
           name="관리구분"
@@ -257,41 +257,38 @@ export default function Page() {
             </option>
           ))}
         </select>
-        <div></div>
       </div>
       <button onClick={handleClick} type="button">
         전부 가져오기
       </button>
-      <div className={styles.itemsContainer}>
+      <div className={forecastStyles.itemsContainer}>
         {Object.keys(groupedInventory).map((groupKey, index) => (
           <div key={index}>
             <h3>{groupKey.replace(/-/g, " : ")}</h3>
             <ul>
               {groupedInventory[groupKey].map((item: any, idx: any) => (
                 <li key={idx}>
-                  <strong>{item.예측날짜}</strong>
-                  <strong>예측고: {item.예측고} </strong>
-                  <strong>예측중량: {item.예측중량}</strong>
-                  <Image
-                    src={
-                      item.재고상태 === "X" ? "/noti.svg" : "/check.svg"
-                    } // public 폴더 내의 경로
-                    alt="설명"
-                    width={66} // 이미지의 폭
-                    height={66} // 이미지의 높이
-                    layout="fixed" // 레이아웃 옵션: fixed, intrinsic, responsive, fill 등
-                  />
-                  <Image
-                    src={
-                      item.중량상태 === "X" ? "/noti.svg" : "/check.svg"
-                    } // public 폴더 내의 경로
-                    alt="설명"
-                    width={66}
-                    height={66}
-                    layout="fixed"
-                  />
-                  {/* <strong>{item.재고상태}</strong>
-                  <strong>{item.중량상태}</strong> */}
+                  <div>
+                    <Image
+                      src={item.재고상태 === "X" ? "/noti.svg" : "/check.svg"} // public 폴더 내의 경로
+                      alt="설명"
+                      width={66} // 이미지의 폭
+                      height={66} // 이미지의 높이
+                      layout="fixed" // 레이아웃 옵션: fixed, intrinsic, responsive, fill 등
+                    />
+                    <p>예측고: {item.예측고} </p>
+                  </div>
+                  <div>
+                    <Image
+                      src={item.중량상태 === "X" ? "/noti.svg" : "/check.svg"} // public 폴더 내의 경로
+                      alt="설명"
+                      width={66}
+                      height={66}
+                      layout="fixed"
+                    />
+                    <p>예측중량: {item.예측중량}</p>
+                  </div>
+                  <p>예측날짜:{item.예측날짜}</p>
                 </li>
               ))}
             </ul>

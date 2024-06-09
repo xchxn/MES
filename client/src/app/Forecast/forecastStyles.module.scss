@@ -1,173 +1,53 @@
-.container {
+.aaacontainer {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  position: relative;
   width: 100%;
+  border: 1px solid #000;
+  padding: 3px 6px;
+  margin: 3px 6px;
 
   .optionContainer {
-    position: relative;
-    align-self: baseline;
-    margin: 10px 20px;
-    padding: 6px 12px;
-    border-bottom: 1px solid #000000 ;
+    border: 1px solid #000;
+    margin: 3px 6px;
+  }
 
-    select{
-      position: relative;
-      padding: 6px 12px;
-      margin: 3px 6px;
-      border: 3px solid #275efe;
-      background: #eceaea;
-      font-size: medium;
-      font-weight: bold;
-      border-radius: 10px;
-      
-      option  {
-        border: 3px solid #000000;
-        border-radius: 5px;
-        margin-top: 5px;
-      }
-      &:focus {
-        border: 3px dashed #000000;
-        box-sizing: border-box;
-        border-radius: 10px;
-        outline: 3px dashed #F8E4FF;
-      }
-      &:hover {
-        border: 3px dashed #000000;
-        background-color: #d6d6d6;
-        box-shadow: #000000;
-    }
-    }
-  };
-  // .itemsContainer {
-  //   position: relative;
-  //   align-self: baseline;
-  //   margin: 10px 20px;
-  //   div {
-  //     margin: 10px 20px;
-  //     li {
-  //       flex-direction: row;
-  //     }
-  //   }
-    
-  // }
   .itemsContainer {
     display: flex;
-    flex-direction: column;
-    align-self: baseline;
-    div {
-      margin-bottom: 20px;
-  
-      h3 {
-        margin-bottom: 10px;
-      }
-  
-      ul {
-        display: flex;
-        list-style: none;
-        padding: 0;
-      }
-  
-      li {
-        display: grid;
-        grid-template-rows: auto auto auto;
-        border: 1px solid #000000;
-        border-radius: 15px;
-        margin: 12px 18px;
-        padding: 6px 12px;
-        gap: 5px;
-        justify-items: center;
-  
-        > strong {
-          margin: 6px 9px;
-          &:nth-child(1) { // 예측날짜
-            text-align: center;
-            grid-row: 3; // 세 번째 행에 위치
-          }
-          &:nth-child(2), &:nth-child(3) { // 현재고, 현재중량
-            text-align: center;
-            grid-row: 2; // 두 번째 행에 위치
-          }
-          &:nth-child(4), &:nth-child(5) { // 재고상태, 중량상태
-            grid-row: 1; // 첫 번째 행에 위치
-          }
-        }
-        > Image {
-          &:nth-child(1), &:nth-child(2) { // 예측날짜
+    flex-direction: row;
+    margin: 3px 6px;
+    padding: 3px 6px;
 
-            max-width: 10px;
-            grid-row: 1; // 세 번째 행에 위치
-          }
+    ul {
+      list-style: none;
+      display: flex;
+      flex-direction: row;
+      border: 1px solid #000;
+      width: 100%;
+      overflow-x: auto;
+      padding: 0;
+      margin: 0;
+    
+      li {
+        border: 1px solid #000;
+        display: flex;
+        flex-direction: column;
+        margin: 10px;
+        padding: 10px;
+        p{
+          
+        }
+        div {
+          display: flex;
+          flex-direction: row;
         }
       }
     }
   }
-  
-  
 
   button {
-    --background: #275efe;
-    --text: #fff;
-    --font-size: 16px;
-    --duration: .44s;
-    --move-hover: -4px;
-    --shadow: 0 2px 8px -1px #{rgba(#275efe, .32)};
-    --shadow-hover: 0 4px 20px -2px #{rgba(#275efe, .5)};
-    --font-shadow: var(--font-size);
     align-self: flex-end;
-    padding: 16px 32px;
-    margin: 12px 18px;
-    font-family: 'Roboto';
-    font-weight: 500;
-    line-height: var(--font-size);
-    border-radius: 24px;
-    display: block;
-    outline: none;
-    appearance: none;
-    border: none;
-    text-decoration: none;
-    font-size: var(--font-size);
-    letter-spacing: .5px;
-    background: var(--background);
-    color: var(--text);
-    box-shadow: var(--shadow);
-    transform: translateY(var(--y)) translateZ(0);
-    transition: transform var(--duration) ease, box-shadow var(--duration) ease;
-    div {
-        display: flex;
-        overflow: hidden;
-        text-shadow: 0 var(--font-shadow) 0 var(--text);
-        span {
-            display: block;
-            backface-visibility: hidden;
-            font-style: normal;
-            transition: transform var(--duration) ease;
-            transform: translateY(var(--m)) translateZ(0);
-            $i: 1;
-            @while $i < 12 {
-                &:nth-child(#{$i}) {
-                    transition-delay: $i / 20 + s;
-                }
-                $i: $i + 1;
-            }
-        }
-    }
-    &:hover {
-        --y: var(--move-hover);
-        --shadow: var(--shadow-hover);
-        span {
-            --m: calc(var(--font-size) * -1);
-        }
-    }
-    &.reverse {
-        --font-shadow: calc(var(--font-size) * -1);
-        &:hover {
-            span {
-                --m: calc(var(--font-size));
-            }
-        }
-    }
-}
-
+    font-size: large;
+    padding: 3px 6px;
+    width: 15vw;
+  }
 }

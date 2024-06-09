@@ -266,15 +266,12 @@ export default function Page() {
       </div>
       <button onClick={handleClick} type="button">검색하기</button>
       <div className={styles.selectedItems}>
-        <div>
-          <p>관리구분</p>
-        </div>
         {products.map((product: any, index) => (
           <li key={index}>
-            <strong>관리구분:</strong> {product.관리구분},
-            <strong>품목:</strong> {product.품목},
-            <strong>품종:</strong> {product.품종},
-            <strong>등급:</strong> {product.등급}
+            <strong>관리구분:</strong> {product.관리구분}, 
+            <strong> 품목:</strong> {product.품목}, 
+            <strong> 품종:</strong> {product.품종}, 
+            <strong> 등급:</strong> {product.등급}
             <input
               type="number"
               value={product.기준수량}
