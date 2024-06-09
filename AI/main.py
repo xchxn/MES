@@ -17,26 +17,26 @@ stock_scaler = joblib.load('stock_scaler.pkl')
 weight_scaler = joblib.load('weight_scaler.pkl')
 column_names = joblib.load('column_names.pkl')
 
-# Step 1: Read the Excel files
-extract_dir = 'excel'
+# # Step 1: Read the Excel files
+# extract_dir = 'excel'
 
-# Read the Excel files into a DataFrame
-data_frames = []
-for file_name in os.listdir(extract_dir):
-    if file_name.endswith('.xlsx'):
-        file_path = os.path.join(extract_dir, file_name)
-        date_str = file_name[:-5]  # Extract date from file name (assuming format YY.MM.DD.xlsx)
-        date = datetime.strptime(date_str, '%y.%m.%d')
-        df = pd.read_excel(file_path)
-        df['날짜'] = date  # Add the date column to the dataframe
-        data_frames.append(df)
+# # Read the Excel files into a DataFrame
+# data_frames = []
+# for file_name in os.listdir(extract_dir):
+#     if file_name.endswith('.xlsx'):
+#         file_path = os.path.join(extract_dir, file_name)
+#         date_str = file_name[:-5]  # Extract date from file name (assuming format YY.MM.DD.xlsx)
+#         date = datetime.strptime(date_str, '%y.%m.%d')
+#         df = pd.read_excel(file_path)
+#         df['날짜'] = date  # Add the date column to the dataframe
+#         data_frames.append(df)
 
-# Concatenate all data frames
-data = pd.concat(data_frames, ignore_index=True)
+# # Concatenate all data frames
+# data = pd.concat(data_frames, ignore_index=True)
 
-# Select the required columns
-columns = ['날짜', '관리구분', '품목', '품종', '등급', '현재고', '현재중량']
-data = data[columns]
+# # Select the required columns
+# columns = ['날짜', '관리구분', '품목', '품종', '등급', '현재고', '현재중량']
+# data = data[columns]
 
 # Step 2: Create the FastAPI application
 app = FastAPI()

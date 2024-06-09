@@ -67,11 +67,11 @@ def build_lstm_model(input_shape):
     return model
 
 model_stock = build_lstm_model((X_scaled.shape[1], X_scaled.shape[2]))
-model_stock.fit(X_scaled, y_current_stock_scaled, epochs=10, batch_size=32, validation_split=0.2, verbose=1)
+model_stock.fit(X_scaled, y_current_stock_scaled, epochs=5, batch_size=32, validation_split=0.2, verbose=1)
 model_stock.save('model_stock.h5')
 
 model_weight = build_lstm_model((X_scaled.shape[1], X_scaled.shape[2]))
-model_weight.fit(X_scaled, y_current_weight_scaled, epochs=10, batch_size=32, validation_split=0.2, verbose=1)
+model_weight.fit(X_scaled, y_current_weight_scaled, epochs=5, batch_size=32, validation_split=0.2, verbose=1)
 model_weight.save('model_weight.h5')
 
 # Save the scalers
