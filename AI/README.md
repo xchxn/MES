@@ -64,7 +64,7 @@
 ## 1. Set Environment
 - Execute as venv.
   ```bash
-  1.   git clone https://github.com/jchanho99/AI_NES
+  1.   git clone https://github.com/jchanho99/SPM
   2.   cd AI
   3.   python3 -m venv .venv
   4-1. source .venv/bin/activate (on macOS, linux)
