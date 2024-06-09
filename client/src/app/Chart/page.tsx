@@ -13,6 +13,37 @@ import {
 
 ChartJS.register(LineElement, PointElement, LinearScale, Title, CategoryScale);
 
+interface InventoryItem {
+  날짜: string;
+  현재고: number;
+}
+
+interface OptionsState {
+  관리구분: string;
+  품목: string;
+  품종: string;
+  등급: string;
+}
+
+interface InitialState {
+  관리구분: string[];
+  품목: string[];
+  품종: string[];
+  등급: string[];
+}
+
+interface ChartData {
+  labels: string[];
+  datasets: [{
+    label: string;
+    data: number[];
+    fill: boolean;
+    borderColor: string;
+    tension: number;
+  }];
+}
+
+
 async function getInventory(option: any) {
   const requestOptions = {
     method: "POST",
@@ -52,32 +83,32 @@ async function getOptions(option: any) {
   return res.json();
 }
 export default function Page() {
-  const [inventory, setInventory] = useState([]);
-  const [options, setOptions] = useState({
-    관리구분: "",
-    품목: "",
-    품종: "",
-    등급: "",
-  });
-  const [initialState, setInitialState] = useState({
-    관리구분: [],
-    품목: [],
-    품종: [],
-    등급: [],
-  });
+  const [inventory, setInventory] = useState<InventoryItem[]>([]);
+const [options, setOptions] = useState<OptionsState>({
+  관리구분: "",
+  품목: "",
+  품종: "",
+  등급: "",
+});
+const [initialState, setInitialState] = useState<InitialState>({
+  관리구분: [],
+  품목: [],
+  품종: [],
+  등급: [],
+});
+const [chartData, setChartData] = useState<ChartData>({
+  labels: [],
+  datasets: [
+    {
+      label: "My First Dataset",
+      data: [],
+      fill: false,
+      borderColor: "rgb(75, 192, 192)",
+      tension: 0.1,
+    },
+  ],
+});
 
-  const [chartData, setChartData] = useState({
-    labels: [],
-    datasets: [
-      {
-        label: "My First Dataset",
-        data: [],
-        fill: false,
-        borderColor: "rgb(75, 192, 192)",
-        tension: 0.1,
-      },
-    ],
-  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -209,11 +240,7 @@ export default function Page() {
         type: "category",
         labels: chartData.labels,
       },
-      y: {
-        type: "linear",
-        min: Math.min(inventory.현재고),
-        max: Math.max(inventory.현재고),
-      },
+      y: { type: "linear", min: Math.min(...inventory.map(item => item.현재고)), max: Math.max(...inventory.map(item => item.현재고)) },
     },
   };
 
