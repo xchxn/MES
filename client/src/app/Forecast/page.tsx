@@ -266,29 +266,16 @@ export default function Page() {
           <div key={index}>
             <h3>{groupKey.replace(/-/g, " : ")}</h3>
             <ul>
+              <li>
+                <p>날짜</p>
+                <p>예측고</p>
+                <p>예측중량</p>
+              </li>
               {groupedInventory[groupKey].map((item: any, idx: any) => (
                 <li key={idx}>
-                  <div>
-                    <Image
-                      src={item.재고상태 === "X" ? "/noti.svg" : "/check.svg"} // public 폴더 내의 경로
-                      alt="설명"
-                      width={66} // 이미지의 폭
-                      height={66} // 이미지의 높이
-                      layout="fixed" // 레이아웃 옵션: fixed, intrinsic, responsive, fill 등
-                    />
-                    <p>예측고: {item.예측고} </p>
-                  </div>
-                  <div>
-                    <Image
-                      src={item.중량상태 === "X" ? "/noti.svg" : "/check.svg"} // public 폴더 내의 경로
-                      alt="설명"
-                      width={66}
-                      height={66}
-                      layout="fixed"
-                    />
-                    <p>예측중량: {item.예측중량}</p>
-                  </div>
-                  <p>예측날짜:{item.예측날짜}</p>
+                  <p>{item.예측날짜}</p>
+                  {item.재고상태 === "X" ? <strong>{item.예측고} </strong> : <p> {item.예측고} </p>} 
+                  {item.중량상태 === "X" ? <strong>{item.예측중량} </strong> : <p> {item.예측중량} </p>}
                 </li>
               ))}
             </ul>
