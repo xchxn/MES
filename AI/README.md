@@ -1,4 +1,4 @@
-# Backend Guide
+# AI Guide
 ### Using Stack
 <div align=center>
 <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
@@ -7,6 +7,9 @@
 <img src="https://img.shields.io/badge/postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white">
 <img src="https://img.shields.io/badge/Python-3776AB.svg?&style=for-the-badge&logo=Python&logoColor=white">
 <img src="https://img.shields.io/badge/azure-61DAFB?style=for-the-badge&logo=azure&logoColor=white">
+<img src="https://img.shields.io/badge/Tensorflow-FF8C00?style=for-the-badge&logo=azure&logoColor=white">
+<img src="https://img.shields.io/badge/pandas-3776AB?style=for-the-badge&logo=azure&logoColor=white">
+<img src="https://img.shields.io/badge/FastAPI-9ACD32?style=for-the-badge&logo=azure&logoColor=white">
 </div>
 
 ### Service Wiki
