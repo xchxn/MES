@@ -24,7 +24,7 @@ async function signUp(formData: FormData): Promise<any> {
     body: JSON.stringify(rawFormData),
   };
 
-  const res = await fetch(`http://localhost:3001/auth/signup`, requestOptions);
+  const res = await fetch(`http://54.180.116.2:3001/auth/signup`, requestOptions);
 
   if (!res.ok) {
     throw new Error("fail fetch data");
@@ -44,7 +44,7 @@ async function IdCheck(targetId: string): Promise<boolean> {
     body: JSON.stringify({ id: targetId }),
   };
 
-  const res = await fetch(`http://localhost:3001/auth/idvalidcheck`, requestOptions);
+  const res = await fetch(`http://54.180.116.2:3001/auth/idvalidcheck`, requestOptions);
   const data = await res.json();
 
   if (!res.ok) {

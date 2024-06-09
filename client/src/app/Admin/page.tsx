@@ -41,7 +41,7 @@ async function getOptionField(): Promise<any> {
   };
 
   const response = await fetch(
-    `http://localhost:3001/admin/getOptionField`,
+    `http://54.180.116.2:3001/admin/getOptionField`,
     requestOptions
   );
 
@@ -68,7 +68,7 @@ async function getAdminOptions(params: SelectedItems): Promise<any> {
   };
 
   const response = await fetch(
-    `http://localhost:3001/admin/getAdminOptions`,
+    `http://54.180.116.2:3001/admin/getAdminOptions`,
     requestOptions
   );
 
@@ -100,7 +100,7 @@ async function setAdminOptions(params: any): Promise<void> {
   };
 
   const response = await fetch(
-    `http://localhost:3001/admin/setAdminOptions`,
+    `http://54.180.116.2:3001/admin/setAdminOptions`,
     requestOptions
   );
 
@@ -123,7 +123,7 @@ async function makeForecast(): Promise<any> {
   };
 
   const response = await fetch(
-    `http://localhost:3001/forecast/makeNoti`,
+    `http://54.180.116.2:3001/forecast/makeNoti`,
     requestOptions
   );
 

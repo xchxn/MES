@@ -30,7 +30,7 @@ async function getForecast(options: any) {
   };
 
   const res = await fetch(
-    `http://localhost:3001/forecast/data`,
+    `http://54.180.116.2:3001/forecast/data`,
     requestOptions
   );
 
@@ -51,7 +51,7 @@ async function getOptions(option: any) {
   };
 
   const res = await fetch(
-    `http://localhost:3001/forecast/getOptions`,
+    `http://54.180.116.2:3001/forecast/getOptions`,
     requestOptions
   );
 
@@ -71,7 +71,7 @@ async function getAll() {
   };
 
   const res = await fetch(
-    `http://localhost:3001/forecast/getAnomalyItems`,
+    `http://54.180.116.2:3001/forecast/getAnomalyItems`,
     requestOptions
   );
 

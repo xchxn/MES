@@ -14,7 +14,7 @@ async function getInventory(options: string) {
   };
 
   const res = await fetch(
-    `http://localhost:3001/management/getItems`,
+    `http://54.180.116.2:3001/management/getItems`,
     requestOptions
   );
 
@@ -32,7 +32,7 @@ async function getOptions() {
   };
 
   const res = await fetch(
-    `http://localhost:3001/management/getDateOptions`,
+    `http://54.180.116.2:3001/management/getDateOptions`,
     requestOptions
   );
 
