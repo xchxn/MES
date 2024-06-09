@@ -32,41 +32,49 @@
     box-shadow: var(--shadow);
     transform: translateY(var(--y)) translateZ(0);
     transition: transform var(--duration) ease, box-shadow var(--duration) ease;
+
     div {
-        display: flex;
-        overflow: hidden;
-        text-shadow: 0 var(--font-shadow) 0 var(--text);
-        span {
-            display: block;
-            backface-visibility: hidden;
-            font-style: normal;
-            transition: transform var(--duration) ease;
-            transform: translateY(var(--m)) translateZ(0);
-            $i: 1;
-            @while $i < 12 {
-                &:nth-child(#{$i}) {
-                    transition-delay: $i / 20 + s;
-                }
-                $i: $i + 1;
-            }
+      display: flex;
+      overflow: hidden;
+      text-shadow: 0 var(--font-shadow) 0 var(--text);
+
+      span {
+        display: block;
+        backface-visibility: hidden;
+        font-style: normal;
+        transition: transform var(--duration) ease;
+        transform: translateY(var(--m)) translateZ(0);
+        $i: 1;
+
+        @while $i < 12 {
+          &:nth-child(#{$i}) {
+            transition-delay: $i / 20 + s;
+          }
+
+          $i: $i + 1;
         }
+      }
     }
+
     &:hover {
-        --y: var(--move-hover);
-        --shadow: var(--shadow-hover);
-        span {
-            --m: calc(var(--font-size) * -1);
-        }
+      --y: var(--move-hover);
+      --shadow: var(--shadow-hover);
+
+      span {
+        --m: calc(var(--font-size) * -1);
+      }
     }
+
     &.reverse {
-        --font-shadow: calc(var(--font-size) * -1);
-        &:hover {
-            span {
-                --m: calc(var(--font-size));
-            }
+      --font-shadow: calc(var(--font-size) * -1);
+
+      &:hover {
+        span {
+          --m: calc(var(--font-size));
         }
+      }
     }
-}
+  }
 
   .optionField {
     flex-direction: column;
@@ -74,7 +82,7 @@
     margin: 10px 10px;
     padding: 10px 10px;
 
-    .fieldOptions{
+    .fieldOptions {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
@@ -94,17 +102,24 @@
       }
     }
   }
-  .selectedItems{
+
+  .selectedItems {
+    border: 1px solid #000;
+    margin: 10px 10px;
+    padding: 10px 10px;
+
     input[type="number"] {
       padding: 5px 5px;
       margin: 10px 10px;
       border-radius: 5px;
       border: 2px solid #000000;
     }
+
     input[type="checkbox"]:checked {
       background: #2248ef;
     }
   }
+
   .inputLine {
     border-bottom: 1px solid #000000;
     margin-bottom: 10px;

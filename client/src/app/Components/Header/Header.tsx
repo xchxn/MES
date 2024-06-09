@@ -22,7 +22,7 @@ async function logout(): Promise<boolean> {
     };
 
     const res = await fetch(
-      `http://localhost:3001/auth/logout`,
+      `http://54.180.116.2:3001/auth/logout`,
       requestOptions
     );
     if (!res.ok) {

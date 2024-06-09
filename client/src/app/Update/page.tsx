@@ -18,7 +18,7 @@ async function updateServer(data: any, fileName: string) {
   };
 
   const res = await fetch(
-    `http://localhost:3001/management/update`,
+    `http://54.180.116.2:3001/management/update`,
     requestOptions
   );
 

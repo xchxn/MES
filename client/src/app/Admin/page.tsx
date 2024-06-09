@@ -41,7 +41,7 @@ async function getOptionField(): Promise<any> {
   };
 
   const response = await fetch(
-    `http://localhost:3001/admin/getOptionField`,
+    `http://54.180.116.2:3001/admin/getOptionField`,
     requestOptions
   );
 
@@ -68,7 +68,7 @@ async function getAdminOptions(params: SelectedItems): Promise<any> {
   };
 
   const response = await fetch(
-    `http://localhost:3001/admin/getAdminOptions`,
+    `http://54.180.116.2:3001/admin/getAdminOptions`,
     requestOptions
   );
 
@@ -100,7 +100,7 @@ async function setAdminOptions(params: any): Promise<void> {
   };
 
   const response = await fetch(
-    `http://localhost:3001/admin/setAdminOptions`,
+    `http://54.180.116.2:3001/admin/setAdminOptions`,
     requestOptions
   );
 
@@ -123,7 +123,7 @@ async function makeForecast(): Promise<any> {
   };
 
   const response = await fetch(
-    `http://localhost:3001/forecast/makeNoti`,
+    `http://54.180.116.2:3001/forecast/makeNoti`,
     requestOptions
   );
 
@@ -266,15 +266,12 @@ export default function Page() {
       </div>
       <button onClick={handleClick} type="button">검색하기</button>
       <div className={styles.selectedItems}>
-        <div>
-          <p>관리구분</p>
-        </div>
         {products.map((product: any, index) => (
           <li key={index}>
-            <strong>관리구분:</strong> {product.관리구분},
-            <strong>품목:</strong> {product.품목},
-            <strong>품종:</strong> {product.품종},
-            <strong>등급:</strong> {product.등급}
+            <strong>관리구분:</strong> {product.관리구분}, 
+            <strong> 품목:</strong> {product.품목}, 
+            <strong> 품종:</strong> {product.품종}, 
+            <strong> 등급:</strong> {product.등급}
             <input
               type="number"
               value={product.기준수량}

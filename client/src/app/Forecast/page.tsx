@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
-import styles from "./forecastStyles.module.scss";
+import forecastStyles from "./forecastStyles.module.scss";
 import Image from "next/image";
 interface InventoryItem {
   관리구분: string;
@@ -14,6 +14,11 @@ interface InventoryItem {
   중량상태: string;
 }
 
+// groupedInventory 객체의 타입을 명시합니다.
+interface GroupedInventory {
+  [key: string]: InventoryItem[];
+}
+
 //옵션을 선택된 항목들의 예측값 요청
 async function getForecast(options: any) {
   const requestOptions = {
@@ -25,7 +30,7 @@ async function getForecast(options: any) {
   };
 
   const res = await fetch(
-    `http://localhost:3001/forecast/data`,
+    `http://54.180.116.2:3001/forecast/data`,
     requestOptions
   );
 
@@ -46,7 +51,7 @@ async function getOptions(option: any) {
   };
 
   const res = await fetch(
-    `http://localhost:3001/forecast/getOptions`,
+    `http://54.180.116.2:3001/forecast/getOptions`,
     requestOptions
   );
 
@@ -66,7 +71,7 @@ async function getAll() {
   };
 
   const res = await fetch(
-    `http://localhost:3001/forecast/getAnomalyItems`,
+    `http://54.180.116.2:3001/forecast/getAnomalyItems`,
     requestOptions
   );
 
@@ -77,7 +82,7 @@ async function getAll() {
 }
 export default function Page() {
   const [inventory, setInventory] = useState<[]>([]);
-  const [groupedInventory, setGroupedInventory] = useState({});
+  const [groupedInventory, setGroupedInventory] = useState<GroupedInventory>({});
   const [options, setOptions] = useState({
     관리구분: "",
     품목: "",
@@ -195,8 +200,8 @@ export default function Page() {
     setGroupedInventory(groupedData);
   };
   return (
-    <div className={styles.container}>
-      <div className={styles.optionContainer}>
+    <div className={forecastStyles.aaacontainer}>
+      <div className={forecastStyles.optionContainer}>
         <select
           id="관리구분"
           name="관리구분"
@@ -257,41 +262,25 @@ export default function Page() {
             </option>
           ))}
         </select>
-        <div></div>
       </div>
       <button onClick={handleClick} type="button">
         전부 가져오기
       </button>
-      <div className={styles.itemsContainer}>
+      <div className={forecastStyles.itemsContainer}>
         {Object.keys(groupedInventory).map((groupKey, index) => (
           <div key={index}>
             <h3>{groupKey.replace(/-/g, " : ")}</h3>
             <ul>
+              <li>
+                <p>날짜</p>
+                <p>예측고</p>
+                <p>예측중량</p>
+              </li>
               {groupedInventory[groupKey].map((item: any, idx: any) => (
                 <li key={idx}>
-                  <strong>{item.예측날짜}</strong>
-                  <strong>예측고: {item.예측고} </strong>
-                  <strong>예측중량: {item.예측중량}</strong>
-                  <Image
-                    src={
-                      item.재고상태 === "X" ? "/noti.svg" : "/check.svg"
-                    } // public 폴더 내의 경로
-                    alt="설명"
-                    width={66} // 이미지의 폭
-                    height={66} // 이미지의 높이
-                    layout="fixed" // 레이아웃 옵션: fixed, intrinsic, responsive, fill 등
-                  />
-                  <Image
-                    src={
-                      item.중량상태 === "X" ? "/noti.svg" : "/check.svg"
-                    } // public 폴더 내의 경로
-                    alt="설명"
-                    width={66}
-                    height={66}
-                    layout="fixed"
-                  />
-                  {/* <strong>{item.재고상태}</strong>
-                  <strong>{item.중량상태}</strong> */}
+                  <p>{item.예측날짜}</p>
+                  {item.재고상태 === "X" ? <strong>{item.예측고} </strong> : <p> {item.예측고} </p>} 
+                  {item.중량상태 === "X" ? <strong>{item.예측중량} </strong> : <p> {item.예측중량} </p>}
                 </li>
               ))}
             </ul>
