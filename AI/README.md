@@ -8,7 +8,7 @@
 <img src="https://img.shields.io/badge/Python-3776AB.svg?&style=for-the-badge&logo=Python&logoColor=white">
 <img src="https://img.shields.io/badge/azure-61DAFB?style=for-the-badge&logo=azure&logoColor=white">
 <img src="https://img.shields.io/badge/Tensorflow-FF8C00?style=for-the-badge&logo=Tensorflow&logoColor=white">
-<img src="https://img.shields.io/badge/scikit-learn-FF8C00?style=for-the-badge&logo=scikit-learn&logoColor=white">
+<img src="https://img.shields.io/badge/scikitlearn-FF8C00?style=for-the-badge&logo=scikit-learn&logoColor=white">
 <img src="https://img.shields.io/badge/pandas-3776AB?style=for-the-badge&logo=pandas&logoColor=white">
 <img src="https://img.shields.io/badge/FastAPI-9ACD32?style=for-the-badge&logo=FastAPI&logoColor=white">
 </div>
