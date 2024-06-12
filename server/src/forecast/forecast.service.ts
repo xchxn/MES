@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { AdminInventory } from '../admin/admin.entity';
 import { map } from 'rxjs/operators';
 import { firstValueFrom } from 'rxjs';
+
 @Injectable()
 export class ForecastService {
   constructor(
@@ -42,13 +43,47 @@ export class ForecastService {
         }),
       );
       const result = await firstValueFrom(observable);
-      await this.forecastRepository
-        .createQueryBuilder()
-        .insert()
-        .into(Forecast)
-        .values(result)
-        .execute();
-      return result;
+      //result의 관리구분,품목,품종,등급이 Forecast 속에 이미 존재한다면
+      //Update, 존재하지 않는다면 insert 그대로
+      if (
+        await this.forecastRepository
+          .createQueryBuilder()
+          .select('관리구분')
+          .where('관리구분 = :type', { type: data.관리구분 })
+          .andWhere('품목 = :item', { item: data.품목 })
+          .andWhere('품종 = :kind', { kind: data.품종 })
+          .andWhere('등급 = :grade', { grade: data.등급 })
+          .getOne()
+      ) {
+        await this.forecastRepository
+          .createQueryBuilder()
+          .update()
+          .set({
+            관리구분: result[0].관리구분,
+            품목: result[0].품목,
+            품종: result[0].품종,
+            등급: result[0].등급,
+            예측날짜: result[0].예측날짜,
+            예측고: result[0].예측고,
+            예측중량: result[0].예측중량,
+            재고상태: result[0].재고상태,
+            중량상태: result[0].중량상태,
+          })
+          .where('관리구분 = :type', { type: data.관리구분 })
+          .andWhere('품목 = :item', { item: data.품목 })
+          .andWhere('품종 = :kind', { kind: data.품종 })
+          .andWhere('등급 = :grade', { grade: data.등급 })
+          .execute();
+        return result;
+      } else {
+        await this.forecastRepository
+          .createQueryBuilder()
+          .insert()
+          .into(Forecast)
+          .values(result)
+          .execute();
+        return result;
+      }
     } catch (error) {
       console.error('Error during data fetching and insertion');
       throw error;

@@ -9,7 +9,8 @@
     margin: 3px 6px;
     padding: 3px 3px;
     border-bottom: 1px solid #000;
-    select{
+
+    select {
       position: relative;
       padding: 6px 12px;
       margin: 3px 6px;
@@ -18,49 +19,62 @@
       font-size: medium;
       font-weight: bold;
       border-radius: 10px;
-      
-      option  {
+
+      option {
         border: 3px solid #000000;
         border-radius: 5px;
         margin-top: 5px;
       }
+
       &:focus {
         border: 3px dashed #000000;
         box-sizing: border-box;
         border-radius: 10px;
         outline: 3px dashed #F8E4FF;
       }
+
       &:hover {
         border: 3px dashed #000000;
         background-color: #d6d6d6;
         box-shadow: #000000;
-    }
+      }
     }
   }
 
   .itemsContainer {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     margin: 3px 6px;
     padding: 3px 6px;
-    h3 {
-      border-bottom: 3px solid #2222fe;
-    }
-    ul {
-      list-style: none;
+
+    div {
       display: flex;
-      flex-direction: row;
-      width: 100%;
-      overflow-x: auto;
-      align-items: center;
-      li {
-        display: flex;
-        flex-direction: column;
-        font-size: large;
+      flex-direction: column;
+      border: 2px solid #8c8c8c;
+      margin: 3px 6px;
+      border-radius: 12px;
+      h3 {
+        border-bottom: 3px solid #2222fe;
         margin: 3px 6px;
-        
-        strong {
-          color: #fe2222;
+      }
+
+      ul {
+        list-style: none;
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        overflow-x: auto;
+        align-items: center;
+
+        li {
+          display: flex;
+          flex-direction: column;
+          font-size: large;
+          margin: 3px 6px;
+
+          strong {
+            color: #fe2222;
+          }
         }
       }
     }

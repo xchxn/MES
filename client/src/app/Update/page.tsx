@@ -18,7 +18,7 @@ async function updateServer(data: any, fileName: string) {
   };
 
   const res = await fetch(
-    `http://54.180.116.2:3001/management/update`,
+    `${process.env.NEXT_PUBLIC_API_URL}/management/update`,
     requestOptions
   );
 

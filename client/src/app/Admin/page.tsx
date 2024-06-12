@@ -41,7 +41,7 @@ async function getOptionField(): Promise<any> {
   };
 
   const response = await fetch(
-    `http://54.180.116.2:3001/admin/getOptionField`,
+    `${process.env.NEXT_PUBLIC_API_URL}/admin/getOptionField`,
     requestOptions
   );
 
@@ -68,7 +68,7 @@ async function getAdminOptions(params: SelectedItems): Promise<any> {
   };
 
   const response = await fetch(
-    `http://54.180.116.2:3001/admin/getAdminOptions`,
+    `${process.env.NEXT_PUBLIC_API_URL}/admin/getAdminOptions`,
     requestOptions
   );
 
@@ -76,9 +76,6 @@ async function getAdminOptions(params: SelectedItems): Promise<any> {
     if (response.status === 401) {
       window.alert("권한이 없습니다. 관리자로 로그인 해주세요.");
       throw new Error("Token authentication failed. Please log in again.");
-    } else if (response.status === 400) {
-      window.alert("중복 업로드");
-      throw new Error("Failed to fetch data");
     } else {
       window.alert("필터 조건을 1체크해주세요.");
       throw new Error("Failed to fetch data");
@@ -100,7 +97,7 @@ async function setAdminOptions(params: any): Promise<void> {
   };
 
   const response = await fetch(
-    `http://54.180.116.2:3001/admin/setAdminOptions`,
+    `${process.env.NEXT_PUBLIC_API_URL}/admin/setAdminOptions`,
     requestOptions
   );
 
@@ -119,16 +116,18 @@ async function makeForecast(): Promise<any> {
     headers: {
       "Content-Type": "application/json",
     },
-    next: { revalidate: 3600 },
+    next: { revalidate: 36000 },
   };
 
   const response = await fetch(
-    `http://54.180.116.2:3001/forecast/makeNoti`,
+    `${process.env.NEXT_PUBLIC_API_URL}/forecast/makeNoti`,
     requestOptions
   );
 
   if (!response.ok) {
     throw new Error("Failed to fetch data");
+  } else {
+    window.alert("예측 데이터 생성 완료.")
   }
   return response.json();
 }

@@ -11,7 +11,7 @@ async function getAnomalyItems() {
     },
   };
 
-  const res = await fetch(`http://54.180.116.2:3001/forecast/getAnomalyItems`, requestOptions);
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/forecast/getAnomalyItems`, requestOptions);
 
   if (!res.ok) {
     throw new Error("Failed to fetch data");

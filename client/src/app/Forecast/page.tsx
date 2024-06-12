@@ -2,6 +2,18 @@
 import { useState, useEffect } from "react";
 import forecastStyles from "./forecastStyles.module.scss";
 import Image from "next/image";
+import {
+  Chart as ChartJS,
+  LineElement,
+  PointElement,
+  LinearScale,
+  Title,
+  CategoryScale,
+} from "chart.js";
+import { Line } from "react-chartjs-2";
+
+ChartJS.register(LineElement, PointElement, LinearScale, Title, CategoryScale);
+
 interface InventoryItem {
   관리구분: string;
   품목: string;
@@ -13,7 +25,16 @@ interface InventoryItem {
   재고상태: string;
   중량상태: string;
 }
-
+interface ChartData {
+  labels: string[];
+  datasets: {
+    label: string;
+    data: number[];
+    fill: boolean;
+    borderColor: string;
+    tension: number;
+  }[];
+}
 // groupedInventory 객체의 타입을 명시합니다.
 interface GroupedInventory {
   [key: string]: InventoryItem[];
@@ -30,7 +51,7 @@ async function getForecast(options: any) {
   };
 
   const res = await fetch(
-    `http://54.180.116.2:3001/forecast/data`,
+    `${process.env.NEXT_PUBLIC_API_URL}/forecast/data`,
     requestOptions
   );
 
@@ -51,7 +72,7 @@ async function getOptions(option: any) {
   };
 
   const res = await fetch(
-    `http://54.180.116.2:3001/forecast/getOptions`,
+    `${process.env.NEXT_PUBLIC_API_URL}/forecast/getOptions`,
     requestOptions
   );
 
@@ -71,7 +92,7 @@ async function getAll() {
   };
 
   const res = await fetch(
-    `http://54.180.116.2:3001/forecast/getAnomalyItems`,
+    `${process.env.NEXT_PUBLIC_API_URL}/forecast/getAnomalyItems`,
     requestOptions
   );
 
@@ -82,7 +103,9 @@ async function getAll() {
 }
 export default function Page() {
   const [inventory, setInventory] = useState<[]>([]);
-  const [groupedInventory, setGroupedInventory] = useState<GroupedInventory>({});
+  const [groupedInventory, setGroupedInventory] = useState<GroupedInventory>(
+    {}
+  );
   const [options, setOptions] = useState({
     관리구분: "",
     품목: "",
@@ -95,6 +118,43 @@ export default function Page() {
     품종: [],
     등급: [],
   });
+  // const [chartData, setChartData] = useState<ChartData>({
+  //   labels: [],
+  //   datasets: [
+  //     {
+  //       label: "Stock Data",
+  //       data: [],
+  //       fill: false,
+  //       borderColor: "rgb(75, 192, 192)",
+  //       tension: 0.1,
+  //     },
+  //   ],
+  // });
+  const [chartData, setChartData] = useState<{ [key: string]: ChartData }>({});
+
+  const chartOptions: any = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: "top",
+      },
+      title: {
+        display: true,
+        text: "Line Chart Example",
+      },
+    },
+    scales: {
+      x: {
+        type: "category",
+        labels: chartData.labels,
+      },
+      y: {
+        type: "linear",
+        min: -5000,
+        max: 5000,
+      },
+    },
+  };
 
   // Inventory 데이터를 그룹화하는 함수
   const groupInventory = (inventory: InventoryItem[]) => {
@@ -199,93 +259,149 @@ export default function Page() {
     const groupedData = groupInventory(values);
     setGroupedInventory(groupedData);
   };
+
+  const generateChartData = (items: InventoryItem[]): ChartData => {
+    return {
+      labels: items.map((item) => item.예측날짜),
+      datasets: [
+        {
+          label: "예측고",
+          data: items.map((item) => item.예측고),
+          borderColor: "rgb(255, 99, 132)",
+          tension: 0.1,
+          fill: false,
+        },
+        {
+          label: "예측중량",
+          data: items.map((item) => item.예측중량),
+          borderColor: "rgb(54, 162, 235)",
+          tension: 0.1,
+          fill: false,
+        },
+      ],
+    };
+  };
+
+  useEffect(() => {
+    if (Object.keys(groupedInventory).length > 0) {
+      const newChartData = Object.keys(groupedInventory).reduce<{
+        [key: string]: ChartData;
+      }>((acc, groupKey) => {
+        const items = groupedInventory[groupKey];
+        const data = generateChartData(items);
+        acc[groupKey] = data;
+        return acc;
+      }, {});
+
+      setChartData(newChartData);
+    }
+  }, [groupedInventory]);
+
   return (
     <div className={forecastStyles.aaacontainer}>
-      <div className={forecastStyles.optionContainer}>
-        <select
-          id="관리구분"
-          name="관리구분"
-          value={options.관리구분}
-          onChange={handleSelectChange}
-        >
-          <option value="" disabled={options.품목 === ""}>
-            선택하세요
-          </option>
-          {initialState.관리구분.map((option: any, index: any) => (
-            <option key={index} value={option}>
-              {option}
-            </option>
-          ))}
-        </select>
-        <select
-          id="품목"
-          name="품목"
-          value={options.품목}
-          onChange={handleSelectChange}
-        >
-          <option value="" disabled={options.품목 === ""}>
-            선택하세요
-          </option>
-          {initialState.품목.map((option, index) => (
-            <option key={index} value={option}>
-              {option}
-            </option>
-          ))}
-        </select>
-        <select
-          id="품종"
-          name="품종"
-          value={options.품종}
-          onChange={handleSelectChange}
-        >
-          <option value="" disabled={options.품목 === ""}>
-            선택하세요
-          </option>
-          {initialState.품종.map((option, index) => (
-            <option key={index} value={option}>
-              {option}
-            </option>
-          ))}
-        </select>
-        <select
-          id="등급"
-          name="등급"
-          value={options.등급}
-          onChange={handleSelectChange}
-        >
-          <option value="" disabled={options.품목 === ""}>
-            선택하세요
-          </option>
-          {initialState.등급.map((option, index) => (
-            <option key={index} value={option}>
-              {option}
-            </option>
-          ))}
-        </select>
-      </div>
-      <button onClick={handleClick} type="button">
-        전부 가져오기
-      </button>
       <div className={forecastStyles.itemsContainer}>
-        {Object.keys(groupedInventory).map((groupKey, index) => (
-          <div key={index}>
-            <h3>{groupKey.replace(/-/g, " : ")}</h3>
-            <ul>
-              <li>
-                <p>날짜</p>
-                <p>예측고</p>
-                <p>예측중량</p>
-              </li>
-              {groupedInventory[groupKey].map((item: any, idx: any) => (
-                <li key={idx}>
-                  <p>{item.예측날짜}</p>
-                  {item.재고상태 === "X" ? <strong>{item.예측고} </strong> : <p> {item.예측고} </p>} 
-                  {item.중량상태 === "X" ? <strong>{item.예측중량} </strong> : <p> {item.예측중량} </p>}
-                </li>
-              ))}
-            </ul>
+        <div className={forecastStyles.optionContainer}>
+          <select
+            id="관리구분"
+            name="관리구분"
+            value={options.관리구분}
+            onChange={handleSelectChange}
+          >
+            <option value="" disabled={options.품목 === ""}>
+              선택하세요
+            </option>
+            {initialState.관리구분.map((option: any, index: any) => (
+              <option key={index} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+          <select
+            id="품목"
+            name="품목"
+            value={options.품목}
+            onChange={handleSelectChange}
+          >
+            <option value="" disabled={options.품목 === ""}>
+              선택하세요
+            </option>
+            {initialState.품목.map((option, index) => (
+              <option key={index} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+          <select
+            id="품종"
+            name="품종"
+            value={options.품종}
+            onChange={handleSelectChange}
+          >
+            <option value="" disabled={options.품목 === ""}>
+              선택하세요
+            </option>
+            {initialState.품종.map((option, index) => (
+              <option key={index} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+          <select
+            id="등급"
+            name="등급"
+            value={options.등급}
+            onChange={handleSelectChange}
+          >
+            <option value="" disabled={options.품목 === ""}>
+              선택하세요
+            </option>
+            {initialState.등급.map((option, index) => (
+              <option key={index} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+        </div>
+        <button onClick={handleClick} type="button">
+          전부 가져오기
+        </button>
+        <div className={forecastStyles.itemsContainer}>
+          <div className={forecastStyles.container}>
+            {Object.entries(chartData).map(([groupKey, data]) => (
+              <div key={groupKey}>
+                <h3>{groupKey.replace(/-/g, " : ")}</h3>
+                <Line data={data} options={chartOptions} />
+              </div>
+            ))}
           </div>
-        ))}
+          {Object.keys(groupedInventory).map((groupKey, index) => (
+            <div key={index}>
+              <h3>{groupKey.replace(/-/g, " : ")}</h3>
+              <ul>
+                <li>
+                  <p>예측고</p>
+                  <p>예측중량</p>
+                  <p>날짜</p>
+                </li>
+                {groupedInventory[groupKey].map((item: any, idx: any) => (
+                  <li key={idx}>
+                    {item.재고상태 === "X" ? (
+                      <strong>{item.예측고} </strong>
+                    ) : (
+                      <p> {item.예측고} </p>
+                    )}
+                    {item.중량상태 === "X" ? (
+                      <strong>{item.예측중량} </strong>
+                    ) : (
+                      <p> {item.예측중량} </p>
+                    )}
+                    <p>{item.예측날짜}</p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

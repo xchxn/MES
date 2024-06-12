@@ -22,7 +22,7 @@ async function logout(): Promise<boolean> {
     };
 
     const res = await fetch(
-      `http://54.180.116.2:3001/auth/logout`,
+      `${process.env.NEXT_PUBLIC_API_URL}/auth/logout`,
       requestOptions
     );
     if (!res.ok) {
@@ -75,7 +75,7 @@ export default function Header() {
 
   return (
     <div className={styles.container}>
-      <Link href="https://github.com/xchxn/SPM" target="_blink">
+      <Link href="https://github.com/xchxn/SFM" target="_blink">
         <Fixed src="/github.svg" alt="설명" width={30} height={30}/>
       </Link>
       {userId ? (

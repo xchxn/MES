@@ -54,7 +54,7 @@ async function getInventory(option: any) {
   };
 
   const res = await fetch(
-    `http://54.180.116.2:3001/management/getData`,
+    `${process.env.NEXT_PUBLIC_API_URL}/management/getData`,
     requestOptions
   );
   console.log(res);
@@ -73,7 +73,7 @@ async function getOptions(option: any) {
   };
 
   const res = await fetch(
-    `http://54.180.116.2:3001/management/getOptions`,
+    `${process.env.NEXT_PUBLIC_API_URL}/management/getOptions`,
     requestOptions
   );
 
@@ -83,7 +83,7 @@ async function getOptions(option: any) {
   return res.json();
 }
 export default function Page() {
-  const [inventory, setInventory] = useState<InventoryItem[]>([]);
+const [inventory, setInventory] = useState<InventoryItem[]>([]);
 const [options, setOptions] = useState<OptionsState>({
   관리구분: "",
   품목: "",
@@ -100,7 +100,7 @@ const [chartData, setChartData] = useState<ChartData>({
   labels: [],
   datasets: [
     {
-      label: "My First Dataset",
+      label: "Stock Data",
       data: [],
       fill: false,
       borderColor: "rgb(75, 192, 192)",
