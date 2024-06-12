@@ -208,22 +208,6 @@ const [chartData, setChartData] = useState<ChartData>({
     console.log(options);
   };
 
-  //fetch한 data에서 날짜를 뽑아서 dataConfig의 labels로 매칭
-  //dataConfig의 datasets속 data에 수치 데이터 mapping
-  //chartsOptions에서 scales의 x에는 라벨링, y축에는 max값와 min값 적용필요
-  // const dataConfig: any = {
-  //   labels: ["January", "February", "March", "April", "May", "June"],
-  //   datasets: [
-  //     {
-  //       label: "My First Dataset",
-  //       data: [65, 59, 80, 81, 56, 55],
-  //       fill: false,
-  //       borderColor: "rgb(75, 192, 192)",
-  //       tension: 0.1,
-  //     },
-  //   ],
-  // };
-
   const chartOptions: any = {
     responsive: true,
     plugins: {
