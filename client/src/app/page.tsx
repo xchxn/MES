@@ -11,7 +11,7 @@ async function getAnomalyItems() {
     },
   };
 
-  const res = await fetch(`http://54.180.116.2:3001/forecast/getAnomalyItems`, requestOptions);
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/forecast/getAnomalyItems`, requestOptions);
 
   if (!res.ok) {
     throw new Error("Failed to fetch data");
@@ -73,13 +73,13 @@ export default function Home() {
   }
   
   return (
-    <ol className={styles.numbered}>
+    <div className={styles.container}>
       <li>SPM 서비스 Wiki</li>
       <li>Update: 엑셀로된 재고 데이터를 업로드 하는 페이지</li> 
       <li>Dashboard: 업로드 된 데이터들을 테이블 형태로 확인하는 페이지</li>
       <li>Chart: 항목 별 데이터에 예측 수치를 추가하여 꺾은 선 그래프로 시각화한 재고 수치 흐름을 한눈에 파악할 수 있는 페이지</li>
       <li>Forecast: 예측 결과를 확인하기 위한 페이지</li>
       <li>관리자 페이지: 인공지능 예측에 필요한 관리자 기준 수치를 설정하고 반영, 예측 요청을 하는 페이지</li>
-    </ol>
+    </div>
   );
 }

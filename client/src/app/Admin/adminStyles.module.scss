@@ -78,10 +78,13 @@
 
   .optionField {
     flex-direction: column;
-    border: 1px solid #000000;
+    border: 3px solid #000000;
+    border-radius: 15px;
     margin: 10px 10px;
     padding: 10px 10px;
-
+    strong {
+      border-bottom: 3px dashed #000;
+    }
     .fieldOptions {
       display: flex;
       flex-wrap: wrap;
@@ -104,10 +107,13 @@
   }
 
   .selectedItems {
-    border: 1px solid #000;
+    border: 3px solid #000;
+    border-radius: 15px;
     margin: 10px 10px;
     padding: 10px 10px;
-
+    li {
+      list-style: none;
+    }
     input[type="number"] {
       padding: 5px 5px;
       margin: 10px 10px;
@@ -117,6 +123,10 @@
 
     input[type="checkbox"]:checked {
       background: #2248ef;
+      text-align: center;
+    }
+    label {
+      text-align: center;
     }
   }
 

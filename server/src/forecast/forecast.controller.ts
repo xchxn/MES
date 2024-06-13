@@ -112,32 +112,32 @@ export class ForecastController {
     return { error: 'Invalid request data' };
   }
 
-  @ApiExcludeEndpoint()
-  @Post('test')
-  async testing(@Body() dataSet: any): Promise<any> {
-    const exampleData = [
-      {
-        예측날짜: '2000-01-26',
-        예측고: 1234,
-        예측중량: 1234,
-        재고상태: 'O',
-        중량상태: 'O',
-      },
-      {
-        예측날짜: '2000-01-27',
-        예측고: 134,
-        예측중량: 134,
-        재고상태: 'O',
-        중량상태: 'O',
-      },
-      {
-        예측날짜: '2000-01-28',
-        예측고: 123,
-        예측중량: 123,
-        재고상태: 'X',
-        중량상태: 'X',
-      },
-    ];
-    return exampleData;
-  }
+  // @ApiExcludeEndpoint()
+  // @Post('test')
+  // async testing(@Body() dataSet: any): Promise<any> {
+  //   const exampleData = [
+  //     {
+  //       예측날짜: '2000-01-26',
+  //       예측고: 1234,
+  //       예측중량: 1234,
+  //       재고상태: 'O',
+  //       중량상태: 'O',
+  //     },
+  //     {
+  //       예측날짜: '2000-01-27',
+  //       예측고: 134,
+  //       예측중량: 134,
+  //       재고상태: 'O',
+  //       중량상태: 'O',
+  //     },
+  //     {
+  //       예측날짜: '2000-01-28',
+  //       예측고: 123,
+  //       예측중량: 123,
+  //       재고상태: 'X',
+  //       중량상태: 'X',
+  //     },
+  //   ];
+  //   return exampleData;
+  // }
 }

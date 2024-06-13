@@ -14,7 +14,7 @@ async function getInventory(options: string) {
   };
 
   const res = await fetch(
-    `http://54.180.116.2:3001/management/getItems`,
+    `${process.env.NEXT_PUBLIC_API_URL}/management/getItems`,
     requestOptions
   );
 
@@ -32,7 +32,7 @@ async function getOptions() {
   };
 
   const res = await fetch(
-    `http://54.180.116.2:3001/management/getDateOptions`,
+    `${process.env.NEXT_PUBLIC_API_URL}/management/getDateOptions`,
     requestOptions
   );
 

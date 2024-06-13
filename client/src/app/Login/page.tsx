@@ -18,7 +18,7 @@ async function Login(formData: any) {
     body: JSON.stringify(rawFormData),
   };
 
-  const res = await fetch('http://54.180.116.2:3001/auth/login', requestOptions);
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, requestOptions);
   const data = await res.json();
   console.log(data);
   // 사용자가 존재하는 경우
