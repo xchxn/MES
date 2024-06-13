@@ -18,7 +18,6 @@ export class ForecastService {
 
   //알림설정 항목으로 ai에 예측 데이터 요청
   async getData(data: any): Promise<any> {
-    console.log(data);
     //추후 모델 배포 주소로 URL 변경
     const url = 'http://172.200.208.9/predict';
     // const url = 'http://localhost:3001/forecast/test';
@@ -45,43 +44,60 @@ export class ForecastService {
       const result = await firstValueFrom(observable);
       //result의 관리구분,품목,품종,등급이 Forecast 속에 이미 존재한다면
       //Update, 존재하지 않는다면 insert 그대로
-      if (
-        await this.forecastRepository
-          .createQueryBuilder()
-          .select('관리구분')
-          .where('관리구분 = :type', { type: data.관리구분 })
-          .andWhere('품목 = :item', { item: data.품목 })
-          .andWhere('품종 = :kind', { kind: data.품종 })
-          .andWhere('등급 = :grade', { grade: data.등급 })
-          .getOne()
-      ) {
-        await this.forecastRepository
-          .createQueryBuilder()
-          .update()
-          .set({
-            관리구분: result[0].관리구분,
-            품목: result[0].품목,
-            품종: result[0].품종,
-            등급: result[0].등급,
-            예측날짜: result[0].예측날짜,
-            예측고: result[0].예측고,
-            예측중량: result[0].예측중량,
-            재고상태: result[0].재고상태,
-            중량상태: result[0].중량상태,
-          })
-          .where('관리구분 = :type', { type: data.관리구분 })
-          .andWhere('품목 = :item', { item: data.품목 })
-          .andWhere('품종 = :kind', { kind: data.품종 })
-          .andWhere('등급 = :grade', { grade: data.등급 })
-          .execute();
-        return result;
-      } else {
+      const rere = await this.forecastRepository
+        .createQueryBuilder()
+        .select('f.관리구분')
+        .from(Forecast, 'f')
+        .where('f.관리구분 = :type', { type: result[0].관리구분 })
+        .andWhere('f.품목 = :item', { item: result[0].품목 })
+        .andWhere('f.품종 = :kind', { kind: result[0].품종 })
+        .andWhere('f.등급 = :grade', { grade: result[0].등급 })
+        .getOne();
+      if (rere === null) {
         await this.forecastRepository
           .createQueryBuilder()
           .insert()
           .into(Forecast)
           .values(result)
           .execute();
+        return result;
+      } else {
+        await this.forecastRepository
+          .createQueryBuilder()
+          .delete()
+          .from(Forecast)
+          .where('관리구분 = :type', { type: data.관리구분 })
+          .andWhere('품목 = :item', { item: data.품목 })
+          .andWhere('품종 = :kind', { kind: data.품종 })
+          .andWhere('등급 = :grade', { grade: data.등급 })
+          .execute();
+
+        await this.forecastRepository
+          .createQueryBuilder()
+          .insert()
+          .into(Forecast)
+          .values(result)
+          .execute();
+        // await this.forecastRepository
+        //   .createQueryBuilder()
+        //   .update(Forecast)
+        //   .set({
+        //     관리구분: result[0].관리구분,
+        //     품목: result[0].품목,
+        //     품종: result[0].품종,
+        //     등급: result[0].등급,
+        //     예측날짜: result[0].예측날짜,
+        //     예측고: result[0].예측고,
+        //     예측중량: result[0].예측중량,
+        //     재고상태: result[0].재고상태,
+        //     중량상태: result[0].중량상태,
+        //   })
+        //   .where('관리구분 = :type', { type: result[0].관리구분 })
+        //   .andWhere('품목 = :item', { item: result[0].품목 })
+        //   .andWhere('품종 = :kind', { kind: result[0].품종 })
+        //   .andWhere('등급 = :grade', { grade: result[0].등급 })
+        //   .andWhere('예측날짜 = :date', { date: result[0].예측날짜 })
+        //   .execute();
         return result;
       }
     } catch (error) {
