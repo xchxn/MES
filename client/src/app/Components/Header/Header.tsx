@@ -80,7 +80,6 @@ export default function Header() {
       </Link>
       {userId ? (
         <div className={styles.loginContainer}>
-          <p> Welcome, {`${userId}`}!</p>
           <button
             className={styles.loginButton}
             onClick={() => router.push("/Admin")}

@@ -163,6 +163,8 @@
 
             strong {
               color: #fe2222;
+              
+            border-right: 1px solid #000;
             }
           }
         }
@@ -198,9 +200,15 @@
             flex-direction: column;
             font-size: large;
             margin: 3px 6px;
-
+            border-right: 1px solid #000;
+            padding: 3px 6px;
+            justify-items: center;
             strong {
               color: #fe2222;
+              border-bottom: 1px solid #000;
+            }
+            p {
+              border-bottom: 1px solid #000;
             }
           }
         }
