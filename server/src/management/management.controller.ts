@@ -35,7 +35,7 @@ function extractAndFormatDate(fileName: string): string {
   const [yy, mm, dd] = datePart.split('.').map(Number);
 
   // Create a Date object
-  const date = new Date(2000 + yy, mm, dd); // Add 2000 to the year to account for 21st century
+  const date = new Date(2000 + yy, mm - 1, dd); // Add 2000 to the year to account for 21st century
 
   // Format the date as "YYYY-MM-DD"
   const formattedDate = date.toISOString().split('T')[0];
